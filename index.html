@@ -302,10 +302,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 /* ══ RESPONSIVE ══ */
+
+/* ── Tablet landscape ── */
 @media(max-width:1100px){
   .slip-create-layout{grid-template-columns:1fr}
   .slip-preview-card{position:static}
 }
+
+/* ── Tablet portrait ── */
 @media(max-width:1024px){
   :root{--sidebar-w:220px}
   .g2-3{grid-template-columns:1fr}
@@ -313,67 +317,230 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .page{padding:20px}
   .topbar{padding:12px 20px}
 }
+
+/* ── Mobile bottom nav bar ── */
 @media(max-width:768px){
-  html{font-size:13px}
+  /* Bottom nav */
+  .mobile-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;
+    background:var(--surface);border-top:1px solid var(--border);
+    height:60px;align-items:stretch;
+    box-shadow:0 -4px 24px rgba(0,0,0,.4);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  }
+  .mobile-nav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;
+    letter-spacing:.3px;text-transform:uppercase;padding:6px 2px;
+    border:none;background:none;font-family:var(--font);
+    transition:color .12s;-webkit-tap-highlight-color:transparent;
+    position:relative;
+  }
+  .mobile-nav-item i{font-size:18px;transition:transform .15s}
+  .mobile-nav-item.active{color:var(--accent)}
+  .mobile-nav-item.active i{transform:translateY(-2px)}
+  .mobile-nav-item.active::after{
+    content:'';position:absolute;bottom:0;left:25%;right:25%;
+    height:2px;background:var(--accent);border-radius:2px 2px 0 0;
+  }
+  .mobile-nav-more{position:relative}
+}
+
+/* ── More menu (mobile) ── */
+.mobile-more-menu{
+  display:none;position:fixed;bottom:64px;right:0;left:0;z-index:119;
+  background:var(--surface);border-top:1px solid var(--border);
+  box-shadow:0 -8px 32px rgba(0,0,0,.5);
+  padding:8px 0 8px;
+  max-height:60vh;overflow-y:auto;
+}
+.mobile-more-menu.open{display:block;animation:sheetIn .2s ease}
+.mobile-more-item{
+  display:flex;align-items:center;gap:14px;padding:14px 20px;
+  font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;
+  border-bottom:1px solid var(--border);transition:background .1s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mobile-more-item:last-child{border-bottom:none}
+.mobile-more-item:active{background:var(--panel)}
+.mobile-more-item i{width:20px;text-align:center;font-size:15px;flex-shrink:0}
+.mobile-more-item.active{color:var(--accent)}
+
+/* ── Hide desktop sidebar on mobile ── */
+@media(max-width:768px){
+  html{font-size:13.5px}
+
+  /* Auth */
   .auth-screen{flex-direction:column;min-height:100vh}
-  .auth-left{width:100%;padding:28px 20px 32px;border-right:none;border-bottom:1px solid var(--border);flex:none;min-height:auto}
-  .auth-brand{margin-bottom:24px}
-  .auth-heading{font-size:22px}
-  .auth-sub{margin-bottom:24px}
+  .auth-left{
+    width:100%;padding:32px 20px 36px;
+    border-right:none;border-bottom:1px solid var(--border);
+    flex:none;min-height:auto;
+  }
+  .auth-brand{margin-bottom:28px}
+  .auth-heading{font-size:26px}
+  .auth-sub{margin-bottom:24px;font-size:13px}
   .auth-right{display:none}
-  .hamburger{display:inline-flex!important}
-  .sidebar{transform:translateX(-100%);z-index:110;width:280px;box-shadow:none}
+  .form-input{font-size:16px!important;padding:13px 14px} /* prevent iOS zoom */
+  .input-wrap .form-input{padding-left:40px}
+  .btn-full{padding:14px 20px;font-size:14px}
+
+  /* Sidebar — drawer on mobile */
+  .hamburger{display:none!important} /* hidden — we use bottom nav instead */
+  .sidebar{
+    transform:translateX(-100%);z-index:200;
+    width:min(300px,85vw);box-shadow:none;
+    transition:transform .25s cubic-bezier(.4,0,.2,1);
+  }
   .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
+  #sidebar-backdrop.show{display:block}
+
+  /* App shell */
   .main{margin-left:0}
   #app.active{display:block}
-  .topbar{padding:10px 14px;gap:10px;height:52px}
-  .topbar-title{font-size:14px}
+  .main{padding-bottom:64px} /* room for bottom nav */
+
+  /* Topbar */
+  .topbar{
+    padding:0 14px;gap:8px;height:54px;
+    position:sticky;top:0;z-index:50;
+  }
+  .topbar-title{font-size:15px;font-weight:700;flex:1}
   .topbar-actions .btn-ghost:not(:last-child){display:none}
-  .page{padding:12px}
-  .page-headline{font-size:20px}
-  .page-sub{font-size:12px;margin-bottom:16px}
-  .stats-row{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-  .stat-card{padding:12px 12px 10px}
-  .stat-card-icon{width:28px;height:28px;font-size:12px;margin-bottom:8px}
-  .stat-value{font-size:20px}
-  .stat-label{font-size:10.5px}
+  #topbar-cta{padding:8px 14px;font-size:12.5px}
+
+  /* Pages */
+  .page{padding:14px 14px 80px}
+  .page-headline{font-size:22px;margin-bottom:2px}
+  .page-sub{font-size:12px;margin-bottom:18px;line-height:1.5}
+
+  /* Stat cards — 2 col */
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .stat-card{padding:14px 12px 12px;border-radius:var(--radius)}
+  .stat-card-icon{width:32px;height:32px;font-size:13px;margin-bottom:10px;border-radius:8px}
+  .stat-value{font-size:24px}
+  .stat-label{font-size:11px}
+  .stat-delta{font-size:11px}
+
+  /* Layout grids → single col */
   .g2,.g3,.g2-3{grid-template-columns:1fr}
-  .chart-box{height:160px!important}
-  .game-card{flex-wrap:wrap;gap:8px;padding:10px 12px}
-  .game-actions{width:100%;justify-content:flex-end;margin-top:4px}
-  .game-score{font-size:14px;padding:0 8px}
+  .g2>*+*,.g3>*+*{margin-top:0}
+
+  /* Charts */
+  .chart-box{height:180px!important}
+
+  /* Game cards */
+  .game-card{flex-wrap:wrap;gap:8px;padding:12px 14px}
+  .game-card .team-badge{width:28px;height:28px;font-size:10px}
+  .game-teams{font-size:13px}
+  .game-meta{font-size:11px}
+  .game-score{font-size:15px;padding:0 8px}
+  .game-actions{width:100%;justify-content:flex-end;margin-top:2px;gap:6px}
+  .game-actions .btn-xs{padding:7px 11px;font-size:12px;min-width:36px;min-height:36px}
+
+  /* Tables — horizontal scroll with sticky first col */
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0}
-  table{min-width:600px}
-  td,thead th{padding:9px 10px;font-size:12px}
+  table{min-width:560px}
+  td,thead th{padding:10px 12px;font-size:12.5px}
+  td:first-child,thead th:first-child{
+    position:sticky;left:0;z-index:1;
+    background:var(--surface);
+  }
+  tbody tr:hover td:first-child{background:var(--panel)}
+
+  /* Slips & promos — 1 col */
   #slips-grid,#promos-grid{grid-template-columns:1fr!important}
+  .slip-card .slip-bottom .btn-xs{
+    min-width:36px;min-height:36px;padding:7px 10px;
+  }
+
+  /* Modals → bottom sheet */
   .overlay{padding:0;align-items:flex-end}
-  .modal{width:100%;max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;max-height:92vh;animation:sheetIn .25s ease}
+  .modal{
+    width:100%;max-width:100%;
+    border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+    max-height:94vh;
+    animation:sheetIn .28s cubic-bezier(.4,0,.2,1);
+  }
   @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal-hd{padding:16px 18px}
+  .modal::before{
+    content:'';display:block;width:40px;height:4px;
+    background:var(--border2);border-radius:2px;
+    margin:12px auto 0;
+  }
+  .modal-hd{padding:14px 18px 14px}
   .modal-body{padding:16px 18px}
-  .modal-ft{padding:12px 18px;flex-direction:column-reverse}
-  .modal-ft .btn{width:100%;justify-content:center}
+  .modal-ft{padding:12px 18px 20px;flex-direction:column-reverse;gap:8px}
+  .modal-ft .btn{width:100%;justify-content:center;padding:13px 20px;font-size:14px}
+
+  /* Forms */
   .form-row,.form-row-3{grid-template-columns:1fr;gap:0}
-  #topbar-cta-label{display:none}
-  .toast{left:12px;right:12px;bottom:12px;min-width:unset}
-  .session-info-banner{flex-direction:column;gap:8px}
-  .slip-type-grid{grid-template-columns:1fr}
+  .form-group{margin-bottom:16px}
+  .form-label{font-size:11px;margin-bottom:6px}
+
+  /* Toast */
+  .toast{left:12px;right:12px;bottom:68px;min-width:unset;font-size:13px}
+
+  /* Session banner */
+  .session-info-banner{flex-direction:column;gap:8px;padding:12px 14px}
+
+  /* Create slip */
+  .slip-type-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .slip-type-card{padding:14px 12px}
+  .slip-type-card .stc-name{font-size:13px}
   .slip-create-layout{grid-template-columns:1fr}
   .slip-preview-card{display:none}
+  .slip-section-card-hd{padding:14px 16px}
+  .slip-section-card-body{padding:14px 16px}
+
+  /* Scheduler */
   .job-card{flex-wrap:wrap;gap:10px}
+  .job-card>div:last-child{width:100%;justify-content:flex-end}
+
+  /* VIP price display */
+  #vip-price-display>div:first-child{font-size:40px!important}
+
+  /* Buttons — minimum tap target 44px */
+  .btn-xs{min-height:36px;min-width:36px}
+  .btn-sm{min-height:38px}
+  .btn{min-height:44px}
+
+  /* Chips — slightly larger on touch */
+  .chip{padding:4px 10px;font-size:11.5px}
+
+  /* Odd pills */
+  .odd-pill{font-size:11.5px;padding:3px 8px}
 }
-@media(max-width:420px){
-  html{font-size:12.5px}
-  .stats-row{grid-template-columns:1fr 1fr}
-  .auth-left{padding:20px 16px 28px}
-  .topbar-title{font-size:13px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .page{padding:10px}
-  .btn{padding:9px 14px}
+
+/* ── Small phones ── */
+@media(max-width:390px){
+  html{font-size:13px}
+  .auth-left{padding:24px 16px 32px}
+  .auth-heading{font-size:23px}
+  .page{padding:10px 10px 80px}
+  .stats-row{gap:8px}
+  .stat-value{font-size:22px}
+  .topbar-title{
+    font-size:14px;max-width:130px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .slip-type-grid{grid-template-columns:1fr}
+  .mobile-nav-item{font-size:9px}
+  .mobile-nav-item i{font-size:17px}
 }
+
+/* ── Tablet auth illustration ── */
 @media(min-width:600px) and (max-width:768px){
   .auth-right{display:flex;padding:20px;min-height:240px}
   .auth-illustration{padding:16px}
   .auth-tagline{font-size:16px;margin-top:16px}
+}
+
+/* ── Desktop: hide mobile nav ── */
+@media(min-width:769px){
+  .mobile-nav{display:none!important}
+  .mobile-more-menu{display:none!important}
+  .hamburger{display:none!important}
 }
 </style>
 </head>
@@ -1092,7 +1259,7 @@ let currentPage = 'dashboard';
 
 async function api(method, path, body = null, isFormData = false) {
   const token = TokenStore.get();
-  const headers = {};
+  const headers = { 'ngrok-skip-browser-warning': 'true' };
   if (token) headers['Authorization'] = `Bearer ${token}`;
   if (!isFormData && body) headers['Content-Type'] = 'application/json';
   const opts = { method, headers };
@@ -2401,6 +2568,89 @@ function statusChip(g){
   if(g.status==='FINISHED') return`<span class="chip chip-gray">Finished</span>`;
   return`<span class="chip chip-gray">${g.status}</span>`;
 }
+
+/* ── Mobile nav sync ── */
+function syncMobileNav(page) {
+  const map = { dashboard:'mn-dash', users:'mn-users', games:'mn-games', slips:'mn-slips', 'create-slip':'mn-slips' };
+  document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+  const active = map[page];
+  if(active) document.getElementById(active)?.classList.add('active');
+}
+
+function toggleMoreMenu() {
+  const m = document.getElementById('mobile-more-menu');
+  const isOpen = m.classList.contains('open');
+  if(isOpen){
+    m.classList.remove('open');
+  } else {
+    m.classList.add('open');
+    // close on backdrop tap
+    setTimeout(()=>{
+      document.addEventListener('click', function _close(e){
+        if(!m.contains(e.target) && !e.target.closest('.mobile-nav-more')){
+          m.classList.remove('open');
+          document.removeEventListener('click',_close);
+        }
+      });
+    },50);
+  }
+}
+
+function mobileNavTo(page) {
+  document.getElementById('mobile-more-menu')?.classList.remove('open');
+  nav(page, null);
+}
+
+// Patch nav() to also sync mobile nav
+const _navOrig = nav;
+window.nav = function(page, el) {
+  _navOrig(page, el);
+  syncMobileNav(page);
+};
+
+// Show/hide mobile nav with app
+const _launchOrig = launchApp;
+window.launchApp = function() {
+  _launchOrig();
+  document.getElementById('mobile-nav')?.style.setProperty('display', 'flex');
+};
+const _logoutOrig = logout;
+window.logout = function() {
+  _logoutOrig();
+  document.getElementById('mobile-nav')?.style.setProperty('display', 'none');
+  document.getElementById('mobile-more-menu')?.classList.remove('open');
+};
 </script>
+
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<nav class="mobile-nav" id="mobile-nav" style="display:none">
+  <button class="mobile-nav-item active" id="mn-dash" onclick="mobileNavTo('dashboard')">
+    <i class="fa fa-house"></i><span>Home</span>
+  </button>
+  <button class="mobile-nav-item" id="mn-games" onclick="mobileNavTo('games')">
+    <i class="fa fa-futbol"></i><span>Games</span>
+  </button>
+  <button class="mobile-nav-item" id="mn-slips" onclick="mobileNavTo('slips')">
+    <i class="fa fa-ticket"></i><span>Slips</span>
+  </button>
+  <button class="mobile-nav-item" id="mn-users" onclick="mobileNavTo('users')">
+    <i class="fa fa-users"></i><span>Users</span>
+  </button>
+  <button class="mobile-nav-item mobile-nav-more" onclick="toggleMoreMenu()">
+    <i class="fa fa-ellipsis"></i><span>More</span>
+  </button>
+</nav>
+
+<!-- ══ MOBILE MORE MENU ══ -->
+<div class="mobile-more-menu" id="mobile-more-menu">
+  <div class="mobile-more-item" onclick="mobileNavTo('create-slip')"><i class="fa fa-plus-circle" style="color:var(--accent)"></i> Create Slip</div>
+  <div class="mobile-more-item" onclick="mobileNavTo('vip')"><i class="fa fa-crown" style="color:var(--gold)"></i> VIP &amp; Pricing</div>
+  <div class="mobile-more-item" onclick="mobileNavTo('promos')"><i class="fa fa-tags" style="color:var(--blue)"></i> Promotions</div>
+  <div class="mobile-more-item" onclick="mobileNavTo('analytics')"><i class="fa fa-brain" style="color:var(--accent)"></i> AI Analytics</div>
+  <div class="mobile-more-item" onclick="mobileNavTo('scheduler')"><i class="fa fa-clock" style="color:var(--text2)"></i> Scheduler</div>
+  <div class="mobile-more-item" onclick="mobileNavTo('settings')"><i class="fa fa-user-gear" style="color:var(--text2)"></i> My Profile</div>
+  <div class="mobile-more-item" onclick="openModal('profile-modal');document.getElementById('mobile-more-menu').classList.remove('open')"><i class="fa fa-circle-user" style="color:var(--text2)"></i> Quick Profile</div>
+  <div class="mobile-more-item" onclick="logout()"><i class="fa fa-arrow-right-from-bracket" style="color:var(--accent2)"></i> Sign Out</div>
+</div>
 </body>
 </html>
