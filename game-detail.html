@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Detail – BetOracle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#0d0f1a;--bg2:#12152b;--card:#1a1e35;--card2:#1f2440;
+      --gold:#f5a623;--gold2:#ffc14d;--gdim:rgba(245,166,35,.11);--gbdr:rgba(245,166,35,.26);
+      --white:#fff;--muted:#8b90a8;--border:rgba(255,255,255,.07);
+      --live:#ff4444;--green:#2ecc71;--red:#e74c3c;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--r:10px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-size:14px;min-height:100vh;line-height:1.5}
+    a{text-decoration:none;color:inherit}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:rgba(245,166,35,.2);border-radius:2px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 16px rgba(245,166,35,.07)}50%{box-shadow:0 0 32px rgba(245,166,35,.22)}}
+    @keyframes scorePop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+    /* ── Top bar ── */
+    .topbar{height:56px;background:rgba(13,15,26,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,32px);position:sticky;top:0;z-index:100;backdrop-filter:blur(18px)}
+    .tb-left{display:flex;align-items:center;gap:12px}
+    .back-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;padding:6px 13px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s}
+    .back-btn:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .back-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .tb-logo{display:flex;align-items:center;gap:8px;font-family:var(--fh);font-size:.9rem;font-weight:800}
+    .logo-mark{width:26px;height:26px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center}
+    .logo-mark svg{width:14px;height:14px;stroke:#0d0f1a;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+    .refresh-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:6px 12px;font-size:.72rem;cursor:pointer;transition:all .18s;white-space:nowrap}
+    .refresh-btn:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .refresh-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .refresh-btn.spinning svg{animation:spin .6s linear infinite}
+
+    /* ── Page layout ── */
+    .page{max-width:860px;margin:0 auto;padding:clamp(16px,3vw,28px);animation:fadeUp .3s ease both}
+
+    /* ── Hero score card ── */
+    .hero-card{background:linear-gradient(140deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:16px;position:relative}
+    .hero-card.live-card{border-color:rgba(255,68,68,.22);animation:glow 5s ease infinite}
+    .hero-top-bar{position:absolute;top:0;left:0;right:0;height:3px}
+    .hero-top-bar.live{background:linear-gradient(90deg,var(--live),transparent)}
+    .hero-top-bar.finished{background:linear-gradient(90deg,var(--muted),transparent)}
+    .hero-top-bar.upcoming{background:linear-gradient(90deg,var(--gold),transparent)}
+    .hero-meta{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 0;flex-wrap:wrap;gap:8px}
+    .hero-league{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--muted)}
+    .hero-league img{width:18px;height:18px;object-fit:contain;border-radius:3px}
+    .hero-badges{display:flex;align-items:center;gap:6px}
+    .badge{font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+    .b-live{background:rgba(255,68,68,.14);color:var(--live);border:1px solid rgba(255,68,68,.28)}
+    .b-up{background:var(--gdim);color:var(--gold);border:1px solid var(--gbdr)}
+    .b-fin{background:rgba(139,144,168,.09);color:var(--muted);border:1px solid rgba(139,144,168,.18)}
+    .b-vip{background:rgba(245,166,35,.16);color:var(--gold2);border:1px solid var(--gbdr)}
+    .live-indicator{display:flex;align-items:center;gap:4px;background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.28);color:var(--live);font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--live);animation:pulse 1.4s ease infinite}
+
+    .hero-score-section{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:20px 24px 24px}
+    .hero-team{display:flex;flex-direction:column;align-items:center;gap:10px}
+    .team-logo-lg{width:64px;height:64px;border-radius:50%;background:var(--card2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+    .team-logo-lg img{width:44px;height:44px;object-fit:contain}
+    .team-logo-lg svg{width:26px;height:26px;opacity:.3}
+    .hero-team-name{font-family:var(--fh);font-size:clamp(.82rem,2.5vw,1rem);font-weight:700;text-align:center;line-height:1.3;max-width:120px}
+    .hero-center{text-align:center;flex-shrink:0;padding:0 8px}
+    .hero-score{font-family:var(--fh);font-size:clamp(2.4rem,8vw,3.4rem);font-weight:800;color:var(--gold);line-height:1;letter-spacing:.06em;transition:transform .2s}
+    .hero-score.pop{animation:scorePop .35s ease}
+    .hero-score.upcoming-score{font-size:clamp(1.2rem,4vw,1.6rem);color:var(--muted)}
+    .hero-period{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-top:6px}
+    .hero-period.live-period{color:var(--live)}
+    .hero-period.finished-period{color:var(--muted)}
+    .hero-period.upcoming-period{color:var(--gold)}
+    .hero-kickoff{font-size:.72rem;color:var(--muted);margin-top:3px}
+
+    /* ── Odds band ── */
+    .odds-band{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));border-top:1px solid var(--border)}
+    .odds-cell{padding:12px 8px;text-align:center;border-right:1px solid var(--border)}
+    .odds-cell:last-child{border-right:none}
+    .odds-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+    .odds-val{font-family:var(--fh);font-size:1rem;font-weight:800;color:var(--gold)}
+    .odds-val.dim{color:var(--muted);font-size:.8rem}
+
+    /* ── Info cards grid ── */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+    @media(max-width:520px){.info-grid{grid-template-columns:1fr}}
+    .info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+    .info-card h4{font-family:var(--fh);font-size:.78rem;font-weight:700;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+    .info-card h4 svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.76rem}
+    .info-row:last-child{border-bottom:none;padding-bottom:0}
+    .info-row .lbl{color:var(--muted)}
+    .info-row .val{font-weight:600;text-align:right;max-width:180px;word-break:break-word}
+    .info-row .val.gold{color:var(--gold)}
+    .info-row .val.green{color:var(--green)}
+    .info-row .val.live{color:var(--live)}
+
+    /* ── Odds breakdown card (full width) ── */
+    .odds-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:16px}
+    .odds-card h4{font-family:var(--fh);font-size:.78rem;font-weight:700;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+    .odds-card h4 svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .odds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:10px}
+    .odds-item{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;transition:border-color .18s,transform .15s}
+    .odds-item:hover{border-color:var(--gbdr);transform:translateY(-1px)}
+    .odds-item .o-lbl{font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+    .odds-item .o-val{font-family:var(--fh);font-size:1.15rem;font-weight:800;color:var(--gold)}
+    .odds-item .o-bm{font-size:.6rem;color:var(--muted);margin-top:4px}
+    .odds-item.dim .o-val{color:var(--muted);font-size:.9rem}
+
+    /* ── Loading / error states ── */
+    .full-loader{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+    .loader{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    .load-text{font-size:.82rem;color:var(--muted)}
+    .error-state{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:32px}
+    .error-state svg{width:48px;height:48px;stroke:var(--muted);fill:none;stroke-width:1.5;opacity:.35}
+    .error-state h3{font-family:var(--fh);font-size:1.1rem}
+    .error-state p{font-size:.78rem;color:var(--muted);line-height:1.6;max-width:320px}
+    .btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--gold);color:#0d0f1a;border:none;cursor:pointer;font-family:var(--fb);font-size:.82rem;font-weight:700;padding:10px 20px;border-radius:8px;transition:background .2s,transform .15s}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+
+    /* ── Live minute progress bar ── */
+    .minute-bar-wrap{padding:0 20px 16px}
+    .minute-bar-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+    .minute-bar-fill{height:100%;background:linear-gradient(90deg,var(--live),var(--gold));border-radius:2px;transition:width .6s ease}
+
+    /* ── Toast ── */
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(6px);background:var(--card2);border:1px solid var(--gbdr);border-radius:100px;padding:8px 18px;font-size:.76rem;color:var(--gold);font-weight:600;opacity:0;transition:opacity .22s,transform .22s;pointer-events:none;z-index:400;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:600px){
+      .hero-score-section{padding:16px 14px 18px;gap:6px}
+      .team-logo-lg{width:52px;height:52px}
+      .team-logo-lg img{width:34px;height:34px}
+      .hero-team-name{font-size:.76rem;max-width:90px}
+    }
+    @media(max-width:380px){
+      .hero-score{font-size:2rem}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <button class="back-btn" onclick="history.back()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Back
+    </button>
+    <a href="index.html" class="tb-logo">
+      <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>
+      BetOracle
+    </a>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:.68rem;color:var(--muted)" id="lastUpdatedLabel"></span>
+    <button class="refresh-btn" id="refreshBtn" onclick="refreshGame()">
+      <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh
+    </button>
+  </div>
+</div>
+
+<div class="page" id="pageContent">
+  <div class="full-loader">
+    <div class="loader"></div>
+    <span class="load-text">Loading match…</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:8080/api/v1';
+const $ = id => document.getElementById(id);
+
+function getToken(){ return localStorage.getItem('bo_token'); }
+function authHeaders(){ return { 'Authorization': 'Bearer ' + getToken(), 'Content-Type': 'application/json' }; }
+function handleLogout(){ ['bo_token','bo_refresh','bo_role'].forEach(k => localStorage.removeItem(k)); location.href = 'auth.html?tab=login'; }
+if (!getToken()) location.href = 'auth.html?tab=login';
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, { ...opts, headers: { ...authHeaders(), ...(opts.headers || {}) } });
+  if (res.status === 401) { handleLogout(); return; }
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || 'Request failed');
+  return json;
+}
+
+function showToast(m, dur = 2400) {
+  const t = $('toast'); t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+/* ── Get game UUID from URL ── */
+const params = new URLSearchParams(location.search);
+const gameId = params.get('id');
+
+if (!gameId) {
+  $('pageContent').innerHTML = `<div class="error-state">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <h3>No Game Specified</h3>
+    <p>No game ID was found in the URL.</p>
+    <button class="btn-gold" onclick="history.back()">Go Back</button>
+  </div>`;
+}
+
+let _game = null;
+let _autoRefreshInterval = null;
+
+function fmt(d) { return d ? new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'; }
+function fmtFull(d) { return d ? new Date(d).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'; }
+
+function statusBarClass(s) {
+  if (s === 'LIVE') return 'live';
+  if (s === 'FINISHED') return 'finished';
+  return 'upcoming';
+}
+
+function displayPeriod(g) {
+  if (g.status === 'LIVE') {
+    const period = g.matchPeriod || '';
+    const min = g.elapsedMinutes || 0;
+    if (period === 'Half Time') return 'HT';
+    if (period === '1st Half') return min > 0 ? min + "'" : '1st Half';
+    if (period === '2nd Half') return min > 0 ? min + "'" : '2nd Half';
+    return min > 0 ? min + "'" : 'In Progress';
+  }
+  if (g.status === 'FINISHED') return g.matchPeriod === 'Full Time' ? 'Full Time' : (g.matchPeriod || 'Full Time');
+  return fmt(g.kickoffTime);
+}
+
+function periodLabelFull(g) {
+  if (g.status === 'LIVE') return g.matchPeriod || 'In Progress';
+  if (g.status === 'FINISHED') return 'Full Time';
+  return 'Kick Off';
+}
+
+function minuteBarPercent(g) {
+  if (g.status !== 'LIVE') return 0;
+  const min = g.elapsedMinutes || 0;
+  const period = g.matchPeriod || '';
+  if (period === 'Half Time') return 50;
+  const total = 90;
+  return Math.min(100, Math.round((min / total) * 100));
+}
+
+function statusBadgeHTML(g) {
+  const map = {
+    LIVE: `<div class="live-indicator"><div class="live-dot"></div>Live</div>`,
+    FINISHED: `<span class="badge b-fin">Full Time</span>`,
+    UPCOMING: `<span class="badge b-up">Upcoming</span>`,
+    CANCELLED: `<span class="badge b-fin">Cancelled</span>`,
+    POSTPONED: `<span class="badge b-fin">Postponed</span>`,
+    SUSPENDED: `<span class="badge b-fin">Suspended</span>`,
+  };
+  return map[g.status] || `<span class="badge b-fin">${g.status}</span>`;
+}
+
+function teamLogoHTML(url, name) {
+  const fb = `<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg>`;
+  if (url) return `<img src="${url}" alt="${name || ''}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='block'"><span style="display:none">${fb}</span>`;
+  return fb;
+}
+
+function oddsItemHTML(label, value, bookmaker) {
+  const hasVal = value != null;
+  return `<div class="odds-item ${hasVal ? '' : 'dim'}">
+    <div class="o-lbl">${label}</div>
+    <div class="o-val">${hasVal ? value : '—'}</div>
+    ${bookmaker ? `<div class="o-bm">via ${bookmaker}</div>` : ''}
+  </div>`;
+}
+
+function renderGame(g) {
+  const isLive = g.status === 'LIVE';
+  const isFinished = g.status === 'FINISHED';
+  const isUpcoming = !isLive && !isFinished;
+  const period = displayPeriod(g);
+  const barPct = minuteBarPercent(g);
+  const sbClass = statusBarClass(g.status);
+
+  // Score display
+  let scoreHTML;
+  if (isUpcoming) {
+    scoreHTML = `<div class="hero-score upcoming-score">vs</div>
+      <div class="hero-kickoff">${fmtFull(g.kickoffTime)}</div>`;
+  } else {
+    scoreHTML = `<div class="hero-score ${isLive ? '' : ''}" id="heroScore">${g.homeScore ?? 0} – ${g.awayScore ?? 0}</div>
+      <div class="hero-period ${sbClass}-period">${periodLabelFull(g)}</div>`;
+    if (isLive && g.elapsedMinutes) {
+      scoreHTML += `<div class="hero-kickoff" style="color:var(--live);font-weight:700">${period}</div>`;
+    }
+  }
+
+  // Odds in main band (1X2)
+  const hasMainOdds = g.homeWinOdds != null || g.drawOdds != null || g.awayWinOdds != null;
+  const oddsBandHTML = hasMainOdds ? `
+    <div class="odds-band">
+      <div class="odds-cell"><div class="odds-lbl">1 Home Win</div><div class="odds-val ${g.homeWinOdds == null ? 'dim' : ''}">${g.homeWinOdds ?? '—'}</div></div>
+      <div class="odds-cell"><div class="odds-lbl">X Draw</div><div class="odds-val ${g.drawOdds == null ? 'dim' : ''}">${g.drawOdds ?? '—'}</div></div>
+      <div class="odds-cell"><div class="odds-lbl">2 Away Win</div><div class="odds-val ${g.awayWinOdds == null ? 'dim' : ''}">${g.awayWinOdds ?? '—'}</div></div>
+    </div>` : '';
+
+  // Full odds breakdown card
+  const hasAnyOdds = g.homeWinOdds != null || g.drawOdds != null || g.awayWinOdds != null ||
+    g.over25Odds != null || g.under25Odds != null || g.over15Odds != null || g.over35Odds != null;
+  const oddsCardHTML = hasAnyOdds ? `
+    <div class="odds-card">
+      <h4><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>All Odds${g.oddsBookmaker ? ' <span style="font-size:.62rem;color:var(--muted);font-weight:400;margin-left:4px">via ' + g.oddsBookmaker + '</span>' : ''}</h4>
+      <div class="odds-grid">
+        ${oddsItemHTML('Home Win', g.homeWinOdds, null)}
+        ${oddsItemHTML('Draw', g.drawOdds, null)}
+        ${oddsItemHTML('Away Win', g.awayWinOdds, null)}
+        ${oddsItemHTML('Over 1.5', g.over15Odds, null)}
+        ${oddsItemHTML('Over 2.5', g.over25Odds, null)}
+        ${oddsItemHTML('Under 2.5', g.under25Odds, null)}
+        ${oddsItemHTML('Over 3.5', g.over35Odds, null)}
+      </div>
+    </div>` : '';
+
+  // Info cards
+  const matchInfoHTML = `
+    <div class="info-card">
+      <h4><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Match Info</h4>
+      <div class="info-row"><span class="lbl">League</span><span class="val">${g.league || '—'}</span></div>
+      <div class="info-row"><span class="lbl">Country</span><span class="val">${g.country || '—'}</span></div>
+      <div class="info-row"><span class="lbl">Kick Off</span><span class="val">${fmtFull(g.kickoffTime)}</span></div>
+      <div class="info-row"><span class="lbl">Status</span><span class="val ${isLive ? 'live' : isFinished ? '' : 'gold'}">${g.status}</span></div>
+      ${isLive ? `<div class="info-row"><span class="lbl">Minute</span><span class="val live">${g.elapsedMinutes != null ? g.elapsedMinutes + "'" : '—'}</span></div>` : ''}
+      ${g.matchPeriod ? `<div class="info-row"><span class="lbl">Period</span><span class="val">${g.matchPeriod}</span></div>` : ''}
+    </div>`;
+
+  const teamInfoHTML = `
+    <div class="info-card">
+      <h4><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Teams</h4>
+      <div class="info-row"><span class="lbl">Home</span><span class="val">${g.homeTeam || '—'}</span></div>
+      <div class="info-row"><span class="lbl">Away</span><span class="val">${g.awayTeam || '—'}</span></div>
+      ${isLive || isFinished ? `
+      <div class="info-row"><span class="lbl">Home Score</span><span class="val gold">${g.homeScore ?? 0}</span></div>
+      <div class="info-row"><span class="lbl">Away Score</span><span class="val gold">${g.awayScore ?? 0}</span></div>` : ''}
+      ${g.vipOnly ? `<div class="info-row"><span class="lbl">Access</span><span class="val" style="color:var(--gold2)">VIP Only</span></div>` : ''}
+    </div>`;
+
+  // Minute progress bar (only for live)
+  const minuteBarHTML = isLive ? `
+    <div class="minute-bar-wrap">
+      <div class="minute-bar-bg"><div class="minute-bar-fill" style="width:${barPct}%"></div></div>
+    </div>` : '';
+
+  const html = `
+    <div class="hero-card ${isLive ? 'live-card' : ''}">
+      <div class="hero-top-bar ${sbClass}"></div>
+      <div class="hero-meta">
+        <div class="hero-league">
+          ${g.leagueLogo ? `<img src="${g.leagueLogo}" alt="${g.league || ''}" onerror="this.style.display='none'">` : ''}
+          <span>${g.league || 'League'}${g.country ? ' · ' + g.country : ''}</span>
+        </div>
+        <div class="hero-badges">
+          ${g.vipOnly ? '<span class="badge b-vip">VIP</span>' : ''}
+          ${statusBadgeHTML(g)}
+        </div>
+      </div>
+      <div class="hero-score-section">
+        <div class="hero-team">
+          <div class="team-logo-lg">${teamLogoHTML(g.homeLogo, g.homeTeam)}</div>
+          <div class="hero-team-name">${g.homeTeam || 'Home'}</div>
+        </div>
+        <div class="hero-center">${scoreHTML}</div>
+        <div class="hero-team">
+          <div class="team-logo-lg">${teamLogoHTML(g.awayLogo, g.awayTeam)}</div>
+          <div class="hero-team-name">${g.awayTeam || 'Away'}</div>
+        </div>
+      </div>
+      ${minuteBarHTML}
+      ${oddsBandHTML}
+    </div>
+    <div class="info-grid">${matchInfoHTML}${teamInfoHTML}</div>
+    ${oddsCardHTML}
+  `;
+
+  $('pageContent').innerHTML = html;
+  document.title = `${g.homeTeam || 'Home'} vs ${g.awayTeam || 'Away'} – BetOracle`;
+
+  // Start auto-refresh for live games
+  if (isLive) {
+    if (_autoRefreshInterval) clearInterval(_autoRefreshInterval);
+    _autoRefreshInterval = setInterval(() => loadGame(false), 30000);
+  } else {
+    if (_autoRefreshInterval) { clearInterval(_autoRefreshInterval); _autoRefreshInterval = null; }
+  }
+}
+
+async function loadGame(showLoader = true) {
+  if (showLoader) {
+    $('pageContent').innerHTML = `<div class="full-loader"><div class="loader"></div><span class="load-text">Loading match…</span></div>`;
+  }
+  try {
+    const json = await apiFetch('/games/' + gameId);
+    _game = json.data;
+    renderGame(_game);
+    const lbl = $('lastUpdatedLabel');
+    if (lbl) lbl.textContent = 'Updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch (e) {
+    $('pageContent').innerHTML = `<div class="error-state">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h3>Could Not Load Match</h3>
+      <p>${e.message || 'Something went wrong. Please try again.'}</p>
+      <button class="btn-gold" onclick="loadGame(true)">Try Again</button>
+    </div>`;
+  }
+}
+
+async function refreshGame() {
+  const btn = $('refreshBtn');
+  if (btn) btn.classList.add('spinning');
+  await loadGame(false);
+  if (btn) btn.classList.remove('spinning');
+  showToast('✓ Match refreshed');
+}
+
+if (gameId) loadGame(true);
+</script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BetOracle – Sign In / Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    /* ─── TOKENS (identical to homepage) ─── */
+    :root{
+      --bg:#0d0f1a; --bg2:#12152b; --card:#1a1e35; --card2:#1f2440;
+      --gold:#f5a623; --gold2:#ffc14d; --gdim:rgba(245,166,35,.11); --gbdr:rgba(245,166,35,.26);
+      --white:#fff; --muted:#8b90a8; --border:rgba(255,255,255,.07);
+      --red:#e74c3c; --green:#2ecc71;
+      --fh:'Syne',sans-serif; --fb:'DM Sans',sans-serif; --r:10px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--bg);color:var(--white);
+      font-family:var(--fb);font-size:14px;
+      min-height:100vh;overflow-x:hidden;line-height:1.5;
+    }
+    a{text-decoration:none;color:inherit}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:rgba(245,166,35,.2);border-radius:2px}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(245,166,35,.08)}50%{box-shadow:0 0 40px rgba(245,166,35,.22)}}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+    /* ─── NAV ─── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;height:56px;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 clamp(14px,4vw,40px);
+      background:rgba(13,15,26,.97);backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--border);
+    }
+    .logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-size:1rem;font-weight:800}
+    .logo-mark{width:28px;height:28px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-mark svg{width:15px;height:15px;stroke:#0d0f1a;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+    .nav-back{
+      display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);
+      font-weight:500;transition:color .18s;-webkit-tap-highlight-color:transparent;
+    }
+    .nav-back:hover{color:var(--white)}
+    .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    /* ─── PAGE LAYOUT ─── */
+    .page{
+      min-height:100vh;display:grid;
+      grid-template-columns:1fr 1fr;
+    }
+
+    /* ─── LEFT PANEL (branding) ─── */
+    .panel-left{
+      background:var(--bg2);
+      border-right:1px solid var(--border);
+      display:flex;flex-direction:column;justify-content:center;
+      padding:clamp(40px,6vw,80px) clamp(28px,5vw,64px);
+      position:relative;overflow:hidden;
+    }
+    .panel-left::before{
+      content:'';position:absolute;top:-120px;right:-80px;
+      width:400px;height:400px;
+      background:radial-gradient(ellipse,rgba(245,166,35,.12) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .panel-left::after{
+      content:'';position:absolute;bottom:-100px;left:-60px;
+      width:300px;height:300px;
+      background:radial-gradient(ellipse,rgba(245,166,35,.07) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .panel-tag{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--gdim);border:1px solid var(--gbdr);
+      border-radius:100px;padding:4px 13px;
+      font-size:.68rem;color:var(--gold);font-weight:600;
+      text-transform:uppercase;letter-spacing:.07em;
+      margin-bottom:24px;width:fit-content;
+    }
+    .panel-tag svg{width:10px;height:10px;fill:var(--gold)}
+    .panel-left h2{
+      font-family:var(--fh);font-size:clamp(1.5rem,3vw,2.2rem);
+      font-weight:800;line-height:1.1;margin-bottom:14px;
+    }
+    .panel-left h2 em{color:var(--gold);font-style:normal}
+    .panel-left p{color:var(--muted);font-size:.84rem;line-height:1.75;max-width:340px;margin-bottom:32px}
+
+    /* feature list */
+    .feat-list{display:flex;flex-direction:column;gap:12px}
+    .feat-item{
+      display:flex;align-items:flex-start;gap:11px;
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--r);padding:13px 15px;
+    }
+    .feat-icon{
+      width:32px;height:32px;border-radius:8px;background:var(--gdim);border:1px solid var(--gbdr);
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+    }
+    .feat-icon svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .feat-text h4{font-family:var(--fh);font-size:.8rem;font-weight:700;margin-bottom:2px}
+    .feat-text p{font-size:.72rem;color:var(--muted);line-height:1.5}
+
+    /* ─── RIGHT PANEL (form) ─── */
+    .panel-right{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:clamp(28px,5vw,60px) clamp(20px,4vw,48px);
+      padding-top:80px;
+    }
+    .form-box{width:100%;max-width:420px;animation:fadeUp .45s ease both}
+
+    /* ─── TABS ─── */
+    .tabs{
+      display:flex;background:var(--card);border:1px solid var(--border);
+      border-radius:10px;padding:4px;gap:4px;margin-bottom:28px;
+    }
+    .tab-btn{
+      flex:1;padding:9px;border:none;background:none;cursor:pointer;
+      font-family:var(--fb);font-size:.82rem;font-weight:600;
+      color:var(--muted);border-radius:7px;transition:all .2s;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .tab-btn.active{background:var(--gold);color:#0d0f1a}
+    .tab-btn:not(.active):hover{color:var(--white);background:rgba(255,255,255,.05)}
+
+    /* ─── FORM TITLE ─── */
+    .form-title{font-family:var(--fh);font-size:1.25rem;font-weight:800;margin-bottom:4px}
+    .form-sub{font-size:.78rem;color:var(--muted);margin-bottom:22px}
+
+    /* ─── FORM FIELDS ─── */
+    .form-panel{display:none}
+    .form-panel.active{display:block}
+
+    .field{margin-bottom:14px}
+    .field label{
+      display:block;font-size:.74rem;font-weight:600;
+      color:var(--muted);margin-bottom:5px;letter-spacing:.02em;
+    }
+    .input-wrap{position:relative}
+    .input-wrap svg.input-icon{
+      position:absolute;left:12px;top:50%;transform:translateY(-50%);
+      width:15px;height:15px;stroke:var(--muted);fill:none;
+      stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+      pointer-events:none;transition:stroke .2s;
+    }
+    .input-wrap input{
+      width:100%;background:var(--card);border:1.5px solid var(--border);
+      border-radius:8px;padding:10px 12px 10px 36px;
+      color:var(--white);font-family:var(--fb);font-size:.84rem;
+      outline:none;transition:border-color .2s,box-shadow .2s;
+      -webkit-appearance:none;
+    }
+    .input-wrap input::placeholder{color:rgba(139,144,168,.55)}
+    .input-wrap input:focus{border-color:var(--gbdr);box-shadow:0 0 0 3px rgba(245,166,35,.08)}
+    .input-wrap input:focus + svg.input-icon,
+    .input-wrap svg.input-icon:has(~ input:focus){stroke:var(--gold)}
+    .input-wrap input.err{border-color:rgba(231,76,60,.5);box-shadow:0 0 0 3px rgba(231,76,60,.08)}
+    .input-wrap input.ok{border-color:rgba(46,204,113,.4)}
+
+    /* toggle password */
+    .pw-toggle{
+      position:absolute;right:11px;top:50%;transform:translateY(-50%);
+      background:none;border:none;cursor:pointer;padding:2px;
+      color:var(--muted);display:flex;align-items:center;
+      transition:color .18s;-webkit-tap-highlight-color:transparent;
+    }
+    .pw-toggle:hover{color:var(--white)}
+    .pw-toggle svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+    /* two-col row */
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    /* field hint / error */
+    .field-hint{font-size:.68rem;color:var(--muted);margin-top:4px}
+    .field-err{font-size:.68rem;color:var(--red);margin-top:4px;display:none}
+    .field-err.show{display:block}
+
+    /* password strength */
+    .pw-strength{margin-top:6px}
+    .pw-bars{display:flex;gap:4px;margin-bottom:4px}
+    .pw-bar{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background .3s}
+    .pw-bar.weak{background:#e74c3c}
+    .pw-bar.fair{background:#f39c12}
+    .pw-bar.good{background:#2ecc71}
+    .pw-label{font-size:.66rem;color:var(--muted)}
+
+    /* phone row */
+    .phone-row{display:flex;gap:8px}
+    .phone-code{
+      width:82px;flex-shrink:0;background:var(--card);border:1.5px solid var(--border);
+      border-radius:8px;padding:10px 8px;color:var(--white);
+      font-family:var(--fb);font-size:.82rem;outline:none;
+      transition:border-color .2s;-webkit-appearance:none;cursor:pointer;
+    }
+    .phone-code:focus{border-color:var(--gbdr)}
+    .phone-input-wrap{flex:1}
+
+    /* terms */
+    .terms-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:16px}
+    .custom-cb{position:relative;width:16px;height:16px;flex-shrink:0;margin-top:1px}
+    .custom-cb input{opacity:0;position:absolute;inset:0;cursor:pointer;margin:0}
+    .custom-cb .cb-box{
+      width:16px;height:16px;border:1.5px solid var(--border);
+      border-radius:4px;display:flex;align-items:center;justify-content:center;
+      background:var(--card);transition:all .18s;pointer-events:none;
+    }
+    .custom-cb input:checked ~ .cb-box{background:var(--gold);border-color:var(--gold)}
+    .custom-cb .cb-box svg{width:10px;height:10px;stroke:#0d0f1a;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .18s}
+    .custom-cb input:checked ~ .cb-box svg{opacity:1}
+    .terms-text{font-size:.73rem;color:var(--muted);line-height:1.55}
+    .terms-text a{color:var(--gold);border-bottom:1px solid transparent;transition:border-color .18s}
+    .terms-text a:hover{border-color:var(--gold)}
+
+    /* forgot */
+    .forgot{display:block;text-align:right;font-size:.73rem;color:var(--muted);margin-top:-8px;margin-bottom:16px;transition:color .18s}
+    .forgot:hover{color:var(--gold)}
+
+    /* divider */
+    .divider{display:flex;align-items:center;gap:10px;margin:18px 0}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+    .divider span{font-size:.7rem;color:var(--muted);white-space:nowrap}
+
+    /* submit button */
+    .btn-submit{
+      width:100%;padding:12px;border:none;cursor:pointer;
+      background:var(--gold);color:#0d0f1a;
+      font-family:var(--fb);font-size:.88rem;font-weight:700;
+      border-radius:9px;transition:background .2s,transform .15s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      -webkit-tap-highlight-color:transparent;
+      position:relative;overflow:hidden;
+    }
+    .btn-submit:hover{background:var(--gold2);transform:translateY(-1px)}
+    .btn-submit:active{transform:scale(.98)}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-submit .spinner{
+      width:16px;height:16px;border:2px solid rgba(13,15,26,.3);
+      border-top-color:#0d0f1a;border-radius:50%;
+      animation:spin .7s linear infinite;display:none;
+    }
+    .btn-submit.loading .spinner{display:block}
+    .btn-submit.loading .btn-text{display:none}
+
+    /* switch tab link */
+    .switch-link{
+      text-align:center;margin-top:18px;
+      font-size:.76rem;color:var(--muted);
+    }
+    .switch-link button{
+      background:none;border:none;cursor:pointer;
+      color:var(--gold);font-family:var(--fb);font-size:.76rem;font-weight:600;
+      padding:0;margin-left:4px;transition:opacity .18s;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .switch-link button:hover{opacity:.8}
+
+    /* alert banner */
+    .alert{
+      border-radius:8px;padding:11px 14px;margin-bottom:16px;
+      font-size:.78rem;line-height:1.55;display:none;
+      align-items:flex-start;gap:9px;
+    }
+    .alert.show{display:flex}
+    .alert-err{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.25);color:#e74c3c}
+    .alert-ok{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.25);color:#2ecc71}
+    .alert svg{width:15px;height:15px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:780px){
+      .page{grid-template-columns:1fr}
+      .panel-left{display:none}
+      .panel-right{padding-top:76px;min-height:100vh}
+    }
+    @media(max-width:400px){
+      .field-row{grid-template-columns:1fr}
+      .form-box{padding:0}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+    </div>
+    BetOracle
+  </a>
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- LEFT BRANDING PANEL -->
+  <div class="panel-left">
+    <div class="panel-tag">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Join BetOracle
+    </div>
+    <h2>Your Edge in<br>Sports <em>Betting</em></h2>
+    <p>Access AI-powered predictions, free betting slips with real booking codes, and exclusive VIP tips — all in one platform.</p>
+    <div class="feat-list">
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+        </div>
+        <div class="feat-text">
+          <h4>Free Daily Predictions</h4>
+          <p>Get expert picks for top leagues every day, completely free.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="feat-text">
+          <h4>Ready-to-Use Booking Codes</h4>
+          <p>Copy and paste directly to your bookmaker — no guesswork.</p>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="feat-text">
+          <h4>VIP Exclusive Slips</h4>
+          <p>Unlock our highest-confidence picks with a VIP subscription.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT FORM PANEL -->
+  <div class="panel-right">
+    <div class="form-box">
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+        <button class="tab-btn" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- ══ LOGIN FORM ══ -->
+      <div class="form-panel active" id="panelLogin">
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to access your predictions and slips.</div>
+
+        <div class="alert alert-err" id="loginErr">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="loginErrMsg">Invalid email or password.</span>
+        </div>
+
+        <div class="field">
+          <label for="loginEmail">Email Address</label>
+          <div class="input-wrap">
+            <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required/>
+            <svg class="input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="field-err" id="loginEmailErr">Please enter a valid email.</div>
+        </div>
+
+        <div class="field">
+          <label for="loginPw">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="loginPw" placeholder="Your password" autocomplete="current-password" required/>
+            <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <button type="button" class="pw-toggle" onclick="togglePw('loginPw',this)" aria-label="Toggle password visibility">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="field-err" id="loginPwErr">Password is required.</div>
+        </div>
+
+        <a href="#" class="forgot">Forgot password?</a>
+
+        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+          <span class="btn-text">Sign In</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="switch-link">
+          Don't have an account?
+          <button onclick="switchTab('register')">Create one free</button>
+        </div>
+      </div>
+
+      <!-- ══ REGISTER FORM ══ -->
+      <div class="form-panel" id="panelRegister">
+        <div class="form-title">Create your account</div>
+        <div class="form-sub">Free forever — upgrade to VIP anytime.</div>
+
+        <div class="alert alert-err" id="regErr">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="regErrMsg">Something went wrong.</span>
+        </div>
+        <div class="alert alert-ok" id="regOk">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Account created! Redirecting…</span>
+        </div>
+
+        <div class="field">
+          <label for="regName">Full Name</label>
+          <div class="input-wrap">
+            <input type="text" id="regName" placeholder="John Doe" autocomplete="name" required/>
+            <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="field-err" id="regNameErr">Please enter your full name.</div>
+        </div>
+
+        <div class="field">
+          <label for="regEmail">Email Address</label>
+          <div class="input-wrap">
+            <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" required/>
+            <svg class="input-icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="field-err" id="regEmailErr">Please enter a valid email.</div>
+        </div>
+
+        <div class="field">
+          <label for="regPhone">Phone Number</label>
+          <div class="phone-row">
+            <select class="phone-code" id="dialCode">
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+251">🇪🇹 +251</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <div class="input-wrap phone-input-wrap">
+              <input type="tel" id="regPhone" placeholder="024 000 0000" autocomplete="tel" required/>
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+          </div>
+          <div class="field-err" id="regPhoneErr">Please enter a valid phone number.</div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" style="margin-bottom:0">
+            <label for="regPw">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="regPw" placeholder="Min. 8 characters" autocomplete="new-password" required oninput="checkStrength(this.value)"/>
+              <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <button type="button" class="pw-toggle" onclick="togglePw('regPw',this)" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-strength" id="pwStrength" style="display:none">
+              <div class="pw-bars">
+                <div class="pw-bar" id="bar1"></div>
+                <div class="pw-bar" id="bar2"></div>
+                <div class="pw-bar" id="bar3"></div>
+                <div class="pw-bar" id="bar4"></div>
+              </div>
+              <div class="pw-label" id="pwLabel"></div>
+            </div>
+            <div class="field-err" id="regPwErr">Min. 8 characters required.</div>
+          </div>
+
+          <div class="field" style="margin-bottom:0">
+            <label for="regPwConfirm">Confirm Password</label>
+            <div class="input-wrap">
+              <input type="password" id="regPwConfirm" placeholder="Repeat password" autocomplete="new-password" required/>
+              <svg class="input-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="field-err" id="regPwConfirmErr">Passwords do not match.</div>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="terms-row">
+          <label class="custom-cb">
+            <input type="checkbox" id="termsCheck"/>
+            <div class="cb-box">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </label>
+          <p class="terms-text">I agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. I confirm I am 18 years of age or older.</p>
+        </div>
+        <div class="field-err show" id="termsErr" style="display:none;margin-bottom:12px">You must accept the terms to continue.</div>
+
+        <button class="btn-submit" id="regBtn" onclick="handleRegister()">
+          <span class="btn-text">Create Free Account</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="switch-link">
+          Already have an account?
+          <button onclick="switchTab('login')">Sign in</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8080/api/v1';
+
+  /* ── read URL param to open the right tab on load ── */
+  window.addEventListener('DOMContentLoaded', () => {
+    const p = new URLSearchParams(location.search).get('tab');
+    if (p === 'register') switchTab('register');
+  });
+
+  /* ── tab switch ── */
+  function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('tabLogin').classList.toggle('active', isLogin);
+    document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+    document.getElementById('panelLogin').classList.toggle('active', isLogin);
+    document.getElementById('panelRegister').classList.toggle('active', !isLogin);
+    // update URL without reload
+    history.replaceState(null, '', `?tab=${tab}`);
+    // clear alerts when switching
+    hideAlert('loginErr'); hideAlert('regErr'); hideAlert('regOk');
+  }
+
+  /* ── toggle password visibility ── */
+  function togglePw(inputId, btn) {
+    const inp = document.getElementById(inputId);
+    const showing = inp.type === 'text';
+    inp.type = showing ? 'password' : 'text';
+    btn.querySelector('svg').innerHTML = showing
+      ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+      : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  }
+
+  /* ── password strength ── */
+  function checkStrength(val) {
+    const wrap = document.getElementById('pwStrength');
+    if (!val) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    let score = 0;
+    if (val.length >= 8)  score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const cls  = ['','weak','weak','fair','good'];
+    const lbl  = ['','Weak','Fair','Good','Strong'];
+    const clrs = ['','#e74c3c','#f39c12','#f39c12','#2ecc71'];
+    for (let i = 1; i <= 4; i++) {
+      const bar = document.getElementById('bar' + i);
+      bar.className = 'pw-bar' + (i <= score ? ' ' + cls[score] : '');
+    }
+    const labelEl = document.getElementById('pwLabel');
+    labelEl.textContent = lbl[score];
+    labelEl.style.color = clrs[score];
+  }
+
+  /* ── alert helpers ── */
+  function showAlert(id, msg) {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    const span = el.querySelector('span');
+    if (span && msg) span.textContent = msg;
+  }
+  function hideAlert(id) {
+    document.getElementById(id)?.classList.remove('show');
+  }
+
+  /* ── field validation helpers ── */
+  function fieldErr(inputId, errId, show) {
+    const inp = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (show) {
+      inp.classList.add('err'); inp.classList.remove('ok');
+      err.classList.add('show');
+    } else {
+      inp.classList.remove('err'); inp.classList.add('ok');
+      err.classList.remove('show');
+    }
+    return !show;
+  }
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function isEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+  function isPhone(s) { return /^[\d\s\-()+]{7,15}$/.test(s); }
+
+  /* ── loading state ── */
+  function setLoading(btnId, loading) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.classList.toggle('loading', loading);
+  }
+
+  /* ── shake animation for errors ── */
+  function shake(id) {
+    const el = document.getElementById(id);
+    el.style.animation = 'none';
+    requestAnimationFrame(() => { el.style.animation = 'shake .4s ease'; });
+  }
+
+  /* ══════════════════════════════════
+     LOGIN  →  POST /api/v1/auth/login
+  ══════════════════════════════════ */
+  async function handleLogin() {
+    hideAlert('loginErr');
+    const email = val('loginEmail');
+    const pw    = val('loginPw');
+    let ok = true;
+    ok = fieldErr('loginEmail', 'loginEmailErr', !isEmail(email)) && ok;
+    ok = fieldErr('loginPw',    'loginPwErr',    !pw)             && ok;
+    if (!ok) { shake('panelLogin'); return; }
+
+    setLoading('loginBtn', true);
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pw })
+      });
+      const json = await res.json();
+
+      if (res.ok && json.data) {
+        const { token, refreshToken, role } = json.data;
+        localStorage.setItem('bo_token',   token);
+        localStorage.setItem('bo_refresh', refreshToken);
+        localStorage.setItem('bo_role',    role);
+        // redirect based on role
+        location.href = role === 'ADMIN' ? 'admin/dashboard.html' : 'dashboard.html';
+      } else {
+        const msg = json.message || 'Invalid email or password.';
+        showAlert('loginErr', msg);
+        shake('panelLogin');
+        document.getElementById('loginPw').value = '';
+        fieldErr('loginPw', 'loginPwErr', false); // reset ok state
+      }
+    } catch (e) {
+      showAlert('loginErr', 'Network error. Please check your connection and try again.');
+      shake('panelLogin');
+    } finally {
+      setLoading('loginBtn', false);
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     REGISTER  →  POST /api/v1/auth/register
+  ══════════════════════════════════════════ */
+  async function handleRegister() {
+    hideAlert('regErr'); hideAlert('regOk');
+    const fullName       = val('regName');
+    const email          = val('regEmail');
+    const phoneRaw       = val('regPhone');
+    const dialCode       = document.getElementById('dialCode').value;
+    const phoneNumber    = dialCode + phoneRaw.replace(/^0/, ''); // e.g. +233241234567
+    const password       = val('regPw');
+    const confirmPassword = val('regPwConfirm');
+    const terms          = document.getElementById('termsCheck').checked;
+
+    let ok = true;
+    ok = fieldErr('regName',      'regNameErr',      !fullName)           && ok;
+    ok = fieldErr('regEmail',     'regEmailErr',      !isEmail(email))    && ok;
+    ok = fieldErr('regPhone',     'regPhoneErr',      !isPhone(phoneRaw)) && ok;
+    ok = fieldErr('regPw',        'regPwErr',         password.length < 8) && ok;
+    ok = fieldErr('regPwConfirm', 'regPwConfirmErr',  password !== confirmPassword) && ok;
+
+    // terms
+    const termsErrEl = document.getElementById('termsErr');
+    if (!terms) {
+      termsErrEl.style.display = 'block';
+      ok = false;
+    } else {
+      termsErrEl.style.display = 'none';
+    }
+
+    if (!ok) { shake('panelRegister'); return; }
+
+    setLoading('regBtn', true);
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password, confirmPassword, phoneNumber })
+      });
+      const json = await res.json();
+
+      if (res.ok && json.data) {
+        const { token, refreshToken, role } = json.data;
+        localStorage.setItem('bo_token',   token);
+        localStorage.setItem('bo_refresh', refreshToken);
+        localStorage.setItem('bo_role',    role);
+        showAlert('regOk');
+        setTimeout(() => { location.href = 'dashboard.html'; }, 1400);
+      } else {
+        const msg = json.message || 'Registration failed. Please try again.';
+        showAlert('regErr', msg);
+        shake('panelRegister');
+      }
+    } catch (e) {
+      showAlert('regErr', 'Network error. Please check your connection and try again.');
+      shake('panelRegister');
+    } finally {
+      setLoading('regBtn', false);
+    }
+  }
+
+  /* ── Enter key submits ── */
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const loginActive = document.getElementById('panelLogin').classList.contains('active');
+    if (loginActive) handleLogin();
+    else handleRegister();
+  });
+
+  /* ── real-time field clearing on input ── */
+  ['loginEmail','loginPw'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => hideAlert('loginErr'));
+  });
+  ['regName','regEmail','regPhone','regPw','regPwConfirm'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => hideAlert('regErr'));
+  });
+</script>
+</body>
+</html>

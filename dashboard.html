@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BetOracle – My Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --bg:#0d0f1a;--bg2:#12152b;--card:#1a1e35;--card2:#1f2440;
+      --gold:#f5a623;--gold2:#ffc14d;--gdim:rgba(245,166,35,.11);--gbdr:rgba(245,166,35,.26);
+      --white:#fff;--muted:#8b90a8;--border:rgba(255,255,255,.07);
+      --live:#ff4444;--green:#2ecc71;--red:#e74c3c;
+      --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--r:10px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--white);font-family:var(--fb);font-size:14px;overflow-x:hidden;line-height:1.5;min-height:100vh}
+    a{text-decoration:none;color:inherit}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:var(--bg)}
+    ::-webkit-scrollbar-thumb{background:rgba(245,166,35,.2);border-radius:2px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 16px rgba(245,166,35,.07)}50%{box-shadow:0 0 32px rgba(245,166,35,.22)}}
+    .btn-gold{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#0d0f1a;border:none;cursor:pointer;font-family:var(--fb);font-size:.82rem;font-weight:700;padding:9px 18px;border-radius:8px;white-space:nowrap;transition:background .2s,transform .15s;gap:6px}
+    .btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+    .btn-gold:active{transform:scale(.97)}
+    .btn-outline{display:inline-flex;align-items:center;justify-content:center;background:none;border:1.5px solid var(--gold);color:var(--gold);font-family:var(--fb);font-size:.8rem;font-weight:700;padding:8px 18px;border-radius:8px;cursor:pointer;white-space:nowrap;transition:background .2s}
+    .btn-outline:hover{background:var(--gdim)}
+    .btn-danger{background:rgba(231,76,60,.12);border:1px solid rgba(231,76,60,.25);color:var(--red);font-family:var(--fb);font-size:.8rem;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background .2s;white-space:nowrap}
+    .btn-danger:hover{background:rgba(231,76,60,.2)}
+    .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+    .sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+    .sb-logo{padding:18px 20px;border-bottom:1px solid var(--border)}
+    .logo{display:flex;align-items:center;gap:9px;font-family:var(--fh);font-size:.95rem;font-weight:800}
+    .logo-mark{width:28px;height:28px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-mark svg{width:15px;height:15px;stroke:#0d0f1a;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+    .sb-profile{padding:16px 20px;border-bottom:1px solid var(--border)}
+    .sb-avatar{width:42px;height:42px;border-radius:50%;background:var(--gdim);border:2px solid var(--gbdr);display:flex;align-items:center;justify-content:center;margin-bottom:9px;font-family:var(--fh);font-size:1rem;font-weight:800;color:var(--gold)}
+    .sb-name{font-size:.84rem;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sb-email{font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .vip-chip{display:inline-flex;align-items:center;gap:4px;background:var(--gdim);border:1px solid var(--gbdr);color:var(--gold);font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em;margin-top:7px}
+    .free-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(139,144,168,.1);border:1px solid rgba(139,144,168,.2);color:var(--muted);font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em;margin-top:7px}
+    .sb-nav{flex:1;padding:12px 0}
+    .sb-section{padding:6px 20px 4px;font-size:.62rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:.82rem;color:var(--muted);font-weight:500;cursor:pointer;transition:all .18s;border-left:2px solid transparent}
+    .nav-item svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .nav-item:hover{color:var(--white);background:rgba(255,255,255,.04)}
+    .nav-item.active{color:var(--gold);background:var(--gdim);border-left-color:var(--gold)}
+    .nav-item .nav-badge{margin-left:auto;background:var(--live);color:#fff;font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:100px;min-width:18px;text-align:center}
+    .nav-item .nav-badge.gold{background:var(--gold);color:#0d0f1a}
+    .sb-footer{padding:14px 20px;border-top:1px solid var(--border)}
+    .sb-footer .nav-item{padding:8px 0;border-left:none}
+    .main{flex:1;overflow:hidden;min-width:0}
+    .topbar{height:56px;background:rgba(13,15,26,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,28px);position:sticky;top:0;z-index:100;backdrop-filter:blur(18px)}
+    .topbar-left{display:flex;align-items:center;gap:12px}
+    .mob-menu-btn{display:none;background:none;border:none;cursor:pointer;color:var(--white);padding:4px}
+    .mob-menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .page-title{font-family:var(--fh);font-size:.95rem;font-weight:800}
+    .topbar-right{display:flex;align-items:center;gap:8px}
+    .notif-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer;color:var(--muted);position:relative;transition:all .18s}
+    .notif-btn:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .notif-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block}
+    .notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--live);border:1.5px solid var(--bg)}
+    .content{padding:clamp(16px,3vw,28px)}
+    .tab-view{display:none}
+    .tab-view.active{display:block;animation:fadeUp .3s ease both}
+    .welcome-banner{background:linear-gradient(135deg,rgba(245,166,35,.12),rgba(245,166,35,.04));border:1px solid rgba(245,166,35,.2);border-radius:14px;padding:20px 24px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;overflow:hidden;animation:glow 5s ease infinite}
+    .welcome-banner::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(245,166,35,.12),transparent 65%);pointer-events:none}
+    .wb-text h2{font-family:var(--fh);font-size:clamp(1rem,2.5vw,1.3rem);font-weight:800;margin-bottom:4px}
+    .wb-text h2 em{color:var(--gold);font-style:normal}
+    .wb-text p{font-size:.78rem;color:var(--muted);line-height:1.6}
+    .wb-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:12px;margin-bottom:22px}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;transition:border-color .2s,transform .18s}
+    .stat-card:hover{border-color:var(--gbdr);transform:translateY(-2px)}
+    .stat-icon{width:36px;height:36px;border-radius:9px;background:var(--gdim);border:1px solid var(--gbdr);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+    .stat-icon svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .stat-icon.red{background:rgba(255,68,68,.1);border-color:rgba(255,68,68,.25)}
+    .stat-icon.red svg{stroke:var(--live)}
+    .stat-icon.green{background:rgba(46,204,113,.1);border-color:rgba(46,204,113,.25)}
+    .stat-icon.green svg{stroke:var(--green)}
+    .stat-val{font-family:var(--fh);font-size:1.5rem;font-weight:800;line-height:1;margin-bottom:4px}
+    .stat-val.gold{color:var(--gold)}
+    .stat-val.red{color:var(--live)}
+    .stat-val.green{color:var(--green)}
+    .stat-lbl{font-size:.72rem;color:var(--muted)}
+    .live-badge-sm{display:flex;align-items:center;gap:4px;background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.28);color:var(--live);font-size:.62rem;font-weight:700;padding:3px 9px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--live);animation:pulse 1.4s ease infinite}
+    .live-games-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+    .live-games-scroll::-webkit-scrollbar{height:2px}
+    .live-games-scroll::-webkit-scrollbar-thumb{background:var(--gbdr);border-radius:2px}
+    .live-game-card{flex-shrink:0;width:270px;background:var(--card);border:1px solid rgba(255,68,68,.2);border-radius:var(--r);padding:14px;cursor:pointer;transition:border-color .2s,transform .18s;position:relative;overflow:hidden}
+    .live-game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--live),transparent)}
+    .live-game-card:hover{border-color:rgba(255,68,68,.45);transform:translateY(-2px)}
+    .lgc-league{font-size:.64rem;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+    .lgc-min{font-size:.64rem;color:var(--live);font-weight:700}
+    .lgc-teams{display:flex;align-items:center;justify-content:space-between;gap:6px}
+    .lgc-team{flex:1;text-align:center}
+    .lgc-team-logo{width:32px;height:32px;object-fit:contain;display:block;margin:0 auto 5px}
+    .lgc-team-name{font-size:.72rem;font-weight:600;line-height:1.3}
+    .lgc-score-box{text-align:center;padding:0 6px}
+    .lgc-score{font-family:var(--fh);font-size:1.4rem;font-weight:800;color:var(--gold);letter-spacing:.04em}
+    .sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .sec-title{font-family:var(--fh);font-size:.92rem;font-weight:800}
+    .sec-title em{color:var(--gold);font-style:normal}
+    .sec-link{font-size:.72rem;color:var(--gold);font-weight:600;display:flex;align-items:center;gap:3px;transition:gap .18s;cursor:pointer}
+    .sec-link:hover{gap:7px}
+    .games-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:clip}
+    .games-filter-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
+    .filter-pills{display:flex;gap:5px;flex-wrap:wrap}
+    .fpill{background:var(--card2);border:1px solid var(--border);color:var(--muted);font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:100px;cursor:pointer;transition:all .18s}
+    .fpill:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .fpill.active{background:var(--gdim);border-color:var(--gbdr);color:var(--gold)}
+    .games-search-row{display:flex;flex-direction:column;gap:8px;padding:10px 16px 6px;border-bottom:1px solid var(--border)}
+    .search-wrap{position:relative;width:100%}
+    .search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:13px;height:13px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+    .search-input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:7px 10px 7px 30px;color:var(--white);font-family:var(--fb);font-size:.78rem;outline:none;transition:border-color .2s}
+    .search-input:focus{border-color:var(--gbdr)}
+    .search-input::placeholder{color:rgba(139,144,168,.45)}
+    .search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);padding:2px;line-height:1;font-size:.9rem;display:none}
+    .search-clear.visible{display:block}
+    .league-scroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;max-width:100%}
+    .league-scroll::-webkit-scrollbar{height:2px}
+    .league-scroll::-webkit-scrollbar-thumb{background:var(--gbdr);border-radius:2px}
+    .lpill{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);color:var(--muted);font-size:.68rem;font-weight:600;padding:4px 11px;border-radius:100px;cursor:pointer;transition:all .18s;white-space:nowrap}
+    .lpill:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .lpill.active{background:var(--gold);border-color:var(--gold);color:#0d0f1a;font-weight:700}
+    .lpill img{width:14px;height:14px;object-fit:contain;border-radius:2px;flex-shrink:0}
+    .no-results-msg{padding:36px 20px;text-align:center;font-size:.8rem;color:var(--muted)}
+    .no-results-msg strong{display:block;font-family:var(--fh);font-size:.88rem;color:var(--white);margin-bottom:4px}
+    .refresh-btn{background:none;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:5px 10px;font-size:.72rem;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .18s;white-space:nowrap}
+    .refresh-btn:hover{color:var(--white);border-color:rgba(255,255,255,.15)}
+    .refresh-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .refresh-btn.spinning svg{animation:spin .6s linear infinite}
+    .game-row{display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s}
+    .game-row:last-child{border-bottom:none}
+    .game-row:hover{background:rgba(255,255,255,.03)}
+    .gr-team{display:flex;align-items:center;gap:8px;min-width:0}
+    .gr-team.right{flex-direction:row-reverse;text-align:right}
+    .gr-logo{width:30px;height:30px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+    .gr-logo img{width:22px;height:22px;object-fit:contain}
+    .gr-logo .fb-icon{width:14px;height:14px;opacity:.35}
+    .gr-info{min-width:0}
+    .gr-name{font-size:.78rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .gr-league-row{display:flex;align-items:center;gap:3px;margin-top:2px}
+    .gr-league-row img{width:11px;height:11px;object-fit:contain;opacity:.65;flex-shrink:0}
+    .gr-league-row span{font-size:.59rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .gr-score-box{text-align:center;min-width:70px}
+    .gr-score{font-family:var(--fh);font-size:.95rem;font-weight:800;line-height:1}
+    .gr-score.live{color:var(--gold)}
+    .gr-time{font-size:.62rem;color:var(--muted);margin-top:2px}
+    .gr-time.live{color:var(--live);font-weight:600}
+    .gr-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:56px}
+    .badge{font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+    .b-live{background:rgba(255,68,68,.14);color:var(--live);border:1px solid rgba(255,68,68,.28)}
+    .b-up{background:var(--gdim);color:var(--gold);border:1px solid var(--gbdr)}
+    .b-fin{background:rgba(139,144,168,.09);color:var(--muted);border:1px solid rgba(139,144,168,.18)}
+    .b-vip{background:rgba(245,166,35,.16);color:var(--gold2);border:1px solid var(--gbdr)}
+    .slips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+    .slip-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,transform .18s;display:flex;flex-direction:column}
+    .slip-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+    .slip-card:hover{border-color:var(--gbdr);transform:translateY(-2px)}
+    .slip-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:6px}
+    .bm-badge{background:var(--gdim);color:var(--gold);font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+    .booking-code{font-family:'Courier New',monospace;font-size:clamp(.9rem,2.8vw,1.05rem);font-weight:700;color:var(--white);letter-spacing:.08em;margin-bottom:6px}
+    .slip-desc{font-size:.72rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:11px}
+    .slip-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;gap:7px}
+    .slip-odds-val{font-family:var(--fh);font-size:1rem;font-weight:800;color:var(--gold);line-height:1}
+    .slip-odds-lbl{font-size:.6rem;color:var(--muted);margin-top:2px}
+    .copy-btn{background:var(--gold);color:#0d0f1a;border:none;border-radius:6px;padding:7px 12px;font-size:.72rem;font-weight:700;cursor:pointer;transition:background .18s;white-space:nowrap}
+    .copy-btn:hover{background:var(--gold2)}
+    .vip-lock-card{background:var(--card);border:1px solid var(--gbdr);border-radius:var(--r);padding:15px;position:relative;overflow:hidden;opacity:.7}
+    .vip-lock-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+    .vip-lock-overlay{position:absolute;inset:0;background:rgba(13,15,26,.75);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:var(--r)}
+    .vip-lock-overlay svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:2}
+    .vip-lock-overlay span{font-size:.74rem;color:var(--gold);font-weight:600}
+    .vip-lock-overlay small{font-size:.66rem;color:var(--muted)}
+    .history-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+    .days-select{background:var(--card2);border:1px solid var(--border);color:var(--white);font-family:var(--fb);font-size:.78rem;padding:7px 12px;border-radius:8px;cursor:pointer;outline:none}
+    .days-select:focus{border-color:var(--gbdr)}
+    .hist-pagination{display:flex;align-items:center;gap:8px;margin-top:16px;justify-content:center}
+    .hist-page-btn{background:var(--card2);border:1px solid var(--border);color:var(--muted);font-family:var(--fb);font-size:.76rem;font-weight:600;padding:6px 14px;border-radius:8px;cursor:pointer;transition:all .18s}
+    .hist-page-btn:hover:not(:disabled){color:var(--white);border-color:rgba(255,255,255,.2)}
+    .hist-page-btn:disabled{opacity:.35;cursor:not-allowed}
+    .hist-page-info{font-size:.74rem;color:var(--muted);padding:0 4px}
+    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .profile-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px}
+    .profile-card h3{font-family:var(--fh);font-size:.84rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .profile-avatar-row{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .p-avatar{width:56px;height:56px;border-radius:50%;background:var(--gdim);border:2px solid var(--gbdr);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.3rem;font-weight:800;color:var(--gold);flex-shrink:0}
+    .p-avatar-info h4{font-family:var(--fh);font-size:.9rem;font-weight:700;margin-bottom:2px}
+    .p-avatar-info p{font-size:.74rem;color:var(--muted)}
+    .form-field{margin-bottom:14px}
+    .form-field label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.02em}
+    .form-input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--white);font-family:var(--fb);font-size:.84rem;outline:none;transition:border-color .2s}
+    .form-input:focus{border-color:var(--gbdr)}
+    .form-input::placeholder{color:rgba(139,144,168,.5)}
+    .payment-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .payment-row:last-child{border-bottom:none}
+    .pay-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .pay-icon.success{background:rgba(46,204,113,.1)}
+    .pay-icon.failed{background:rgba(231,76,60,.1)}
+    .pay-icon.pending{background:rgba(139,144,168,.1)}
+    .pay-icon svg{width:16px;height:16px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+    .pay-icon.success svg{stroke:var(--green)}
+    .pay-icon.failed svg{stroke:var(--red)}
+    .pay-icon.pending svg{stroke:var(--muted)}
+    .pay-info{flex:1;min-width:0}
+    .pay-purpose{font-size:.8rem;font-weight:600;margin-bottom:2px}
+    .pay-date{font-size:.68rem;color:var(--muted)}
+    .pay-amount{text-align:right;flex-shrink:0}
+    .pay-amount .amount{font-family:var(--fh);font-size:.9rem;font-weight:700}
+    .pay-amount .amount.success{color:var(--green)}
+    .pay-amount .amount.failed{color:var(--red)}
+    .pay-status{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+    .vip-status-card{background:linear-gradient(140deg,rgba(245,166,35,.1),rgba(245,166,35,.03));border:1px solid var(--gbdr);border-radius:var(--r);padding:20px;margin-bottom:16px;animation:glow 4s ease infinite}
+    .vip-status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .vip-status-left{display:flex;align-items:center;gap:12px}
+    .vip-big-icon{width:48px;height:48px;background:var(--gold);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .vip-big-icon svg{width:22px;height:22px;stroke:#0d0f1a;fill:none;stroke-width:2.2}
+    .vip-status-info h3{font-family:var(--fh);font-size:.95rem;font-weight:800;margin-bottom:2px}
+    .vip-status-info p{font-size:.74rem;color:var(--muted)}
+    .vip-expires{background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:8px 14px;text-align:center}
+    .vip-expires .exp-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+    .vip-expires .exp-val{font-family:var(--fh);font-size:.88rem;font-weight:700;color:var(--gold);margin-top:1px}
+    .loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px;gap:10px;color:var(--muted);font-size:.8rem}
+    .loader{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:8px;color:var(--muted);font-size:.8rem;text-align:center}
+    .empty-state svg{width:36px;height:36px;stroke:var(--muted);fill:none;stroke-width:1.5;opacity:.35}
+    .empty-state span{font-weight:500}
+    .empty-state p{font-size:.72rem;line-height:1.55}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:300;opacity:0;pointer-events:none;transition:opacity .22s;padding:16px}
+    .overlay.open{opacity:1;pointer-events:all}
+    .modal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:clamp(18px,4vw,28px);max-width:400px;width:100%;transform:translateY(14px);transition:transform .22s}
+    .overlay.open .modal{transform:none}
+    .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .modal-hd h3{font-family:var(--fh);font-size:1rem;font-weight:700}
+    .modal-x{background:rgba(255,255,255,.07);border:none;cursor:pointer;color:var(--muted);width:28px;height:28px;border-radius:6px;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:background .18s}
+    .modal-x:hover{background:rgba(255,255,255,.12);color:var(--white)}
+    .modal p{color:var(--muted);font-size:.8rem;margin-bottom:14px;line-height:1.6}
+    .modal-code{background:var(--bg);border:1px solid var(--gbdr);border-radius:9px;padding:16px;text-align:center;margin-bottom:14px;font-family:'Courier New',monospace;font-size:clamp(1.1rem,4.5vw,1.5rem);font-weight:700;color:var(--gold);letter-spacing:.12em;word-break:break-all}
+    .modal-acts{display:flex;gap:8px;flex-wrap:wrap}
+    .modal-acts .btn-gold{flex:1;padding:10px;font-size:.82rem}
+    .modal-acts .btn-outline{flex:1;padding:9px;font-size:.82rem}
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(6px);background:var(--card2);border:1px solid var(--gbdr);border-radius:100px;padding:8px 18px;font-size:.76rem;color:var(--gold);font-weight:600;opacity:0;transition:opacity .22s,transform .22s;pointer-events:none;z-index:400;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:149}
+    .sidebar-overlay.open{display:block}
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:fixed;left:-220px;top:0;height:100vh;z-index:150;transition:left .28s;width:220px}
+      .sidebar.mob-open{left:0}
+      .mob-menu-btn{display:flex}
+      .profile-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .stats-row{grid-template-columns:1fr 1fr}
+      .welcome-banner{flex-direction:column;align-items:flex-start}
+      .wb-actions{width:100%}
+      .wb-actions .btn-gold,.wb-actions .btn-outline{flex:1;justify-content:center}
+    }
+    @media(max-width:380px){.stats-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <a href="index.html" class="logo">
+        <div class="logo-mark"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>
+        BetOracle
+      </a>
+    </div>
+    <div class="sb-profile">
+      <div class="sb-avatar" id="sbAvatar">?</div>
+      <div class="sb-name" id="sbName">Loading…</div>
+      <div class="sb-email" id="sbEmail">—</div>
+      <div id="sbVipChip" class="vip-chip" style="display:none"><svg viewBox="0 0 24 24" width="10" height="10" fill="var(--gold)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>VIP Member</div>
+      <div id="sbFreeChip" class="free-chip">Free Plan</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Main</div>
+      <div class="nav-item active" onclick="switchView('overview',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Overview</div>
+      <div class="nav-item" onclick="switchView('live',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>Live Scores<span class="nav-badge" id="liveNavBadge" style="display:none">0</span></div>
+      <div class="nav-item" onclick="switchView('games',this)"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>Today's Games</div>
+      <div class="nav-item" onclick="switchView('history',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Past Games</div>
+      <div class="nav-item" onclick="switchView('slips',this)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Betting Slips<span class="nav-badge gold" id="slipsNavBadge" style="display:none">0</span></div>
+      <div class="sb-section" style="margin-top:8px">Account</div>
+      <div class="nav-item" onclick="switchView('vip',this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>VIP Access</div>
+      <div class="nav-item" onclick="switchView('profile',this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My Profile</div>
+      <div class="nav-item" onclick="switchView('payments',this)"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payments</div>
+    </nav>
+    <div class="sb-footer">
+      <a href="index.html" class="nav-item" style="display:flex"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Back to Home</a>
+      <div class="nav-item" onclick="handleLogout()" style="color:var(--red)"><svg viewBox="0 0 24 24" stroke="var(--red)"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="mob-menu-btn" onclick="openSidebar()"><svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <span class="page-title" id="pageTitle">Overview</span>
+      </div>
+      <div class="topbar-right">
+        <div style="font-size:.72rem;color:var(--muted);display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Live</div>
+        <button class="notif-btn" title="Notifications"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot"></div></button>
+        <button class="btn-gold" onclick="switchView('vip',null)">Upgrade VIP</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <div class="tab-view active" id="view-overview">
+        <div class="welcome-banner">
+          <div class="wb-text"><h2>Good day, <em id="welcomeName">there</em>! 👋</h2><p>Here's what's happening in sport today. Check live scores and your slips.</p></div>
+          <div class="wb-actions">
+            <button class="btn-gold" onclick="switchView('slips',null)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>View Slips</button>
+            <button class="btn-outline" onclick="switchView('live',null)">Live Scores</button>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-icon red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg></div><div class="stat-val red" id="statLive">—</div><div class="stat-lbl">Games Live Now</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div><div class="stat-val gold" id="statToday">—</div><div class="stat-lbl">Games Today</div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div class="stat-val green" id="statSlips">—</div><div class="stat-lbl">Free Slips Available</div></div>
+          <div class="stat-card" id="statVipCard" style="cursor:pointer" onclick="switchView('vip',null)"><div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="stat-val gold" id="statVip">Free</div><div class="stat-lbl" id="statVipLbl">Tap to upgrade</div></div>
+        </div>
+        <div id="overviewLiveWrap">
+          <div class="sec-hd"><div style="display:flex;align-items:center;gap:8px"><h3 class="sec-title"><em>Live</em> Scores</h3><div class="live-badge-sm"><div class="live-dot"></div>Live</div></div><span class="sec-link" onclick="switchView('live',null)">See all →</span></div>
+          <div class="live-games-scroll" id="overviewLiveScroll"><div class="loading-state"><div class="loader"></div></div></div>
+          <div style="height:22px"></div>
+        </div>
+        <div class="sec-hd"><h3 class="sec-title">Today's <em>Games</em></h3><span class="sec-link" onclick="switchView('games',null)">See all →</span></div>
+        <div class="games-table-wrap" id="overviewGamesTable"><div class="loading-state"><div class="loader"></div><span>Loading games…</span></div></div>
+        <div style="height:22px"></div>
+        <div class="sec-hd"><h3 class="sec-title">Free <em>Slips</em></h3><span class="sec-link" onclick="switchView('slips',null)">See all →</span></div>
+        <div class="slips-grid" id="overviewSlipsGrid"><div class="loading-state" style="grid-column:1/-1"><div class="loader"></div></div></div>
+      </div>
+
+      <!-- LIVE SCORES -->
+      <div class="tab-view" id="view-live">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px"><div class="live-badge-sm"><div class="live-dot"></div>Live Now</div><span style="font-size:.76rem;color:var(--muted)" id="liveTabCount">Loading…</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:.68rem;color:var(--muted)" id="dashLastUpdated">—</span><button class="refresh-btn" id="dashLiveRefreshBtn" onclick="manualDashLiveRefresh()"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button></div>
+        </div>
+        <div id="liveTabGrid"><div class="loading-state"><div class="loader"></div><span>Fetching live scores…</span></div></div>
+      </div>
+
+      <!-- TODAY'S GAMES -->
+      <div class="tab-view" id="view-games">
+        <div class="games-table-wrap">
+          <div class="games-filter-row">
+            <div class="filter-pills">
+              <button class="fpill active" onclick="filterGamesTab('all',this)">All</button>
+              <button class="fpill" onclick="filterGamesTab('UPCOMING',this)">Upcoming</button>
+              <button class="fpill" onclick="filterGamesTab('LIVE',this)">Live</button>
+              <button class="fpill" onclick="filterGamesTab('FINISHED',this)">Finished</button>
+            </div>
+            <button class="refresh-btn" id="refreshGamesBtn" onclick="refreshGames()"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button>
+          </div>
+          <div class="games-search-row">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-input" id="gamesSearch" type="text" placeholder="Search by club name…" oninput="onGamesSearchInput(this)"/>
+              <button class="search-clear" id="gamesSearchClear" onclick="clearGamesSearch()">✕</button>
+            </div>
+            <div class="league-scroll" id="gamesLeaguePills"></div>
+          </div>
+          <div id="gamesTabContent"><div class="loading-state"><div class="loader"></div><span>Loading games…</span></div></div>
+        </div>
+      </div>
+
+      <!-- PAST GAMES -->
+      <div class="tab-view" id="view-history">
+        <div class="history-controls">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <h3 class="sec-title">Past <em>Games</em></h3>
+            <select class="days-select" id="histDaysSelect" onchange="loadHistoryTab(true)">
+              <option value="1">Last 24 hours</option>
+              <option value="3">Last 3 days</option>
+              <option value="7" selected>Last 7 days</option>
+              <option value="14">Last 14 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
+          </div>
+          <button class="refresh-btn" id="refreshHistBtn" onclick="loadHistoryTab(true)"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button>
+        </div>
+        <div class="games-table-wrap">
+          <div class="games-search-row">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-input" id="histSearch" type="text" placeholder="Search past games by club name…" oninput="onHistSearchInput(this)"/>
+              <button class="search-clear" id="histSearchClear" onclick="clearHistSearch()">✕</button>
+            </div>
+            <div class="league-scroll" id="histLeaguePills"></div>
+          </div>
+          <div id="historyContent"><div class="loading-state"><div class="loader"></div><span>Loading history…</span></div></div>
+        </div>
+        <div class="hist-pagination" id="histPagination" style="display:none">
+          <button class="hist-page-btn" id="histPrevBtn" onclick="histChangePage(-1)" disabled>← Prev</button>
+          <span class="hist-page-info" id="histPageInfo">Page 1</span>
+          <button class="hist-page-btn" id="histNextBtn" onclick="histChangePage(1)">Next →</button>
+        </div>
+      </div>
+
+      <!-- SLIPS -->
+      <div class="tab-view" id="view-slips">
+        <div class="sec-hd" style="margin-bottom:16px"><h3 class="sec-title">Free Betting <em>Slips</em></h3><span style="font-size:.72rem;color:var(--muted)">Copy code → paste on bookmaker</span></div>
+        <div class="slips-grid" id="slipsTabGrid"><div class="loading-state" style="grid-column:1/-1"><div class="loader"></div></div></div>
+        <div style="margin-top:22px" id="vipSlipsHint">
+          <div class="sec-hd"><h3 class="sec-title">VIP <em>Slips</em></h3></div>
+          <div class="slips-grid">
+            <div class="vip-lock-card"><div class="slip-head"><span class="bm-badge">Betway</span><span class="badge b-vip">VIP</span></div><div class="booking-code">••••••••</div><div class="slip-desc">Exclusive high-odds slip available for VIP members only</div><div class="vip-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>VIP Only</span><small>Upgrade to unlock</small></div></div>
+            <div class="vip-lock-card"><div class="slip-head"><span class="bm-badge">Sportybet</span><span class="badge b-vip">VIP</span></div><div class="booking-code">••••••••</div><div class="slip-desc">Midnight Oracle — our highest confidence slip of the day</div><div class="vip-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>VIP Only</span><small>Upgrade to unlock</small></div></div>
+          </div>
+          <div style="text-align:center;margin-top:18px"><button class="btn-gold" onclick="switchView('vip',null)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Upgrade to VIP</button></div>
+        </div>
+      </div>
+
+      <!-- VIP -->
+      <div class="tab-view" id="view-vip">
+        <div id="vipStatusWrap"></div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px">
+          <div style="padding:16px;border-bottom:1px solid var(--border)"><div style="font-family:var(--fh);font-size:.84rem;font-weight:700;margin-bottom:2px">What you get with VIP</div><div style="font-size:.72rem;color:var(--muted)">Unlock the full BetOracle experience</div></div>
+          <div id="vipFeaturesList" style="padding:6px 0"></div>
+        </div>
+        <div style="background:linear-gradient(140deg,rgba(245,166,35,.1),rgba(245,166,35,.03));border:1px solid var(--gbdr);border-radius:var(--r);padding:24px;text-align:center;animation:glow 4s ease infinite">
+          <div style="font-family:var(--fh);font-size:1.8rem;font-weight:800;color:var(--gold)" id="vipPriceDisplay">Loading…</div>
+          <div style="font-size:.76rem;color:var(--muted);margin-bottom:18px" id="vipPriceSub">per month · cancel anytime</div>
+          <button class="btn-gold" style="width:100%;max-width:280px;padding:13px;font-size:.9rem" id="vipPayBtn" onclick="initiatePayment()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Get VIP Access</button>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:12px">Secure payment via Paystack · Instant access</div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="tab-view" id="view-profile">
+        <div class="profile-grid">
+          <div class="profile-card">
+            <h3>Personal Information</h3>
+            <div class="profile-avatar-row"><div class="p-avatar" id="profileAvatarLg">?</div><div class="p-avatar-info"><h4 id="profileName">—</h4><p id="profileRole">Free Member</p></div></div>
+            <div class="form-field"><label>Full Name</label><input class="form-input" id="pfFullName" type="text" placeholder="Your full name"/></div>
+            <div class="form-field"><label>Email Address</label><input class="form-input" id="pfEmail" type="email" placeholder="you@example.com"/></div>
+            <div class="form-field"><label>Phone Number</label><input class="form-input" id="pfPhone" type="tel" placeholder="+233 24 000 0000"/></div>
+            <button class="btn-gold" style="width:100%" onclick="saveProfile()">Save Changes</button>
+          </div>
+          <div class="profile-card">
+            <h3>Change Password</h3>
+            <div class="form-field"><label>Current Password</label><input class="form-input" id="pfCurPw" type="password" placeholder="Current password"/></div>
+            <div class="form-field"><label>New Password</label><input class="form-input" id="pfNewPw" type="password" placeholder="Min. 8 characters"/></div>
+            <div class="form-field"><label>Confirm New Password</label><input class="form-input" id="pfConfPw" type="password" placeholder="Repeat new password"/></div>
+            <button class="btn-gold" style="width:100%;margin-bottom:10px" onclick="changePassword()">Update Password</button>
+            <button class="btn-danger" style="width:100%" onclick="handleLogout()">Sign Out of All Devices</button>
+            <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--border)">
+              <div style="font-family:var(--fh);font-size:.78rem;font-weight:700;margin-bottom:10px;color:var(--muted)">Account Info</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;font-size:.76rem"><span style="color:var(--muted)">Member Since</span><span id="memberSince">—</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.76rem"><span style="color:var(--muted)">Account Status</span><span style="color:var(--green)">Active</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.76rem"><span style="color:var(--muted)">Plan</span><span id="acctPlan" style="color:var(--gold)">Free</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENTS -->
+      <div class="tab-view" id="view-payments">
+        <div class="profile-card" style="max-width:640px"><h3>Payment History</h3><div id="paymentList"><div class="loading-state"><div class="loader"></div><span>Loading payments…</span></div></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="slipModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-hd"><h3 id="modalTitle">Booking Code</h3><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <p id="modalDesc">Copy this code and enter it on your bookmaker platform.</p>
+    <div class="modal-code" id="modalCode">—</div>
+    <div class="modal-acts"><button class="btn-gold" onclick="copyModalCode()">Copy Code</button><button class="btn-outline" onclick="closeModal()">Close</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   CORE
+══════════════════════════════════════════════════ */
+const API='http://localhost:8080/api/v1';
+const $=id=>document.getElementById(id);
+function getToken(){return localStorage.getItem('bo_token');}
+function authHeaders(){return{'Authorization':'Bearer '+getToken(),'Content-Type':'application/json'};}
+function handleLogout(){['bo_token','bo_refresh','bo_role'].forEach(k=>localStorage.removeItem(k));location.href='auth.html?tab=login';}
+if(!getToken())location.href='auth.html?tab=login';
+
+async function apiFetch(path,opts={}){
+  const res=await fetch(API+path,{...opts,headers:{...authHeaders(),...(opts.headers||{})}});
+  if(res.status===401){handleLogout();return;}
+  const json=await res.json();
+  if(!res.ok)throw new Error(json.message||'Request failed');
+  return json;
+}
+function debounce(fn,ms=380){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);};}
+function showToast(m,dur=2400){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+function openSidebar(){$('sidebar').classList.add('mob-open');$('sbOverlay').classList.add('open');}
+function closeSidebar(){$('sidebar').classList.remove('mob-open');$('sbOverlay').classList.remove('open');}
+function goToGame(id){location.href='game-detail.html?id='+id;}
+
+/* ── Modal ── */
+let _code='';
+function openModal(code,title,desc){_code=code;$('modalTitle').textContent=title||'Booking Code';$('modalDesc').textContent=desc||'Copy this code and enter it on your bookmaker platform.';$('modalCode').textContent=code;$('slipModal').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){$('slipModal').classList.remove('open');document.body.style.overflow='';}
+function copyModalCode(){navigator.clipboard.writeText(_code).then(()=>showToast('✓ Copied: '+_code)).catch(()=>showToast('Code: '+_code));}
+$('slipModal').addEventListener('click',e=>{if(e.target===$('slipModal'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function copyCode(code){navigator.clipboard.writeText(code).then(()=>showToast('✓ Copied: '+code)).catch(()=>showToast('Code: '+code));}
+
+/* ══════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════ */
+const viewTitles={overview:'Overview',live:'Live Scores',games:"Today's Games",history:'Past Games',slips:'Betting Slips',vip:'VIP Access',profile:'My Profile',payments:'Payments'};
+function switchView(viewId,navEl){
+  document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const view=$('view-'+viewId);if(view)view.classList.add('active');
+  if(navEl)navEl.classList.add('active');
+  $('pageTitle').textContent=viewTitles[viewId]||viewId;
+  closeSidebar();
+  if(viewId==='live')    renderLiveTab();
+  if(viewId==='games')   renderGamesTab();
+  if(viewId==='history') loadHistoryTab(false);
+  if(viewId==='slips')   renderSlipsTab();
+  if(viewId==='profile') loadProfile();
+  if(viewId==='payments')loadPayments();
+  if(viewId==='vip')     loadVip();
+}
+
+/* ══════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════ */
+let _liveGames=[],_todayGames=[],_freeSlips=[],_vipSlips=[],_user=null,_isVip=false;
+let _gamesTabFilter='all';
+let _histPage=0,_histHasMore=false,_histGames=[];
+let _gamesSearch='',_gamesLeague='all';
+let _histSearch='',_histLeague='all';
+
+/* ══════════════════════════════════════════════════
+   LEAGUE META — real logos from api-sports CDN
+   PL=39  LaLiga=140  SerieA=135  Bundesliga=78  Ligue1=61
+══════════════════════════════════════════════════ */
+const LEAGUE_META={
+  'Premier League':  {flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',country:'England', logo:'https://media.api-sports.io/football/leagues/39.png', display:'Premier League'},
+  'Primera Division':{flag:'🇪🇸',        country:'Spain',   logo:'https://media.api-sports.io/football/leagues/140.png',display:'La Liga'},
+  'Serie A':         {flag:'🇮🇹',        country:'Italy',   logo:'https://media.api-sports.io/football/leagues/135.png',display:'Serie A'},
+  'Bundesliga':      {flag:'🇩🇪',        country:'Germany', logo:'https://media.api-sports.io/football/leagues/78.png', display:'Bundesliga'},
+  'Ligue 1':         {flag:'🇫🇷',        country:'France',  logo:'https://media.api-sports.io/football/leagues/61.png', display:'Ligue 1'},
+};
+const TOP5=Object.keys(LEAGUE_META);
+
+/* ══════════════════════════════════════════════════
+   FORMATTERS & HELPERS
+══════════════════════════════════════════════════ */
+function fmt(d){return d?new Date(d).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''}
+function fmtFull(d){return d?new Date(d).toLocaleDateString([],{year:'numeric',month:'short',day:'numeric'}):''}
+function initials(name){if(!name)return'?';const p=name.trim().split(' ');return(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
+
+/* Fallback icon when no logo URL */
+const FB_ICON=`<svg class="fb-icon" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/></svg>`;
+
+function teamLogoHTML(url){
+  if(!url)return FB_ICON;
+  return`<img src="${url}" width="22" height="22" style="object-fit:contain" loading="lazy" onerror="this.outerHTML='${FB_ICON.replace(/"/g,"'")}'" alt="">`;
+}
+
+/* League logo tag — prefers g.leagueLogo from API, falls back to LEAGUE_META */
+function leagueImg(g,size=12){
+  const meta=LEAGUE_META[(g.league||'').trim()];
+  const src=g.leagueLogo||(meta?meta.logo:'');
+  if(!src)return`<span style="width:5px;height:5px;border-radius:50%;background:var(--muted);display:inline-block"></span>`;
+  return`<img src="${src}" width="${size}" height="${size}" style="object-fit:contain;border-radius:2px;opacity:.75;flex-shrink:0" loading="lazy" onerror="this.style.display='none'" alt="">`;
+}
+
+function sBadge(s){
+  const cls={LIVE:'b-live',UPCOMING:'b-up',FINISHED:'b-fin',CANCELLED:'b-fin',POSTPONED:'b-fin',SUSPENDED:'b-fin'};
+  const lbl={LIVE:'Live',UPCOMING:'Soon',FINISHED:'FT',CANCELLED:'Off',POSTPONED:'PP',SUSPENDED:'SUS'};
+  return`<span class="badge ${cls[s]||'b-fin'}">${lbl[s]||s}</span>`;
+}
+
+function displayPeriod(g){
+  if(g.status==='LIVE'){
+    const p=g.matchPeriod||'',m=g.elapsedMinutes||0;
+    if(p==='Half Time')return'HT';
+    if(p==='1st Half')return m>0?m+"'":'1st';
+    if(p==='2nd Half')return m>0?m+"'":'2nd';
+    return m>0?m+"'":'Live';
+  }
+  if(g.status==='FINISHED')return g.matchPeriod==='Full Time'?'FT':(g.matchPeriod||'FT');
+  return fmt(g.kickoffTime);
+}
+
+/* ══════════════════════════════════════════════════
+   LEAGUE PILLS (shared)
+══════════════════════════════════════════════════ */
+function buildLeaguePills(games,containerId,activeLeague,onSelect){
+  const container=$(containerId);if(!container)return;
+  const counts={};
+  games.forEach(g=>{const l=(g.league||'').trim();if(l)counts[l]=(counts[l]||0)+1;});
+  const present=TOP5.filter(l=>counts[l]>0);
+  container.innerHTML='';
+  if(!present.length)return;
+  const mk=(key,html)=>{
+    const btn=document.createElement('button');
+    btn.className='lpill'+(activeLeague===key?' active':'');
+    btn.innerHTML=html;
+    btn.addEventListener('click',()=>{
+      container.querySelectorAll('.lpill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');onSelect(key);
+    });
+    container.appendChild(btn);
+  };
+  mk('all','All');
+  present.forEach(l=>{
+    const m=LEAGUE_META[l];
+    mk(l,`<img src="${m.logo}" onerror="this.style.display='none'" loading="lazy"><strong>${m.display}</strong><span style="opacity:.45;font-size:.6rem;margin-left:3px">${m.country}</span><span style="opacity:.35;font-size:.58rem;margin-left:4px">${counts[l]}</span>`);
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   FILTER / SEARCH HELPERS
+══════════════════════════════════════════════════ */
+function applyFilters(games,search,league){
+  let r=games;
+  if(league&&league!=='all')r=r.filter(g=>(g.league||'').trim()===league.trim());
+  if(search&&search.trim()){const q=search.trim().toLowerCase();r=r.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q));}
+  return r;
+}
+function noResultsHTML(search,league){
+  if(search&&league!=='all')return`<div class="no-results-msg"><strong>No matches found</strong>No games for "${search}" in ${league}</div>`;
+  if(search)return`<div class="no-results-msg"><strong>No matches found</strong>No clubs matching "${search}"</div>`;
+  if(league!=='all')return`<div class="no-results-msg"><strong>No games in ${league}</strong>Try a different league or status filter</div>`;
+  return`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>No games found</span></div>`;
+}
+function showingBar(shown,total){
+  if(shown>=total)return'';
+  return`<div style="padding:8px 16px;font-size:.7rem;color:var(--muted);border-bottom:1px solid var(--border)">Showing <strong style="color:var(--gold)">${shown}</strong> of ${total} games</div>`;
+}
+
+/* ── Today's Games search (debounced → API) ── */
+const _debouncedGamesSearch=debounce(()=>renderGamesTab(),380);
+function onGamesSearchInput(el){_gamesSearch=el.value;$('gamesSearchClear').classList.toggle('visible',!!el.value);_debouncedGamesSearch();}
+function clearGamesSearch(){$('gamesSearch').value='';_gamesSearch='';$('gamesSearchClear').classList.remove('visible');renderGamesTab();}
+
+/* ── Past Games search (debounced → API /games/search filtered to finished) ── */
+const _debouncedHistSearch=debounce(()=>loadHistoryTabSearch(),380);
+function onHistSearchInput(el){_histSearch=el.value;$('histSearchClear').classList.toggle('visible',!!el.value);_debouncedHistSearch();}
+function clearHistSearch(){$('histSearch').value='';_histSearch='';$('histSearchClear').classList.remove('visible');renderHistoryContent();}
+
+/* ══════════════════════════════════════════════════
+   BOOTSTRAP
+══════════════════════════════════════════════════ */
+async function bootstrap(){
+  try{
+    const json=await apiFetch('/users/me');_user=json.data;
+    $('sbAvatar').textContent=initials(_user.fullName);
+    $('sbName').textContent=_user.fullName||'User';
+    $('sbEmail').textContent=_user.email||'';
+    $('welcomeName').textContent=(_user.fullName||'there').split(' ')[0];
+    try{const v=await apiFetch('/payment/vip/status');_isVip=v.data?.vipActive===true;}catch(_){_isVip=false;}
+    if(_isVip){$('sbVipChip').style.display='inline-flex';$('sbFreeChip').style.display='none';$('statVip').textContent='VIP';$('statVipLbl').textContent='Active member';$('statVipCard').style.cursor='default';$('statVipCard').onclick=null;}
+    else{$('sbVipChip').style.display='none';$('sbFreeChip').style.display='inline-flex';}
+  }catch(e){console.warn('Bootstrap failed',e);}
+  await Promise.allSettled([loadLiveGames(),loadTodayGames(),loadFreeSlips()]);
+  renderOverviewSlips();renderOverviewGames();
+}
+
+/* ══════════════════════════════════════════════════
+   DATA LOADERS
+══════════════════════════════════════════════════ */
+async function loadLiveGames(){
+  try{
+    const json=await apiFetch('/games/live');_liveGames=json.data||[];
+    const badge=$('liveNavBadge');
+    if(_liveGames.length){badge.textContent=_liveGames.length;badge.style.display='block';}else badge.style.display='none';
+    const scroll=$('overviewLiveScroll'),wrap=$('overviewLiveWrap');
+    if(_liveGames.length){scroll.innerHTML=_liveGames.map(liveMiniCard).join('');wrap.style.display='';}
+    else wrap.style.display='none';
+    $('statLive').textContent=_liveGames.length;
+    const c=$('liveTabCount');if(c)c.textContent=_liveGames.length?`${_liveGames.length} match${_liveGames.length!==1?'es':''} in progress`:'No matches live right now';
+  }catch(e){$('statLive').textContent='0';$('overviewLiveWrap').style.display='none';}
+}
+
+async function loadTodayGames(){
+  try{
+    const json=await apiFetch('/games/today');_todayGames=json.data||[];
+    $('statToday').textContent=_todayGames.length;
+    buildLeaguePills(_todayGames,'gamesLeaguePills',_gamesLeague,league=>{_gamesLeague=league;renderGamesTab();});
+  }catch(e){$('statToday').textContent='0';}
+}
+
+async function loadFreeSlips(){
+  try{
+    const json=await apiFetch('/games/slips/free');_freeSlips=json.data||[];
+    $('statSlips').textContent=_freeSlips.length;
+    const badge=$('slipsNavBadge');
+    if(_freeSlips.length){badge.textContent=_freeSlips.length;badge.style.display='block';}else badge.style.display='none';
+  }catch(e){$('statSlips').textContent='0';}
+  if(_isVip){try{const v=await apiFetch('/vip/games/slips');_vipSlips=v.data||[];}catch(_){_vipSlips=[];}}
+}
+
+/* ══════════════════════════════════════════════════
+   CARD / ROW RENDERERS
+══════════════════════════════════════════════════ */
+function liveMiniCard(g){
+  const period=displayPeriod(g);
+  const hl=g.homeLogo?`<img class="lgc-team-logo" src="${g.homeLogo}" loading="lazy" onerror="this.style.display='none'" alt="">`:'';
+  const al=g.awayLogo?`<img class="lgc-team-logo" src="${g.awayLogo}" loading="lazy" onerror="this.style.display='none'" alt="">`:'';
+  return`<div class="live-game-card" onclick="goToGame('${g.id}')" role="button" tabindex="0">
+    <div class="lgc-league">
+      <span style="display:flex;align-items:center;gap:4px">${leagueImg(g,11)}<span>${g.league||'League'}</span></span>
+      <span class="lgc-min">${period}</span>
+    </div>
+    <div class="lgc-teams">
+      <div class="lgc-team">${hl}<div class="lgc-team-name">${g.homeTeam||'Home'}</div></div>
+      <div class="lgc-score-box"><div class="lgc-score">${g.homeScore??0}–${g.awayScore??0}</div></div>
+      <div class="lgc-team">${al}<div class="lgc-team-name">${g.awayTeam||'Away'}</div></div>
+    </div>
+  </div>`;
+}
+
+function liveFullCard(g){
+  const period=displayPeriod(g);
+  const periodLabel=g.matchPeriod||'In Progress';
+  const li=(url,alt)=>url?`<img src="${url}" alt="${alt||''}" width="32" height="32" style="object-fit:contain" loading="lazy" onerror="this.style.display='none'">`:`<svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" width="24" height="24"><circle cx="12" cy="12" r="10"/></svg>`;
+  const odds=g.homeWinOdds!=null?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border)">
+    <div style="text-align:center;padding:7px 4px;border-right:1px solid var(--border)"><div style="font-size:.56rem;color:var(--muted);text-transform:uppercase">Home</div><div style="font-family:var(--fh);font-size:.8rem;font-weight:700;color:var(--gold)">${g.homeWinOdds}</div></div>
+    <div style="text-align:center;padding:7px 4px;border-right:1px solid var(--border)"><div style="font-size:.56rem;color:var(--muted);text-transform:uppercase">Draw</div><div style="font-family:var(--fh);font-size:.8rem;font-weight:700;color:var(--gold)">${g.drawOdds??'—'}</div></div>
+    <div style="text-align:center;padding:7px 4px"><div style="font-size:.56rem;color:var(--muted);text-transform:uppercase">Away</div><div style="font-family:var(--fh);font-size:.8rem;font-weight:700;color:var(--gold)">${g.awayWinOdds}</div></div>
+  </div>`:'';
+  return`<div style="background:var(--card);border:1px solid rgba(255,68,68,.2);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .18s;position:relative"
+    onmouseover="this.style.transform='translateY(-2px)';this.style.borderColor='rgba(255,68,68,.48)'"
+    onmouseout="this.style.transform='';this.style.borderColor='rgba(255,68,68,.2)'"
+    onclick="goToGame('${g.id}')" role="button" tabindex="0">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--live),transparent)"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 13px 0;gap:6px">
+      <div style="display:flex;align-items:center;gap:5px;font-size:.64rem;color:var(--muted)">${leagueImg(g,13)}<span>${g.league||'League'}</span></div>
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:3px;background:rgba(255,68,68,.13);border:1px solid rgba(255,68,68,.28);color:var(--live);font-size:.58rem;font-weight:800;padding:2px 6px;border-radius:100px;text-transform:uppercase"><div style="width:5px;height:5px;border-radius:50%;background:var(--live);animation:pulse 1.4s ease infinite"></div>Live</div>
+        <div style="background:var(--card2);border:1px solid var(--border);color:var(--muted);font-size:.6rem;font-weight:700;padding:2px 6px;border-radius:4px">${period}</div>
+        ${g.vipOnly?'<div style="background:rgba(245,166,35,.14);border:1px solid var(--gbdr);color:var(--gold2);font-size:.58rem;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase">VIP</div>':''}
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;padding:12px 13px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+        <div style="width:50px;height:50px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden">${li(g.homeLogo,g.homeTeam)}</div>
+        <div style="font-size:.72rem;font-weight:600;text-align:center;word-break:break-word">${g.homeTeam||'Home'}</div>
+      </div>
+      <div style="text-align:center;padding:0 4px;flex-shrink:0">
+        <div style="font-family:var(--fh);font-size:1.9rem;font-weight:800;color:var(--gold);line-height:1;letter-spacing:.04em;white-space:nowrap">${g.homeScore??0} – ${g.awayScore??0}</div>
+        <div style="font-size:.58rem;color:var(--live);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:3px">${periodLabel}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+        <div style="width:50px;height:50px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden">${li(g.awayLogo,g.awayTeam)}</div>
+        <div style="font-size:.72rem;font-weight:600;text-align:center;word-break:break-word">${g.awayTeam||'Away'}</div>
+      </div>
+    </div>
+    ${odds}
+  </div>`;
+}
+
+function gameRowHTML(g){
+  const live=g.status==='LIVE',fin=g.status==='FINISHED';
+  const period=displayPeriod(g);
+  let scoreDisplay;
+  if(live||fin){
+    scoreDisplay=`<div class="gr-score ${live?'live':''}">${g.homeScore??0}–${g.awayScore??0}</div><div class="gr-time ${live?'live':''}">${period}</div>`;
+  }else{
+    scoreDisplay=`<div class="gr-score" style="font-size:.72rem;font-weight:500;color:var(--muted)">vs</div><div class="gr-time">${fmt(g.kickoffTime)}</div>`;
+  }
+  return`<div class="game-row" onclick="goToGame('${g.id}')" role="button" tabindex="0">
+    <div class="gr-team">
+      <div class="gr-logo">${teamLogoHTML(g.homeLogo)}</div>
+      <div class="gr-info">
+        <div class="gr-name">${g.homeTeam||'Home'}</div>
+        <div class="gr-league-row">${leagueImg(g,11)}<span>${g.league||''}</span></div>
+      </div>
+    </div>
+    <div class="gr-score-box">${scoreDisplay}</div>
+    <div class="gr-team right">
+      <div class="gr-logo">${teamLogoHTML(g.awayLogo)}</div>
+      <div class="gr-info" style="text-align:right"><div class="gr-name">${g.awayTeam||'Away'}</div></div>
+    </div>
+    <div class="gr-status">${g.vipOnly?'<span class="badge b-vip">VIP</span>':''}${sBadge(g.status)}</div>
+  </div>`;
+}
+
+function slipCardHTML(s,locked=false){
+  const tc={VIP:'b-vip',FREE_SUPER_ODDS:'b-live',MIDNIGHT_ORACLE:'b-fin'}[s.type]||'b-up';
+  const sc=String(s.bookingCode||'').replace(/'/g,"\\'");
+  const sd=String(s.description||'').replace(/'/g,"\\'").substring(0,90);
+  const bm=String(s.bookmaker||'').replace(/'/g,"\\'");
+  if(locked)return`<div class="vip-lock-card"><div class="slip-head"><span class="bm-badge">${s.bookmaker||'VIP'}</span><span class="badge b-vip">VIP</span></div><div class="booking-code">••••••••</div><div class="slip-desc">${s.description||'Exclusive VIP slip'}</div><div class="vip-lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>VIP Only</span><small>Upgrade to unlock</small></div></div>`;
+  return`<div class="slip-card" onclick="openModal('${sc}','${bm} &#8212; Booking Code','${sd}')" role="button" tabindex="0">
+    <div class="slip-head"><span class="bm-badge">${s.bookmaker||'Bookmaker'}</span><span class="badge ${tc}">${s.type||'FREE'}</span></div>
+    <div class="booking-code">${s.bookingCode||'—'}</div>
+    <div class="slip-desc">${s.description||''}</div>
+    <div class="slip-foot"><div><div class="slip-odds-val">${s.totalOdds??'—'}</div><div class="slip-odds-lbl">Total Odds</div></div><button class="copy-btn" onclick="event.stopPropagation();copyCode('${sc}')">Copy</button></div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   OVERVIEW
+══════════════════════════════════════════════════ */
+function renderOverviewGames(){
+  const wrap=$('overviewGamesTable');
+  if(!_todayGames.length){wrap.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>No games today</span></div>`;return;}
+  wrap.innerHTML=_todayGames.slice(0,5).map(gameRowHTML).join('');
+}
+function renderOverviewSlips(){
+  const grid=$('overviewSlipsGrid');
+  if(!_freeSlips.length){grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>No slips available yet</span></div>`;return;}
+  grid.innerHTML=_freeSlips.slice(0,3).map(s=>slipCardHTML(s)).join('');
+}
+
+/* ══════════════════════════════════════════════════
+   LIVE TAB
+══════════════════════════════════════════════════ */
+function renderLiveTab(){
+  const grid=$('liveTabGrid'),countEl=$('liveTabCount'),lastEl=$('dashLastUpdated');
+  if(lastEl)lastEl.textContent=`Updated ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  if(!_liveGames.length){
+    countEl.textContent='No matches live right now';
+    grid.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:52px 20px;gap:12px;text-align:center">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+      </div>
+      <div><div style="font-family:var(--fh);font-size:.9rem;font-weight:700;margin-bottom:4px">No Live Games Right Now</div><div style="font-size:.74rem;color:var(--muted);line-height:1.6;max-width:280px">Scores refresh every 30 seconds.</div></div>
+      <button class="btn-outline" style="font-size:.78rem;padding:8px 20px" onclick="switchView('games',null)">View Today's Schedule</button>
+    </div>`;
+    return;
+  }
+  countEl.textContent=`${_liveGames.length} match${_liveGames.length!==1?'es':''} in progress`;
+  grid.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px">${_liveGames.map(liveFullCard).join('')}</div>`;
+}
+async function manualDashLiveRefresh(){
+  const btn=$('dashLiveRefreshBtn');if(btn)btn.classList.add('spinning');
+  await loadLiveGames();renderLiveTab();
+  if(btn)btn.classList.remove('spinning');showToast('✓ Live scores refreshed');
+}
+
+/* ══════════════════════════════════════════════════
+   TODAY'S GAMES TAB — API-driven search + league filter
+══════════════════════════════════════════════════ */
+async function renderGamesTab(){
+  const content=$('gamesTabContent');
+  let games;
+  try{
+    if(_gamesSearch.trim()&&_gamesLeague!=='all'){
+      /* keyword + league: search API then client-filter by league */
+      const json=await apiFetch('/games/search?keyword='+encodeURIComponent(_gamesSearch.trim()));
+      games=(json.data||[]).filter(g=>(g.league||'').trim()===_gamesLeague.trim());
+    }else if(_gamesSearch.trim()){
+      /* keyword only → /games/search */
+      const json=await apiFetch('/games/search?keyword='+encodeURIComponent(_gamesSearch.trim()));
+      games=json.data||[];
+    }else if(_gamesLeague!=='all'){
+      /* league only → /games/league */
+      const json=await apiFetch('/games/league?league='+encodeURIComponent(_gamesLeague));
+      games=json.data||[];
+    }else{
+      /* no filter — use preloaded today games, no extra fetch */
+      games=_todayGames;
+    }
+  }catch(e){
+    content.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>Failed to load games</span><p>${e.message}</p></div>`;
+    return;
+  }
+  /* Status pill applied client-side on whatever API returned */
+  const base=_gamesTabFilter==='all'?games:games.filter(g=>g.status===_gamesTabFilter);
+  /* Rebuild league pills from full pre-status result */
+  buildLeaguePills(games,'gamesLeaguePills',_gamesLeague,league=>{_gamesLeague=league;renderGamesTab();});
+  if(!base.length){content.innerHTML=noResultsHTML(_gamesSearch,_gamesLeague);return;}
+  content.innerHTML=showingBar(base.length,games.length)+base.map(gameRowHTML).join('');
+}
+
+function filterGamesTab(status,btn){
+  _gamesTabFilter=status;
+  document.querySelectorAll('#view-games .fpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGamesTab();
+}
+async function refreshGames(){
+  const btn=$('refreshGamesBtn');if(btn)btn.classList.add('spinning');
+  await loadTodayGames();renderGamesTab();renderOverviewGames();
+  if(btn)btn.classList.remove('spinning');showToast('✓ Games refreshed');
+}
+
+/* ══════════════════════════════════════════════════
+   PAST GAMES TAB
+   - Page load: fetches /games/history (or /vip/games/history)
+   - League pills: client-side filter on _histGames
+   - Keyword search: calls /games/search, filters to finished status + active league pill
+══════════════════════════════════════════════════ */
+async function loadHistoryTab(reset=false){
+  if(reset){_histPage=0;_histSearch='';_histLeague='all';$('histSearch').value='';$('histSearchClear').classList.remove('visible');}
+  const content=$('historyContent'),pagination=$('histPagination');
+  const days=parseInt($('histDaysSelect').value)||7;
+  const btn=$('refreshHistBtn');if(btn)btn.classList.add('spinning');
+  content.innerHTML=`<div class="loading-state"><div class="loader"></div><span>Loading past games…</span></div>`;
+  pagination.style.display='none';
+  try{
+    const endpoint=_isVip?'/vip/games/history':'/games/history';
+    const json=await apiFetch(`${endpoint}?days=${days}&page=${_histPage}&size=100`);
+    _histGames=json.data||[];
+    buildLeaguePills(_histGames,'histLeaguePills',_histLeague,league=>{_histLeague=league;renderHistoryContent();});
+    renderHistoryContent();
+    _histHasMore=_histGames.length===100;
+    pagination.style.display=_histGames.length?'flex':'none';
+    $('histPageInfo').textContent=`Page ${_histPage+1}`;
+    $('histPrevBtn').disabled=_histPage===0;$('histNextBtn').disabled=!_histHasMore;
+  }catch(e){
+    _histGames=[];
+    content.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg><span>Could not load past games</span><p>${e.message}</p></div>`;
+  }
+  if(btn)btn.classList.remove('spinning');
+}
+
+/* Keyword search for history: calls /games/search, keeps only finished games, then applies league pill */
+async function loadHistoryTabSearch(){
+  if(!_histSearch.trim()){renderHistoryContent();return;}
+  const content=$('historyContent');
+  content.innerHTML=`<div class="loading-state"><div class="loader"></div><span>Searching…</span></div>`;
+  try{
+    const json=await apiFetch('/games/search?keyword='+encodeURIComponent(_histSearch.trim()));
+    const finished=(json.data||[]).filter(g=>['FINISHED','CANCELLED','POSTPONED'].includes(g.status));
+    const filtered=_histLeague!=='all'?finished.filter(g=>(g.league||'').trim()===_histLeague.trim()):finished;
+    if(!filtered.length){content.innerHTML=noResultsHTML(_histSearch,_histLeague);return;}
+    content.innerHTML=showingBar(filtered.length,finished.length)+filtered.map(gameRowHTML).join('');
+  }catch(e){
+    content.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span>Search failed</span><p>${e.message}</p></div>`;
+  }
+}
+
+/* Render history content from cached _histGames with client-side league filter */
+function renderHistoryContent(){
+  const content=$('historyContent');
+  /* If there's a keyword search active, hand off to the API search function */
+  if(_histSearch.trim()){loadHistoryTabSearch();return;}
+  const filtered=applyFilters(_histGames,'',_histLeague);
+  if(!_histGames.length&&_histPage===0){
+    const days=parseInt($('histDaysSelect').value)||7;
+    content.innerHTML=`<div class="empty-state" style="padding:52px 20px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>No past games found</span><p>No finished games in the last ${days} day${days!==1?'s':''}.</p></div>`;
+    return;
+  }
+  if(!filtered.length){content.innerHTML=noResultsHTML('',_histLeague);return;}
+  content.innerHTML=showingBar(filtered.length,_histGames.length)+filtered.map(gameRowHTML).join('');
+}
+
+async function histChangePage(dir){_histPage=Math.max(0,_histPage+dir);await loadHistoryTab(false);$('view-history').scrollIntoView({behavior:'smooth',block:'start'});}
+
+/* ══════════════════════════════════════════════════
+   SLIPS TAB
+══════════════════════════════════════════════════ */
+function renderSlipsTab(){
+  const grid=$('slipsTabGrid'),hint=$('vipSlipsHint');
+  if(!_freeSlips.length)grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>No free slips available today</span><p>Check back later for today's picks.</p></div>`;
+  else grid.innerHTML=_freeSlips.map(s=>slipCardHTML(s)).join('');
+  if(_isVip&&_vipSlips.length)hint.innerHTML=`<div class="sec-hd"><h3 class="sec-title">VIP <em>Slips</em></h3></div><div class="slips-grid">${_vipSlips.map(s=>slipCardHTML(s)).join('')}</div>`;
+  else if(_isVip)hint.innerHTML=`<div class="sec-hd"><h3 class="sec-title">VIP <em>Slips</em></h3></div><div class="empty-state"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span>No VIP slips posted yet</span></div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   PROFILE
+══════════════════════════════════════════════════ */
+async function loadProfile(){
+  if(!_user){try{const j=await apiFetch('/users/me');_user=j.data;}catch(_){return;}}
+  const u=_user;
+  $('profileAvatarLg').textContent=initials(u.fullName);$('profileName').textContent=u.fullName||'—';$('profileRole').textContent=_isVip?'VIP Member':'Free Member';
+  $('pfFullName').value=u.fullName||'';$('pfEmail').value=u.email||'';$('pfPhone').value=u.phoneNumber||'';
+  $('memberSince').textContent=fmtFull(u.createdAt);$('acctPlan').textContent=_isVip?'VIP':'Free';
+  $('acctPlan').style.color=_isVip?'var(--gold)':'var(--muted)';
+}
+async function saveProfile(){
+  const fullName=$('pfFullName').value.trim(),email=$('pfEmail').value.trim(),phoneNumber=$('pfPhone').value.trim();
+  if(!fullName||!email)return showToast('Name and email are required');
+  try{const json=await apiFetch('/users/me',{method:'PATCH',body:JSON.stringify({fullName,email,phoneNumber})});
+    _user=json.data;$('sbName').textContent=_user.fullName;$('sbEmail').textContent=_user.email;
+    $('sbAvatar').textContent=initials(_user.fullName);$('welcomeName').textContent=(_user.fullName||'there').split(' ')[0];showToast('✓ Profile updated');
+  }catch(e){showToast('Error: '+e.message);}
+}
+async function changePassword(){
+  const currentPassword=$('pfCurPw').value,newPassword=$('pfNewPw').value,confirmNewPassword=$('pfConfPw').value;
+  if(!currentPassword||!newPassword)return showToast('Fill in all password fields');
+  if(newPassword.length<8)return showToast('Password must be at least 8 characters');
+  if(newPassword!==confirmNewPassword)return showToast('Passwords do not match');
+  try{await apiFetch('/users/me',{method:'PATCH',body:JSON.stringify({currentPassword,newPassword,confirmNewPassword})});
+    $('pfCurPw').value='';$('pfNewPw').value='';$('pfConfPw').value='';showToast('✓ Password updated');
+  }catch(e){showToast('Error: '+e.message);}
+}
+
+/* ══════════════════════════════════════════════════
+   PAYMENTS
+══════════════════════════════════════════════════ */
+async function loadPayments(){
+  const list=$('paymentList');
+  list.innerHTML=`<div class="loading-state"><div class="loader"></div><span>Loading payments…</span></div>`;
+  try{
+    const json=await apiFetch('/payment/history');const payments=json.data||[];
+    if(!payments.length){list.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>No payment history yet</span><p>Your transactions will appear here.</p></div>`;return;}
+    list.innerHTML=payments.map(p=>{
+      const sc={SUCCESS:'success',FAILED:'failed',PENDING:'pending',ABANDONED:'pending'}[p.status]||'pending';
+      const icon=sc==='success'?`<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`:sc==='failed'?`<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`:`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+      const purpose=(p.purpose||'VIP Subscription').replace(/_/g,' ');
+      const date=fmtFull(p.paidAt||p.createdAt)+(p.channel?' · '+p.channel:'');
+      const sign=sc==='success'?'+':'';
+      const amount=`${sign}${p.currency||'GHS'} ${(p.amount??0).toFixed(2)}`;
+      const statusColor=sc==='success'?'green':sc==='failed'?'red':'muted';
+      return`<div class="payment-row"><div class="pay-icon ${sc}">${icon}</div><div class="pay-info"><div class="pay-purpose">${purpose}</div><div class="pay-date">${date}</div></div><div class="pay-amount"><div class="amount ${sc}">${amount}</div><div class="pay-status" style="color:var(--${statusColor})">${p.status}</div></div></div>`;
+    }).join('');
+  }catch(e){list.innerHTML=`<div class="empty-state"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg><span>Could not load payments</span></div>`;}
+}
+
+/* ══════════════════════════════════════════════════
+   VIP
+══════════════════════════════════════════════════ */
+async function loadVip(){
+  const statusWrap=$('vipStatusWrap'),priceDisplay=$('vipPriceDisplay'),priceSub=$('vipPriceSub'),payBtn=$('vipPayBtn');
+  const features=[['Exclusive VIP Betting Slips','Access high-odds slips not available to free users'],['Midnight Oracle Picks','Our highest-confidence picks posted nightly'],['VIP Live Score Access','All live games including VIP-only fixtures'],['Past Games History','Full access to 30-day game history including VIP games'],['Priority Support','Dedicated support channel for VIP members'],['All Free Features','Everything in the free plan, plus more']];
+  $('vipFeaturesList').innerHTML=features.map(([t,d])=>`<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)"><div style="width:24px;height:24px;border-radius:50%;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div style="font-size:.8rem;font-weight:600;margin-bottom:2px">${t}</div><div style="font-size:.72rem;color:var(--muted)">${d}</div></div></div>`).join('');
+  try{
+    const vipJson=await apiFetch('/payment/vip/status');const vipData=vipJson.data||{};_isVip=vipData.vipActive===true;
+    if(_isVip){
+      const expiry=vipData.vipExpiresAt?fmtFull(vipData.vipExpiresAt):'Active';
+      statusWrap.innerHTML=`<div class="vip-status-card"><div class="vip-status-row"><div class="vip-status-left"><div class="vip-big-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="vip-status-info"><h3>VIP Member</h3><p>You have full access to all VIP features</p></div></div><div class="vip-expires"><div class="exp-label">Expires</div><div class="exp-val">${expiry}</div></div></div></div>`;
+      payBtn.textContent='✓ VIP Active — Renew';
+    }else statusWrap.innerHTML='';
+  }catch(_){statusWrap.innerHTML='';}
+  try{
+    const priceJson=await apiFetch('/payment/vip/price');const p=priceJson.data||{};
+    const amount=p.price??p.amount??'—';const currency=p.currency||'GHS';
+    priceDisplay.textContent=`${currency} ${typeof amount==='number'?amount.toFixed(2):amount}`;
+    priceSub.textContent='per month · cancel anytime';
+  }catch(_){priceDisplay.textContent='Contact us';priceSub.textContent='for pricing';}
+}
+async function initiatePayment(){
+  const btn=$('vipPayBtn');btn.disabled=true;btn.textContent='Processing…';
+  try{
+    const json=await apiFetch('/payment/initiate',{method:'POST'});const data=json.data;
+    if(data?.authorizationUrl)window.location.href=data.authorizationUrl;
+    else{showToast('Could not initiate payment. Try again.');btn.disabled=false;btn.textContent='Get VIP Access';}
+  }catch(e){showToast('Payment error: '+e.message);btn.disabled=false;btn.textContent='Get VIP Access';}
+}
+
+/* ══════════════════════════════════════════════════
+   AUTO-REFRESH
+══════════════════════════════════════════════════ */
+setInterval(async()=>{
+  await loadLiveGames();
+  if($('view-live')?.classList.contains('active'))renderLiveTab();
+},30000);
+setInterval(async()=>{
+  await loadTodayGames();
+  if($('view-games')?.classList.contains('active'))renderGamesTab();
+  renderOverviewGames();
+},60000);
+
+/* ══════════════════════════════════════════════════
+   PAYMENT RETURN CHECK
+══════════════════════════════════════════════════ */
+(async function checkPaymentReturn(){
+  const params=new URLSearchParams(location.search);
+  const ref=params.get('reference')||params.get('trxref');
+  if(!ref)return;
+  history.replaceState({},'',location.pathname);showToast('Verifying payment…',4000);
+  try{
+    const json=await apiFetch(`/payment/verify?reference=${ref}`);const d=json.data;
+    if(d?.vipActivated){_isVip=true;showToast('🎉 VIP activated! Welcome to the club.',4000);switchView('vip',null);}
+    else showToast('Payment status: '+(d?.status||'unknown'));
+  }catch(e){showToast('Could not verify payment: '+e.message);}
+})();
+
+bootstrap();
+</script>
+</body>
+</html>
