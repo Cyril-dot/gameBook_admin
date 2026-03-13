@@ -296,20 +296,19 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .preview-odds{font-family:var(--font-mono);font-size:36px;font-weight:700;color:var(--gold);margin-bottom:4px}
 .preview-meta{font-size:12px;color:var(--muted)}
 
+/* ── DATE FILTER TABS (shared by Create Slip & Analytics) ── */
+.csdf.active{background:var(--accent-lt)!important;color:var(--accent)!important;border-color:#1a4d32!important}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--panel)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 /* ══ RESPONSIVE ══ */
-
-/* ── Tablet landscape ── */
 @media(max-width:1100px){
   .slip-create-layout{grid-template-columns:1fr}
   .slip-preview-card{position:static}
 }
-
-/* ── Tablet portrait ── */
 @media(max-width:1024px){
   :root{--sidebar-w:220px}
   .g2-3{grid-template-columns:1fr}
@@ -317,10 +316,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .page{padding:20px}
   .topbar{padding:12px 20px}
 }
-
-/* ── Mobile bottom nav bar ── */
 @media(max-width:768px){
-  /* Bottom nav */
   .mobile-nav{
     display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;
     background:var(--surface);border-top:1px solid var(--border);
@@ -345,8 +341,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   }
   .mobile-nav-more{position:relative}
 }
-
-/* ── More menu (mobile) ── */
 .mobile-more-menu{
   display:none;position:fixed;bottom:64px;right:0;left:0;z-index:119;
   background:var(--surface);border-top:1px solid var(--border);
@@ -365,71 +359,40 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .mobile-more-item:active{background:var(--panel)}
 .mobile-more-item i{width:20px;text-align:center;font-size:15px;flex-shrink:0}
 .mobile-more-item.active{color:var(--accent)}
-
-/* ── Hide desktop sidebar on mobile ── */
 @media(max-width:768px){
   html{font-size:13.5px}
-
-  /* Auth */
   .auth-screen{flex-direction:column;min-height:100vh}
-  .auth-left{
-    width:100%;padding:32px 20px 36px;
-    border-right:none;border-bottom:1px solid var(--border);
-    flex:none;min-height:auto;
-  }
+  .auth-left{width:100%;padding:32px 20px 36px;border-right:none;border-bottom:1px solid var(--border);flex:none;min-height:auto;}
   .auth-brand{margin-bottom:28px}
   .auth-heading{font-size:26px}
   .auth-sub{margin-bottom:24px;font-size:13px}
   .auth-right{display:none}
-  .form-input{font-size:16px!important;padding:13px 14px} /* prevent iOS zoom */
+  .form-input{font-size:16px!important;padding:13px 14px}
   .input-wrap .form-input{padding-left:40px}
   .btn-full{padding:14px 20px;font-size:14px}
-
-  /* Sidebar — drawer on mobile */
-  .hamburger{display:none!important} /* hidden — we use bottom nav instead */
-  .sidebar{
-    transform:translateX(-100%);z-index:200;
-    width:min(300px,85vw);box-shadow:none;
-    transition:transform .25s cubic-bezier(.4,0,.2,1);
-  }
+  .hamburger{display:none!important}
+  .sidebar{transform:translateX(-100%);z-index:200;width:min(300px,85vw);box-shadow:none;transition:transform .25s cubic-bezier(.4,0,.2,1);}
   .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
   #sidebar-backdrop.show{display:block}
-
-  /* App shell */
   .main{margin-left:0}
   #app.active{display:block}
-  .main{padding-bottom:64px} /* room for bottom nav */
-
-  /* Topbar */
-  .topbar{
-    padding:0 14px;gap:8px;height:54px;
-    position:sticky;top:0;z-index:50;
-  }
+  .main{padding-bottom:64px}
+  .topbar{padding:0 14px;gap:8px;height:54px;position:sticky;top:0;z-index:50;}
   .topbar-title{font-size:15px;font-weight:700;flex:1}
   .topbar-actions .btn-ghost:not(:last-child){display:none}
   #topbar-cta{padding:8px 14px;font-size:12.5px}
-
-  /* Pages */
   .page{padding:14px 14px 80px}
   .page-headline{font-size:22px;margin-bottom:2px}
   .page-sub{font-size:12px;margin-bottom:18px;line-height:1.5}
-
-  /* Stat cards — 2 col */
   .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
   .stat-card{padding:14px 12px 12px;border-radius:var(--radius)}
   .stat-card-icon{width:32px;height:32px;font-size:13px;margin-bottom:10px;border-radius:8px}
   .stat-value{font-size:24px}
   .stat-label{font-size:11px}
   .stat-delta{font-size:11px}
-
-  /* Layout grids → single col */
   .g2,.g3,.g2-3{grid-template-columns:1fr}
   .g2>*+*,.g3>*+*{margin-top:0}
-
-  /* Charts */
   .chart-box{height:180px!important}
-
-  /* Game cards */
   .game-card{flex-wrap:wrap;gap:8px;padding:12px 14px}
   .game-card .team-badge{width:28px;height:28px;font-size:10px}
   .game-teams{font-size:13px}
@@ -437,54 +400,26 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .game-score{font-size:15px;padding:0 8px}
   .game-actions{width:100%;justify-content:flex-end;margin-top:2px;gap:6px}
   .game-actions .btn-xs{padding:7px 11px;font-size:12px;min-width:36px;min-height:36px}
-
-  /* Tables — horizontal scroll with sticky first col */
   .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0}
   table{min-width:560px}
   td,thead th{padding:10px 12px;font-size:12.5px}
-  td:first-child,thead th:first-child{
-    position:sticky;left:0;z-index:1;
-    background:var(--surface);
-  }
+  td:first-child,thead th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);}
   tbody tr:hover td:first-child{background:var(--panel)}
-
-  /* Slips & promos — 1 col */
   #slips-grid,#promos-grid{grid-template-columns:1fr!important}
-  .slip-card .slip-bottom .btn-xs{
-    min-width:36px;min-height:36px;padding:7px 10px;
-  }
-
-  /* Modals → bottom sheet */
+  .slip-card .slip-bottom .btn-xs{min-width:36px;min-height:36px;padding:7px 10px;}
   .overlay{padding:0;align-items:flex-end}
-  .modal{
-    width:100%;max-width:100%;
-    border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-    max-height:94vh;
-    animation:sheetIn .28s cubic-bezier(.4,0,.2,1);
-  }
+  .modal{width:100%;max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;max-height:94vh;animation:sheetIn .28s cubic-bezier(.4,0,.2,1);}
   @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal::before{
-    content:'';display:block;width:40px;height:4px;
-    background:var(--border2);border-radius:2px;
-    margin:12px auto 0;
-  }
+  .modal::before{content:'';display:block;width:40px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;}
   .modal-hd{padding:14px 18px 14px}
   .modal-body{padding:16px 18px}
   .modal-ft{padding:12px 18px 20px;flex-direction:column-reverse;gap:8px}
   .modal-ft .btn{width:100%;justify-content:center;padding:13px 20px;font-size:14px}
-
-  /* Forms */
   .form-row,.form-row-3{grid-template-columns:1fr;gap:0}
   .form-group{margin-bottom:16px}
   .form-label{font-size:11px;margin-bottom:6px}
-
-  /* Toast */
   .toast{left:12px;right:12px;bottom:68px;min-width:unset;font-size:13px}
-
-  /* Session banner */
   .session-info-banner{flex-direction:column;gap:8px;padding:12px 14px}
-
-  /* Create slip */
   .slip-type-grid{grid-template-columns:1fr 1fr;gap:10px}
   .slip-type-card{padding:14px 12px}
   .slip-type-card .stc-name{font-size:13px}
@@ -492,27 +427,15 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .slip-preview-card{display:none}
   .slip-section-card-hd{padding:14px 16px}
   .slip-section-card-body{padding:14px 16px}
-
-  /* Scheduler */
   .job-card{flex-wrap:wrap;gap:10px}
   .job-card>div:last-child{width:100%;justify-content:flex-end}
-
-  /* VIP price display */
   #vip-price-display>div:first-child{font-size:40px!important}
-
-  /* Buttons — minimum tap target 44px */
   .btn-xs{min-height:36px;min-width:36px}
   .btn-sm{min-height:38px}
   .btn{min-height:44px}
-
-  /* Chips — slightly larger on touch */
   .chip{padding:4px 10px;font-size:11.5px}
-
-  /* Odd pills */
   .odd-pill{font-size:11.5px;padding:3px 8px}
 }
-
-/* ── Small phones ── */
 @media(max-width:390px){
   html{font-size:13px}
   .auth-left{padding:24px 16px 32px}
@@ -520,23 +443,16 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .page{padding:10px 10px 80px}
   .stats-row{gap:8px}
   .stat-value{font-size:22px}
-  .topbar-title{
-    font-size:14px;max-width:130px;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
+  .topbar-title{font-size:14px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .slip-type-grid{grid-template-columns:1fr}
   .mobile-nav-item{font-size:9px}
   .mobile-nav-item i{font-size:17px}
 }
-
-/* ── Tablet auth illustration ── */
 @media(min-width:600px) and (max-width:768px){
   .auth-right{display:flex;padding:20px;min-height:240px}
   .auth-illustration{padding:16px}
   .auth-tagline{font-size:16px;margin-top:16px}
 }
-
-/* ── Desktop: hide mobile nav ── */
 @media(min-width:769px){
   .mobile-nav{display:none!important}
   .mobile-more-menu{display:none!important}
@@ -805,13 +721,30 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <i class="fa fa-search"></i>
                 <input class="form-input" id="cs-game-search" placeholder="Search by team or league…" oninput="filterCreateSlipGames()" style="padding-left:36px" autocomplete="off"/>
               </div>
+
+              <!-- DATE RANGE TABS -->
+              <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px">
+                <button class="btn btn-ghost btn-xs csdf active" data-d="today"     onclick="setCreateSlipDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
+                <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow"         onclick="setCreateSlipDateFilter('tomorrow',this)">Tomorrow</button>
+                <button class="btn btn-ghost btn-xs csdf" data-d="day-after"        onclick="setCreateSlipDateFilter('day-after',this)">Day After</button>
+                <button class="btn btn-ghost btn-xs csdf" data-d="next-week"        onclick="setCreateSlipDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7 Days</button>
+                <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+                  <input type="date" id="cs-custom-date" class="form-input"
+                    style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset"
+                    onchange="setCreateSlipDateFilter('custom',null)"
+                    title="Pick a specific date"/>
+                </div>
+              </div>
+
+              <!-- Status filters -->
               <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
                 <button class="btn btn-ghost btn-xs csgf active" data-f="all" onclick="setCreateSlipGameFilter('all',this)">All</button>
                 <button class="btn btn-ghost btn-xs csgf" data-f="live" onclick="setCreateSlipGameFilter('live',this)"><span class="live-dot" style="width:6px;height:6px;margin-right:2px"></span>Live</button>
                 <button class="btn btn-ghost btn-xs csgf" data-f="upcoming" onclick="setCreateSlipGameFilter('upcoming',this)">Upcoming</button>
                 <button class="btn btn-ghost btn-xs csgf" data-f="odds" onclick="setCreateSlipGameFilter('odds',this)"><i class="fa fa-percent" style="font-size:10px"></i> Has Odds</button>
-                <button class="btn btn-ghost btn-xs" style="margin-left:auto" onclick="loadCreateSlipGames()"><i class="fa fa-rotate"></i></button>
+                <button class="btn btn-ghost btn-xs" onclick="loadCreateSlipGames()"><i class="fa fa-rotate"></i></button>
               </div>
+
               <div id="cs-game-list" style="border:1.5px solid var(--border);border-radius:8px;max-height:200px;overflow-y:auto;background:var(--bg)">
                 <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
               </div>
@@ -999,14 +932,29 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="card mb24">
         <div class="card-pad" style="border-bottom:1px solid var(--border)">
           <div class="card-title">Select a Fixture</div>
-          <div class="card-sub">Pick a game — IDs are auto-filled from today's fixtures</div>
+          <div class="card-sub">Pick a game — date tabs let you browse upcoming fixtures</div>
         </div>
         <div class="card-pad">
-          <div class="search-group mb16" style="margin-bottom:12px">
+          <div class="search-group mb16" style="margin-bottom:10px">
             <i class="fa fa-search"></i>
             <input class="form-input" id="an-game-search" placeholder="Search by team or league…"
                    oninput="filterAnalyticsGames()" style="padding-left:36px" autocomplete="off"/>
           </div>
+
+          <!-- ── DATE RANGE TABS (Analytics) ── -->
+          <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px">
+            <button class="btn btn-ghost btn-xs csdf active" data-d="today"    onclick="setAnalyticsDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
+            <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow"        onclick="setAnalyticsDateFilter('tomorrow',this)">Tomorrow</button>
+            <button class="btn btn-ghost btn-xs csdf" data-d="day-after"       onclick="setAnalyticsDateFilter('day-after',this)">Day After</button>
+            <button class="btn btn-ghost btn-xs csdf" data-d="next-week"       onclick="setAnalyticsDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7 Days</button>
+            <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+              <input type="date" id="an-custom-date" class="form-input"
+                style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset"
+                onchange="setAnalyticsDateFilter('custom',null)"
+                title="Pick a specific date"/>
+            </div>
+          </div>
+
           <div id="an-game-list"
                style="border:1.5px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;background:var(--bg);margin-bottom:14px">
             <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>
@@ -1111,7 +1059,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 </div>
 
 <!-- ════ MODALS ════ -->
-
 <div class="overlay" id="book-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Book Game</div><div class="modal-close" onclick="closeModal('book-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1405,7 +1352,7 @@ function nav(page, el) {
   if(page==='vip'        && !CHARTS_INIT.vip)    { loadVip();    CHARTS_INIT.vip=true;    }
   if(page==='promos'     && !CHARTS_INIT.promos) { loadPromos(); CHARTS_INIT.promos=true; }
   if(page==='scheduler') loadSchedulerStatus();
-  if(page==='analytics') loadAnalyticsGames();
+  if(page==='analytics') initAnalyticsPage();
 }
 function topCTA() { (PAGE_META[currentPage]?.ctaFn||(()=>{}))(); }
 function refreshCurrentPage() { CHARTS_INIT[currentPage]=false; nav(currentPage,null); }
@@ -1984,7 +1931,12 @@ async function settleSlipFromResult(slipId) {
   } catch(e) { showToast(e.message, 'red'); }
 }
 
-let CS_TYPE='booking', CS_GAME=null, CS_PREDICTIONS=[], CS_ODDS_LEGS=[], CS_GAMES_ALL=[], CS_GAME_FILTER='all';
+// ══════════════════════════════════════════════════════
+// CREATE SLIP — state
+// ══════════════════════════════════════════════════════
+let CS_TYPE='booking', CS_GAME=null, CS_PREDICTIONS=[], CS_ODDS_LEGS=[];
+let CS_GAMES_ALL=[], CS_GAME_FILTER='all';
+let CS_DATE_FILTER = 'today';
 
 function initCreateSlipPage() {
   CS_TYPE='booking'; CS_GAME=null; CS_PREDICTIONS=[]; CS_ODDS_LEGS=[];
@@ -2003,9 +1955,15 @@ function initCreateSlipPage() {
   document.getElementById('cs-odds-from-game').style.display='none';
   document.getElementById('cs-odds-legs').innerHTML='';
   document.getElementById('cs-combined-odds').textContent='—';
-  CS_GAME_FILTER='all';
+
+  CS_GAME_FILTER='all'; CS_DATE_FILTER='today';
   document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
   document.querySelector('.csgf[data-f="all"]')?.classList.add('active');
+  // Reset only the date tabs inside the create-slip page
+  document.querySelectorAll('#page-create-slip .csdf').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#page-create-slip .csdf[data-d="today"]')?.classList.add('active');
+  const csd=document.getElementById('cs-custom-date');if(csd)csd.value='';
+
   updateSlipPreview();
   loadCreateSlipGames();
 }
@@ -2021,12 +1979,31 @@ function setCreateSlipType(type) {
   updateSlipPreview();
 }
 
+function setCreateSlipDateFilter(d, el) {
+  CS_DATE_FILTER = d;
+  document.querySelectorAll('#page-create-slip .csdf').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (d !== 'custom') {
+    const csd = document.getElementById('cs-custom-date');
+    if (csd) csd.value = '';
+  }
+  loadCreateSlipGames();
+}
+
 async function loadCreateSlipGames() {
   const el=document.getElementById('cs-game-list'); if(!el)return;
   el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading games…</div>';
   try {
-    const res=await GET('/api/v1/admin/games/today');
-    CS_GAMES_ALL=res.data||[];
+    let endpoint = '/api/v1/admin/games/today';
+    if      (CS_DATE_FILTER === 'tomorrow')   endpoint = '/api/v1/admin/games/tomorrow';
+    else if (CS_DATE_FILTER === 'day-after')  endpoint = '/api/v1/admin/games/day-after-tomorrow';
+    else if (CS_DATE_FILTER === 'next-week')  endpoint = '/api/v1/admin/games/next-week';
+    else if (CS_DATE_FILTER === 'custom') {
+      const d = document.getElementById('cs-custom-date')?.value;
+      if (d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
+    }
+    const res = await GET(endpoint);
+    CS_GAMES_ALL = res.data||[];
     renderCreateSlipGameList(CS_GAMES_ALL);
   } catch(e) {
     el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
@@ -2384,16 +2361,57 @@ async function submitCreatePromo(){
 }
 async function deletePromo(id){if(!confirm('Delete this promotion?'))return;try{await DEL(`/api/v1/admin/promos/${id}`);showToast('Promo deleted','red');loadPromos();}catch(e){showToast(e.message,'red');}}
 
+// ══════════════════════════════════════════════════════
+// ANALYTICS — state + date filter
+// ══════════════════════════════════════════════════════
 let AN_GAMES_ALL=[], AN_GAME_SEL=null;
+let AN_DATE_FILTER = 'today';
+
+function initAnalyticsPage() {
+  AN_DATE_FILTER = 'today';
+  AN_GAME_SEL = null;
+  document.getElementById('an-game-selected').style.display='none';
+  document.getElementById('analytics-result').classList.remove('show');
+  document.getElementById('an-game-search').value = '';
+  // Reset date tabs
+  document.querySelectorAll('#page-analytics .csdf').forEach(b => b.classList.remove('active'));
+  document.querySelector('#page-analytics .csdf[data-d="today"]')?.classList.add('active');
+  const acd = document.getElementById('an-custom-date'); if(acd) acd.value='';
+  loadAnalyticsGames();
+}
+
+function setAnalyticsDateFilter(d, el) {
+  AN_DATE_FILTER = d;
+  document.querySelectorAll('#page-analytics .csdf').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (d !== 'custom') {
+    const acd = document.getElementById('an-custom-date');
+    if (acd) acd.value = '';
+  }
+  AN_GAME_SEL = null;
+  document.getElementById('an-game-selected').style.display='none';
+  document.getElementById('analytics-result').classList.remove('show');
+  loadAnalyticsGames();
+}
 
 async function loadAnalyticsGames() {
   const el=document.getElementById('an-game-list'); if(!el)return;
   el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>';
   try {
-    if(ALL_GAMES&&ALL_GAMES.length){AN_GAMES_ALL=ALL_GAMES;}
-    else{const res=await GET('/api/v1/admin/games/today');AN_GAMES_ALL=res.data||[];}
+    let endpoint = '/api/v1/admin/games/today';
+    if      (AN_DATE_FILTER === 'tomorrow')  endpoint = '/api/v1/admin/games/tomorrow';
+    else if (AN_DATE_FILTER === 'day-after') endpoint = '/api/v1/admin/games/day-after-tomorrow';
+    else if (AN_DATE_FILTER === 'next-week') endpoint = '/api/v1/admin/games/next-week';
+    else if (AN_DATE_FILTER === 'custom') {
+      const d = document.getElementById('an-custom-date')?.value;
+      if (d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
+    }
+    const res = await GET(endpoint);
+    AN_GAMES_ALL = res.data||[];
     renderAnalyticsGameList(AN_GAMES_ALL);
-  } catch(e){el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;}
+  } catch(e) {
+    el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
+  }
 }
 
 function filterAnalyticsGames() {
@@ -2584,7 +2602,6 @@ function toggleMoreMenu() {
     m.classList.remove('open');
   } else {
     m.classList.add('open');
-    // close on backdrop tap
     setTimeout(()=>{
       document.addEventListener('click', function _close(e){
         if(!m.contains(e.target) && !e.target.closest('.mobile-nav-more')){
@@ -2601,14 +2618,12 @@ function mobileNavTo(page) {
   nav(page, null);
 }
 
-// Patch nav() to also sync mobile nav
 const _navOrig = nav;
 window.nav = function(page, el) {
   _navOrig(page, el);
   syncMobileNav(page);
 };
 
-// Show/hide mobile nav with app
 const _launchOrig = launchApp;
 window.launchApp = function() {
   _launchOrig();
