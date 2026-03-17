@@ -296,8 +296,15 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .preview-odds{font-family:var(--font-mono);font-size:36px;font-weight:700;color:var(--gold);margin-bottom:4px}
 .preview-meta{font-size:12px;color:var(--muted)}
 
-/* ── DATE FILTER TABS (shared by Create Slip & Analytics) ── */
+/* ── DATE FILTER TABS ── */
 .csdf.active{background:var(--accent-lt)!important;color:var(--accent)!important;border-color:#1a4d32!important}
+
+/* ── VIP CURRENCY GRID ── */
+.vip-currency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.vip-equiv-card{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center}
+.vip-equiv-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:var(--font-mono)}
+.vip-equiv-val{font-size:18px;font-weight:700;font-family:var(--font-mono);color:var(--text)}
+.vip-equiv-val.ghs{color:var(--accent)}.vip-equiv-val.ngn{color:var(--gold)}.vip-equiv-val.usd{color:var(--blue)}
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px}
@@ -435,6 +442,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .btn{min-height:44px}
   .chip{padding:4px 10px;font-size:11.5px}
   .odd-pill{font-size:11.5px;padding:3px 8px}
+  .vip-currency-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:390px){
   html{font-size:13px}
@@ -447,6 +455,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .slip-type-grid{grid-template-columns:1fr}
   .mobile-nav-item{font-size:9px}
   .mobile-nav-item i{font-size:17px}
+  .vip-currency-grid{grid-template-columns:1fr}
 }
 @media(min-width:600px) and (max-width:768px){
   .auth-right{display:flex;padding:20px;min-height:240px}
@@ -721,8 +730,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <i class="fa fa-search"></i>
                 <input class="form-input" id="cs-game-search" placeholder="Search by team or league…" oninput="filterCreateSlipGames()" style="padding-left:36px" autocomplete="off"/>
               </div>
-
-              <!-- DATE RANGE TABS -->
               <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px">
                 <button class="btn btn-ghost btn-xs csdf active" data-d="today"     onclick="setCreateSlipDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
                 <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow"         onclick="setCreateSlipDateFilter('tomorrow',this)">Tomorrow</button>
@@ -735,8 +742,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                     title="Pick a specific date"/>
                 </div>
               </div>
-
-              <!-- Status filters -->
               <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
                 <button class="btn btn-ghost btn-xs csgf active" data-f="all" onclick="setCreateSlipGameFilter('all',this)">All</button>
                 <button class="btn btn-ghost btn-xs csgf" data-f="live" onclick="setCreateSlipGameFilter('live',this)"><span class="live-dot" style="width:6px;height:6px;margin-right:2px"></span>Live</button>
@@ -744,7 +749,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <button class="btn btn-ghost btn-xs csgf" data-f="odds" onclick="setCreateSlipGameFilter('odds',this)"><i class="fa fa-percent" style="font-size:10px"></i> Has Odds</button>
                 <button class="btn btn-ghost btn-xs" onclick="loadCreateSlipGames()"><i class="fa fa-rotate"></i></button>
               </div>
-
               <div id="cs-game-list" style="border:1.5px solid var(--border);border-radius:8px;max-height:200px;overflow-y:auto;background:var(--bg)">
                 <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
               </div>
@@ -897,12 +901,20 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="page-headline">VIP &amp; Pricing</div>
       <p class="page-sub">GET /api/v1/admin/vip/price · POST /api/v1/admin/vip/price</p>
       <div class="g2 mb24">
+
+        <!-- ── Current VIP Price card ── -->
         <div class="card">
-          <div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Current VIP Price</div></div>
-          <div class="card-pad" style="text-align:center;padding:36px 20px" id="vip-price-display">
+          <div class="card-pad" style="border-bottom:1px solid var(--border)">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+              <div><div class="card-title">Current VIP Price</div><div class="card-sub">Admin base price · users pay in their local currency</div></div>
+              <button class="btn btn-ghost btn-xs" onclick="refreshVipRates()" title="Refresh live rates"><i class="fa fa-rotate"></i> Rates</button>
+            </div>
+          </div>
+          <div class="card-pad" id="vip-price-display">
             <div class="loading-state"><div class="spinner"></div> Loading…</div>
           </div>
         </div>
+
         <div class="card">
           <div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Subscription Metrics</div></div>
           <div class="card-pad" id="vip-metrics"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
@@ -940,8 +952,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             <input class="form-input" id="an-game-search" placeholder="Search by team or league…"
                    oninput="filterAnalyticsGames()" style="padding-left:36px" autocomplete="off"/>
           </div>
-
-          <!-- ── DATE RANGE TABS (Analytics) ── -->
           <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px">
             <button class="btn btn-ghost btn-xs csdf active" data-d="today"    onclick="setAnalyticsDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
             <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow"        onclick="setAnalyticsDateFilter('tomorrow',this)">Tomorrow</button>
@@ -954,7 +964,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 title="Pick a specific date"/>
             </div>
           </div>
-
           <div id="an-game-list"
                style="border:1.5px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;background:var(--bg);margin-bottom:14px">
             <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>
@@ -1125,15 +1134,47 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
+<!-- ══ VIP PRICE MODAL — updated for any currency ══ -->
 <div class="overlay" id="vip-modal">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title">Update VIP Pricing</div><div class="modal-close" onclick="closeModal('vip-modal')"><i class="fa fa-xmark"></i></div></div>
+    <div class="modal-hd">
+      <div class="modal-title">Update VIP Pricing</div>
+      <div class="modal-close" onclick="closeModal('vip-modal')"><i class="fa fa-xmark"></i></div>
+    </div>
     <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group"><label class="form-label">Price</label><input class="form-input" id="vp-price" type="number" step="0.01" placeholder="149"/></div>
-        <div class="form-group"><label class="form-label">Currency</label><select class="form-input" id="vp-currency"><option>ZAR</option><option>USD</option><option>GBP</option><option>EUR</option><option>NGN</option><option>GHS</option></select></div>
+      <!-- Info banner -->
+      <div style="background:var(--blue-lt);border:1px solid #0d2040;border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:12.5px;color:var(--blue);display:flex;gap:10px;align-items:flex-start">
+        <i class="fa fa-circle-info" style="margin-top:1px;flex-shrink:0"></i>
+        <div>Set the price in <strong>any currency</strong>. Users will be automatically charged in their local currency (GHS / NGN / USD) at the live exchange rate when they pay.</div>
       </div>
-      <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="vp-desc" rows="3" placeholder="Unlock premium predictions &amp; VIP slips"></textarea></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Price <span style="color:var(--accent2)">*</span></label>
+          <input class="form-input" id="vp-price" type="number" step="0.01" min="0.01" placeholder="e.g. 10.00" oninput="updateVipModalPreview()"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Currency <span style="color:var(--accent2)">*</span></label>
+          <select class="form-input" id="vp-currency" onchange="updateVipModalPreview()">
+            <option value="USD">USD — US Dollar</option>
+            <option value="GHS">GHS — Ghana Cedi</option>
+            <option value="NGN">NGN — Nigerian Naira</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — British Pound</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-input" id="vp-desc" rows="2" placeholder="e.g. Unlock premium predictions &amp; VIP slips for 24 hours"></textarea>
+      </div>
+      <!-- Live conversion preview — shown once admin types a price -->
+      <div id="vip-modal-preview" style="display:none;background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:14px 16px">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;font-family:var(--font-mono)">
+          <i class="fa fa-wand-magic-sparkles" style="margin-right:4px"></i>Estimated user charges (live rates)
+        </div>
+        <div id="vip-modal-equiv" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-modal-rate-note"></div>
+      </div>
     </div>
     <div class="modal-ft">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('vip-modal')">Cancel</button>
@@ -1184,7 +1225,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 </div>
 
 <script>
-const API_BASE = 'https://bettingbackend-y3ck.onrender.com';
+const API_BASE = 'https://poikiloblastic-leeanne-gazeless.ngrok-free.dev';
 
 const TokenStore = {
   set(t)  { localStorage.setItem('bc_jwt', t); },
@@ -1203,6 +1244,9 @@ let ALL_USERS   = [];
 let CHARTS_INIT = {};
 let anProbRef, anGoalsRef;
 let currentPage = 'dashboard';
+
+// Cached live rates for the VIP modal preview (USD-based)
+let _vipModalRates = null;
 
 async function api(method, path, body = null, isFormData = false) {
   const token = TokenStore.get();
@@ -1959,7 +2003,6 @@ function initCreateSlipPage() {
   CS_GAME_FILTER='all'; CS_DATE_FILTER='today';
   document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
   document.querySelector('.csgf[data-f="all"]')?.classList.add('active');
-  // Reset only the date tabs inside the create-slip page
   document.querySelectorAll('#page-create-slip .csdf').forEach(b=>b.classList.remove('active'));
   document.querySelector('#page-create-slip .csdf[data-d="today"]')?.classList.add('active');
   const csd=document.getElementById('cs-custom-date');if(csd)csd.value='';
@@ -2240,20 +2283,113 @@ async function submitCreateSlipPage() {
   });
 }
 
+// ══════════════════════════════════════════════════════
+// VIP PAGE — updated for any-currency pricing
+// ══════════════════════════════════════════════════════
+
+// Currency symbols for display
+const CUR_SYM = { USD:'$', GHS:'₵', NGN:'₦', EUR:'€', GBP:'£' };
+function curSym(c) { return CUR_SYM[c] || c+' '; }
+
+// Fallback cross-conversion rates if we can't reach the API
+const FALLBACK_RATES_USD = { USD:1, GHS:15.5, NGN:1600, EUR:0.92, GBP:0.79 };
+
+/**
+ * Fetch live USD-based rates from open.er-api.com (same free API the backend uses).
+ * Cached in _vipModalRates for the session.
+ */
+async function fetchModalRates() {
+  if (_vipModalRates) return _vipModalRates;
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/USD');
+    const json = await res.json();
+    if (json.result === 'success') {
+      _vipModalRates = json.rates;
+      return _vipModalRates;
+    }
+  } catch {}
+  return FALLBACK_RATES_USD;
+}
+
+/**
+ * Convert `amount` from `baseCur` to `targetCur` using live rates.
+ * All rates are USD-based so we cross-convert via USD.
+ */
+async function convertAmount(amount, baseCur, targetCur) {
+  if (baseCur === targetCur) return amount;
+  const rates = await fetchModalRates();
+  const usdToBase   = rates[baseCur]   || FALLBACK_RATES_USD[baseCur]   || 1;
+  const usdToTarget = rates[targetCur] || FALLBACK_RATES_USD[targetCur] || 1;
+  return Math.round((amount / usdToBase) * usdToTarget * 100) / 100;
+}
+
+/**
+ * Called every time admin changes price or currency in the VIP modal.
+ * Shows equivalent GHS / NGN / USD prices using live rates.
+ */
+async function updateVipModalPreview() {
+  const price   = parseFloat(document.getElementById('vp-price')?.value);
+  const baseCur = document.getElementById('vp-currency')?.value || 'USD';
+  const preview = document.getElementById('vip-modal-preview');
+  const equivEl = document.getElementById('vip-modal-equiv');
+  const noteEl  = document.getElementById('vip-modal-rate-note');
+  if (!preview || !equivEl) return;
+
+  if (!price || price <= 0) { preview.style.display = 'none'; return; }
+  preview.style.display = '';
+  equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)"><div class="spinner" style="width:12px;height:12px;border-width:1.5px;display:inline-block"></div> Fetching rates…</span>`;
+
+  const targets = ['GHS','NGN','USD'].filter(c => c !== baseCur);
+  // Always show all three Paystack currencies
+  const allTargets = ['GHS','NGN','USD'];
+
+  try {
+    const results = await Promise.all(
+      allTargets.map(async cur => {
+        const converted = await convertAmount(price, baseCur, cur);
+        return { cur, converted };
+      })
+    );
+
+    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
+    equivEl.innerHTML = results.map(({cur, converted}) => `
+      <div class="vip-equiv-card" style="flex:1;min-width:80px">
+        <div class="vip-equiv-label">${cur}</div>
+        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+      </div>`).join('');
+
+    const rates = await fetchModalRates();
+    const usdToBase = rates[baseCur] || FALLBACK_RATES_USD[baseCur] || 1;
+    const isLive = rates !== FALLBACK_RATES_USD;
+    noteEl.textContent = `1 USD = ${curSym(baseCur)}${usdToBase.toFixed(2)} ${baseCur} · ${isLive ? '🟢 Live rate' : '🟡 Fallback rate — live API unavailable'}`;
+  } catch(e) {
+    equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)">Could not load rates</span>`;
+  }
+}
+
 async function loadVip() {
   try {
     const [priceRes,statsRes]=await Promise.allSettled([GET('/api/v1/admin/vip/price'),GET('/api/v1/admin/stats')]);
     if(priceRes.status==='fulfilled'&&priceRes.value.success){
       const p=priceRes.value.data;
-      document.getElementById('vip-price-display').innerHTML=`
-        <div style="font-size:56px;font-family:var(--font-mono);font-weight:700;color:var(--gold);line-height:1">${p.currency} ${p.price}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:8px">Per Month · ${p.currency}</div>
-        <div style="font-size:13px;color:var(--text2);margin-top:4px">${p.description||''}</div>
-        <button class="btn btn-gold" style="margin-top:20px" onclick="openVipModal(${p.price},'${p.currency}',\`${p.description||''}\`)">
+      // Build equivalent prices for display
+      const displayEl = document.getElementById('vip-price-display');
+      displayEl.innerHTML=`
+        <div style="font-size:52px;font-family:var(--font-mono);font-weight:700;color:var(--gold);line-height:1">${curSym(p.currency)}${Number(p.price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:6px">Base price · Set in <span style="color:var(--text)">${p.currency}</span></div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;margin-bottom:16px">${p.description||''}</div>
+        <div id="vip-equiv-display" class="vip-currency-grid">
+          <div class="vip-equiv-card"><div class="vip-equiv-label">Loading</div><div class="vip-equiv-val"><div class="spinner" style="width:12px;height:12px;border-width:1.5px"></div></div></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-live-rate-note"></div>
+        <button class="btn btn-gold" style="margin-top:18px" onclick="openVipModal(${p.price},'${p.currency}',\`${(p.description||'').replace(/`/g,"'")}\`)">
           <i class="fa fa-pen"></i> Update Pricing
         </button>`;
+
+      // Fetch and render live equivalents
+      renderVipEquivalents(p.price, p.currency);
     } else {
-      document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--muted);font-size:13px">No price set</div><button class="btn btn-gold" style="margin-top:16px" onclick="openModal('vip-modal')"><i class="fa fa-plus"></i> Set Price</button>`;
+      document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--muted);font-size:13px">No price set yet</div><button class="btn btn-gold" style="margin-top:16px" onclick="openModal('vip-modal')"><i class="fa fa-plus"></i> Set Price</button>`;
     }
     if(statsRes.status==='fulfilled'&&statsRes.value.success){
       const d=statsRes.value.data;
@@ -2269,6 +2405,48 @@ async function loadVip() {
   } catch(e) {
     document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--accent2);font-size:13px">${e.message}</div>`;
   }
+}
+
+/**
+ * Renders the 3-currency equivalent grid on the VIP page.
+ */
+async function renderVipEquivalents(price, baseCur) {
+  const equivEl  = document.getElementById('vip-equiv-display');
+  const noteEl   = document.getElementById('vip-live-rate-note');
+  if (!equivEl) return;
+
+  const targets = ['GHS','NGN','USD'];
+  try {
+    const results = await Promise.all(
+      targets.map(async cur => {
+        const converted = await convertAmount(price, baseCur, cur);
+        return { cur, converted };
+      })
+    );
+
+    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
+    equivEl.innerHTML = results.map(({cur,converted}) => `
+      <div class="vip-equiv-card">
+        <div class="vip-equiv-label">${cur}</div>
+        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+      </div>`).join('');
+
+    const rates  = await fetchModalRates();
+    const isLive = rates !== FALLBACK_RATES_USD;
+    if (noteEl) noteEl.textContent = `${isLive ? '🟢 Live exchange rates' : '🟡 Fallback rates — live API unavailable'} · Users pay in their local currency`;
+  } catch(e) {
+    if(equivEl) equivEl.innerHTML = `<div style="color:var(--muted);font-size:12px">Could not load equivalents</div>`;
+  }
+}
+
+/**
+ * Refresh button — clears rate cache and reloads the VIP page.
+ */
+async function refreshVipRates() {
+  _vipModalRates = null;
+  CHARTS_INIT.vip = false;
+  loadVip();
+  showToast('Exchange rates refreshed','green');
 }
 
 function buildVipCharts(d) {
@@ -2288,14 +2466,29 @@ function buildVipCharts(d) {
   }
 }
 
-function openVipModal(price,currency,desc){document.getElementById('vp-price').value=price;document.getElementById('vp-currency').value=currency;document.getElementById('vp-desc').value=desc;openModal('vip-modal');}
+function openVipModal(price, currency, desc) {
+  document.getElementById('vp-price').value    = price;
+  document.getElementById('vp-currency').value = currency;
+  document.getElementById('vp-desc').value     = desc;
+  document.getElementById('vip-modal-preview').style.display = 'none';
+  openModal('vip-modal');
+  // Trigger preview after modal opens
+  setTimeout(updateVipModalPreview, 50);
+}
+
 async function submitVipPrice(){
-  const price=parseFloat(v('vp-price'));if(!price)return showToast('Enter a valid price','red');
+  const price=parseFloat(v('vp-price'));
+  if(!price||price<=0) return showToast('Enter a valid price greater than zero','red');
+  const currency = v('vp-currency');
+  if(!currency) return showToast('Select a currency','red');
   await submitBtn('vip-submit-btn',async()=>{
-    const res=await POST('/api/v1/admin/vip/price',{price,currency:v('vp-currency'),description:v('vp-desc')});
+    const res=await POST('/api/v1/admin/vip/price',{price,currency,description:v('vp-desc')});
     if(!res.success)throw new Error(res.message);
-    closeModal('vip-modal');showToast('VIP price updated','green');
-    CHARTS_INIT.vip=false;loadVip();
+    closeModal('vip-modal');
+    showToast(`VIP price set: ${curSym(currency)}${price} ${currency}`,'green');
+    _vipModalRates=null; // clear cache so equivalents refresh
+    CHARTS_INIT.vip=false;
+    loadVip();
   });
 }
 
@@ -2362,7 +2555,7 @@ async function submitCreatePromo(){
 async function deletePromo(id){if(!confirm('Delete this promotion?'))return;try{await DEL(`/api/v1/admin/promos/${id}`);showToast('Promo deleted','red');loadPromos();}catch(e){showToast(e.message,'red');}}
 
 // ══════════════════════════════════════════════════════
-// ANALYTICS — state + date filter
+// ANALYTICS
 // ══════════════════════════════════════════════════════
 let AN_GAMES_ALL=[], AN_GAME_SEL=null;
 let AN_DATE_FILTER = 'today';
@@ -2373,7 +2566,6 @@ function initAnalyticsPage() {
   document.getElementById('an-game-selected').style.display='none';
   document.getElementById('analytics-result').classList.remove('show');
   document.getElementById('an-game-search').value = '';
-  // Reset date tabs
   document.querySelectorAll('#page-analytics .csdf').forEach(b => b.classList.remove('active'));
   document.querySelector('#page-analytics .csdf[data-d="today"]')?.classList.add('active');
   const acd = document.getElementById('an-custom-date'); if(acd) acd.value='';
