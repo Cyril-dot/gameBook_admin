@@ -1202,7 +1202,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="pm-title" placeholder="e.g. Weekend Special"/></div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="pm-desc" rows="2" placeholder="Promo details…"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type"><option value="SUBSCRIPTION_DISCOUNT">SUBSCRIPTION_DISCOUNT</option><option value="FREE_TRIAL">FREE_TRIAL</option><option value="SEASONAL">SEASONAL</option></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type"><!-- FIXED — matches your PromoType enum exactly -->
+<option value="DISCOUNT">DISCOUNT — % off VIP price</option>
+<option value="FREE_VIP">FREE_VIP — Free VIP access</option>
+<option value="ANNOUNCEMENT">ANNOUNCEMENT — Banner / notice</option></select></div>
         <div class="form-group"><label class="form-label">Discount %</label><input class="form-input" id="pm-disc" placeholder="25" type="number"/></div>
       </div>
       <div class="form-row">
