@@ -692,9 +692,7 @@ function clearImage() {
 // ── SAVE ─────────────────────────────────────────────────
 
 async function saveGameCode() {
-  const home = val('gd-home'), away = val('gd-away');
   const bookmaker = val('gd-bookmaker'), code = val('gd-code');
-  if(!home || !away) return showToast('Home and away team required','red');
   if(!bookmaker || !code) return showToast('Bookmaker and booking code required','red');
 
   const btn = document.getElementById('save-btn');
@@ -709,24 +707,41 @@ async function saveGameCode() {
     fd.append('published', document.getElementById('gd-pub').checked ? 'true' : 'false');
     fd.append('description', val('gd-desc') || '');
     fd.append('totalOdds', val('gd-totalodds') || '1.0');
+
+    // ── Multi-game selections from fetch result ────────────────────────────
+    if (currentFetchResult) {
+      const sels = currentFetchResult.selections || [];
+      if (sels.length > 0) {
+        fd.append('selections', JSON.stringify(sels));
+        fd.append('totalSelections', String(sels.length));
+      }
+      if (currentFetchResult.deadline) {
+        fd.append('deadline', currentFetchResult.deadline);
+      }
+    }
+
+    // ── Optional fields ───────────────────────────────────────────────────
     const valid = document.getElementById('gd-valid').value;
-    if(valid) fd.append('validUntil', valid);
+    if (valid) fd.append('validUntil', valid);
     const img = document.getElementById('slip-image').files[0];
-    if(img) fd.append('image', img);
+    if (img) fd.append('image', img);
 
     const res = await apiCall('POST', '/api/v1/admin/games/slips', fd, true);
     if(!res.success) throw new Error(res.message || 'Save failed');
 
+    // ── Add to local table ────────────────────────────────────────────────
+    const home = val('gd-home') || (currentFetchResult?.selections?.[0]?.homeTeam) || '—';
+    const away = val('gd-away') || (currentFetchResult?.selections?.[0]?.awayTeam) || '—';
     savedCodes.unshift({
       id: res.data?.id || Date.now(),
       home, away, bookmaker, code,
-      totalOdds: val('gd-totalodds') || '—',
+      totalOdds: val('gd-totalodds') || currentFetchResult?.totalOdds || '—',
       type: document.getElementById('gd-sliptype').value,
       published: document.getElementById('gd-pub').checked,
       savedAt: new Date()
     });
     renderSavedCodes();
-    showToast(`${home} vs ${away} saved successfully!`, 'green');
+    showToast(`Slip saved successfully! ${currentFetchResult?.totalSelections || ''} games`, 'green');
     resetForm();
   } catch(e) {
     showToast(e.message || 'Save failed', 'red');
