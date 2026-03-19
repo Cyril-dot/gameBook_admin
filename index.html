@@ -668,6 +668,69 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
 .bulk-progress-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .3s ease; }
 
 /* ═══════════════════════════════════════════════════
+   BOOKING CODE FETCH — NEW
+═══════════════════════════════════════════════════ */
+.bc-fetch-bar {
+  display:flex; gap:8px; align-items:flex-end;
+  padding:14px 16px; background:var(--bg);
+  border:1.5px solid var(--border2); border-radius:10px;
+  margin-bottom:16px; flex-wrap:wrap;
+}
+.bc-fetch-bar .form-group { margin-bottom:0; flex:1; min-width:120px; }
+.bc-fetch-bar .form-label { font-size:10px; margin-bottom:5px; }
+.bc-fetch-bar .form-input { padding:9px 12px; font-size:13px; }
+
+.bc-preview-panel {
+  border:1.5px solid var(--border); border-radius:10px;
+  overflow:hidden; margin-bottom:16px;
+  animation:pageIn .2s ease;
+}
+.bc-preview-header {
+  padding:12px 16px; background:var(--panel);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.bc-preview-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text2); font-family:var(--font-mono); }
+.bc-preview-odds  {
+  font-family:var(--font-mono); font-size:18px; font-weight:700;
+  color:var(--gold); background:var(--gold-lt);
+  border:1px solid #3a2810; padding:3px 12px; border-radius:6px;
+}
+.bc-selection-list { padding:10px 12px; }
+.bc-selection-row {
+  display:flex; align-items:center; gap:10px; padding:9px 10px;
+  border-radius:8px; margin-bottom:6px; background:var(--bg);
+  border:1px solid var(--border);
+}
+.bc-selection-row:last-child { margin-bottom:0; }
+.bc-sel-num {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--accent-lt); color:var(--accent);
+  border:1px solid #1a4d32; font-size:10px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; font-family:var(--font-mono);
+}
+.bc-sel-teams { flex:1; min-width:0; }
+.bc-sel-match { font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bc-sel-meta  { font-size:11px; color:var(--muted); margin-top:2px; }
+.bc-sel-pick  {
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  color:var(--blue); background:var(--blue-lt);
+  border:1px solid #0d2040; padding:2px 8px; border-radius:4px;
+  white-space:nowrap; flex-shrink:0;
+}
+.bc-sel-odds  {
+  font-family:var(--font-mono); font-size:12px; font-weight:700;
+  color:var(--gold); flex-shrink:0;
+}
+.bc-confirm-bar {
+  padding:12px 16px; background:var(--accent-lt);
+  border-top:1px solid #1a4d32;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.bc-confirm-msg { font-size:12px; color:var(--accent); flex:1; min-width:0; }
+
+/* ═══════════════════════════════════════════════════
    VIP CURRENCY GRID
 ═══════════════════════════════════════════════════ */
 .vip-currency-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
@@ -739,6 +802,7 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .stats-row { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
   .slip-type-grid { grid-template-columns:1fr 1fr; }
   .vip-currency-grid { grid-template-columns:1fr 1fr; }
+  .bc-fetch-bar { flex-direction:column; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -746,57 +810,32 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
 ═══════════════════════════════════════════════════ */
 @media (max-width:768px) {
   html { font-size:13.5px; }
-
-  /* Sidebar becomes drawer */
-  .sidebar {
-    transform:translateX(-100%);
-    width:min(300px,82vw);
-    box-shadow:none;
-    z-index:200;
-  }
-  .sidebar.open {
-    transform:translateX(0);
-    box-shadow:var(--shadow-lg);
-  }
+  .sidebar { transform:translateX(-100%); width:min(300px,82vw); box-shadow:none; z-index:200; }
+  .sidebar.open { transform:translateX(0); box-shadow:var(--shadow-lg); }
   #sidebar-backdrop.show { display:block; }
-
-  /* Main fills full width */
   .main { margin-left:0; padding-bottom:64px; }
   #app.active { display:block; }
-
-  /* Topbar */
   .topbar { padding:0 14px; gap:8px; height:54px; }
   .topbar-title { font-size:15px; max-width:140px; }
   .topbar-actions .btn-ghost:not(:last-child) { display:none; }
   #topbar-cta { padding:8px 14px; font-size:12.5px; min-height:36px; }
   .hamburger { display:inline-flex !important; }
-
-  /* Pages */
   .page { padding:14px 14px 80px; }
   .page-headline { font-size:22px; }
   .page-sub { font-size:12px; margin-bottom:16px; line-height:1.5; }
-
-  /* Stats */
   .stats-row { grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
   .stat-card { padding:14px 12px 12px; }
   .stat-card-icon { width:32px; height:32px; font-size:13px; margin-bottom:10px; border-radius:8px; }
   .stat-value { font-size:22px; }
   .stat-label { font-size:11px; }
   .stat-delta { font-size:11px; }
-
-  /* Grids */
   .g2,.g3,.g2-3 { grid-template-columns:1fr; }
-  .g2>*+*,.g3>*+* { margin-top:0; }
   .chart-box { height:180px !important; }
-
-  /* Form rows collapse */
   .form-row,.form-row-3 { grid-template-columns:1fr; gap:0; }
   .form-group { margin-bottom:16px; }
   .form-label { font-size:11px; margin-bottom:6px; }
   .form-input { font-size:16px !important; padding:13px 14px; }
   .input-wrap .form-input { padding-left:40px; }
-
-  /* Game cards */
   .game-card { flex-wrap:wrap; gap:8px; padding:12px 14px; }
   .game-card .team-badge { width:28px; height:28px; font-size:10px; }
   .game-teams { font-size:13px; }
@@ -804,29 +843,18 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .game-score { font-size:14px; padding:0 8px; }
   .game-actions { width:100%; justify-content:flex-end; margin-top:2px; gap:6px; }
   .game-actions .btn-xs { min-height:38px; min-width:38px; }
-
-  /* Table */
   td,thead th { padding:10px 12px; font-size:12.5px; }
   td:first-child,thead th:first-child { position:sticky; left:0; z-index:1; background:var(--surface); }
   tbody tr:hover td:first-child { background:var(--panel); }
-
-  /* Slip grids */
   #slips-grid,#promos-grid { grid-template-columns:1fr !important; }
-
-  /* Modal becomes bottom sheet */
   .overlay { padding:0; align-items:flex-end; }
-  .modal {
-    width:100%; max-width:100%; border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-    max-height:94vh; animation:sheetIn .28s cubic-bezier(.4,0,.2,1);
-  }
+  .modal { width:100%; max-width:100%; border-radius:var(--radius-lg) var(--radius-lg) 0 0; max-height:94vh; animation:sheetIn .28s cubic-bezier(.4,0,.2,1); }
   .modal::before { content:''; display:block; width:40px; height:4px; background:var(--border2); border-radius:2px; margin:12px auto 0; }
   @keyframes sheetIn { from{transform:translateY(100%)} to{transform:translateY(0)} }
   .modal-hd { padding:14px 18px; }
   .modal-body { padding:16px 18px; }
   .modal-ft { padding:12px 18px 24px; flex-direction:column-reverse; gap:8px; }
   .modal-ft .btn { width:100%; justify-content:center; padding:13px 20px; font-size:14px; }
-
-  /* Auth */
   .auth-screen { flex-direction:column; }
   .auth-left { width:100%; padding:32px 20px 36px; border-right:none; border-bottom:1px solid var(--border); flex:none; min-height:auto; }
   .auth-brand { margin-bottom:28px; }
@@ -834,8 +862,6 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .auth-sub { margin-bottom:24px; font-size:13px; }
   .auth-right { display:none; }
   .btn-full { padding:14px 20px; font-size:14px; }
-
-  /* Create slip */
   .slip-type-grid  { grid-template-columns:1fr 1fr; gap:10px; }
   .slip-type-card  { padding:14px 12px; }
   .slip-type-card .stc-name { font-size:13px; }
@@ -843,38 +869,20 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .slip-preview-card  { display:none; }
   .slip-section-card-hd  { padding:14px 16px; }
   .slip-section-card-body{ padding:14px 16px; }
-
-  /* Bulk odds rows */
   .bgor-odds-grid,.bgor-odds-grid2 { grid-template-columns:1fr 1fr; }
   .bgor-meta { display:none; }
-
-  /* Toast */
   .toast { left:12px; right:12px; bottom:72px; min-width:unset; font-size:13px; }
-
-  /* Session banner */
   .session-info-banner { flex-direction:column; gap:8px; padding:12px 14px; }
-
-  /* Slip queue */
   .slip-queue-hd { flex-direction:column; align-items:flex-start; gap:8px; }
-
-  /* Job cards */
   .job-card>div:last-child { width:100%; justify-content:flex-end; }
-
-  /* VIP */
   .vip-currency-grid { grid-template-columns:1fr 1fr; }
   #vip-price-display>div:first-child { font-size:40px !important; }
-
-  /* Bulk tabs */
   .bulk-tab { font-size:11.5px; padding:7px 8px; }
-
-  /* Buttons min-touch targets */
   .btn     { min-height:44px; }
   .btn-sm  { min-height:40px; }
   .btn-xs  { min-height:38px; min-width:38px; }
   .chip    { padding:4px 10px; font-size:11.5px; }
   .odd-pill{ font-size:11.5px; padding:3px 8px; }
-
-  /* Mobile nav */
   .mobile-nav {
     display:flex !important;
     position:fixed; bottom:0; left:0; right:0; z-index:120;
@@ -888,10 +896,12 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
     position:fixed; bottom:64px; right:0; left:0; z-index:119;
     background:var(--surface); border-top:1px solid var(--border);
     box-shadow:0 -8px 32px rgba(0,0,0,.5);
-    padding:8px 0;
-    max-height:60vh; overflow-y:auto;
+    padding:8px 0; max-height:60vh; overflow-y:auto;
   }
   .mobile-more-menu.open { display:block; animation:sheetIn .2s ease; }
+  .bc-fetch-bar { flex-direction:column; }
+  .bc-selection-row { flex-wrap:wrap; }
+  .bc-sel-teams { width:100%; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -913,6 +923,7 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .modal-ft { gap:6px; }
   .page-headline { font-size:20px; }
   .game-score { font-size:13px; }
+  .bc-preview-odds { font-size:14px; }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -946,6 +957,34 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   .mobile-more-menu,
   .hamburger { display:none !important; }
 }
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NAV ITEM STYLES
+═══════════════════════════════════════════════════ */
+.mobile-nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; cursor:pointer; color:var(--muted); font-size:10px; font-weight:600;
+  letter-spacing:.3px; text-transform:uppercase; padding:6px 2px;
+  border:none; background:none; font-family:var(--font);
+  transition:color .12s; -webkit-tap-highlight-color:transparent; position:relative;
+}
+.mobile-nav-item i { font-size:18px; transition:transform .15s; }
+.mobile-nav-item.active { color:var(--accent); }
+.mobile-nav-item.active i { transform:translateY(-2px); }
+.mobile-nav-item.active::after {
+  content:''; position:absolute; bottom:0; left:25%; right:25%;
+  height:2px; background:var(--accent); border-radius:2px 2px 0 0;
+}
+.mobile-more-item {
+  display:flex; align-items:center; gap:14px; padding:14px 20px;
+  font-size:14px; font-weight:500; color:var(--text2); cursor:pointer;
+  border-bottom:1px solid var(--border); transition:background .1s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mobile-more-item:last-child { border-bottom:none; }
+.mobile-more-item:active { background:var(--panel); }
+.mobile-more-item i { width:20px; text-align:center; font-size:15px; flex-shrink:0; }
+.mobile-more-item.active { color:var(--accent); }
 </style>
 </head>
 <body>
@@ -1247,9 +1286,67 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
                 <div class="sec-icon ic-green"><i class="fa fa-ticket"></i></div>
-                <div><div style="font-weight:700;font-size:14px">Step 3 — Booking Code Details</div><div style="font-size:12px;color:var(--muted)">Enter bookmaker and code</div></div>
+                <div>
+                  <div style="font-weight:700;font-size:14px">Step 3 — Booking Code Details</div>
+                  <div style="font-size:12px;color:var(--muted)">Enter manually or auto-fetch from bookmaker</div>
+                </div>
               </div>
               <div class="slip-section-card-body">
+
+                <!-- ══ AUTO-FETCH BAR (NEW) ══ -->
+                <div style="margin-bottom:18px;padding:14px 16px;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+                    <i class="fa fa-wand-magic-sparkles" style="color:var(--accent)"></i>
+                    Auto-Fetch from Bookmaker
+                  </div>
+                  <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+                    <div class="form-group" style="margin-bottom:0;flex:1;min-width:120px">
+                      <label class="form-label">Bookmaker</label>
+                      <select class="form-input" id="cs-fetch-bm" style="padding:9px 12px;font-size:13px">
+                        <option value="sportybet-gh">Sportybet Ghana</option>
+                        <option value="sportybet-ng">Sportybet Nigeria</option>
+                        <option value="betway-gh">Betway Ghana</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;flex:2;min-width:140px">
+                      <label class="form-label">Booking Code</label>
+                      <input class="form-input" id="cs-fetch-code" placeholder="e.g. ABC123" style="padding:9px 12px;font-size:13px;font-family:var(--font-mono);text-transform:uppercase"/>
+                    </div>
+                    <button class="btn btn-success btn-sm" id="cs-fetch-btn" onclick="fetchBookingCode()" style="flex-shrink:0;white-space:nowrap">
+                      <i class="fa fa-bolt"></i> Fetch
+                    </button>
+                  </div>
+                  <div id="cs-fetch-error" style="display:none;margin-top:10px;padding:8px 12px;background:var(--accent2-lt);border:1px solid #5a2518;border-radius:7px;font-size:12.5px;color:var(--accent2)">
+                    <i class="fa fa-circle-xmark" style="margin-right:6px"></i><span id="cs-fetch-error-msg">Failed to fetch</span>
+                  </div>
+                </div>
+
+                <!-- ══ FETCH RESULT PREVIEW (shown after fetch) ══ -->
+                <div id="cs-fetch-result" style="display:none;margin-bottom:16px">
+                  <div class="bc-preview-panel">
+                    <div class="bc-preview-header">
+                      <div class="bc-preview-title">
+                        <i class="fa fa-circle-check" style="color:var(--accent);margin-right:5px"></i>
+                        Fetched — <span id="bc-res-bm">—</span>
+                        · <span id="bc-res-code" style="color:var(--accent)">—</span>
+                        · <span id="bc-res-count" style="color:var(--text2)">— selections</span>
+                      </div>
+                      <div class="bc-preview-odds" id="bc-res-odds">—×</div>
+                    </div>
+                    <div class="bc-selection-list" id="bc-res-selections"></div>
+                    <div class="bc-confirm-bar">
+                      <div class="bc-confirm-msg">
+                        <i class="fa fa-circle-info" style="margin-right:5px"></i>
+                        Slip fields below have been pre-filled. Review then submit.
+                      </div>
+                      <button class="btn btn-ghost btn-xs" onclick="clearFetchResult()">
+                        <i class="fa fa-xmark"></i> Clear
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ══ MANUAL FIELDS (always shown, pre-filled after fetch) ══ -->
                 <div class="form-row">
                   <div class="form-group"><label class="form-label">Bookmaker <span style="color:var(--accent2)">*</span></label><input class="form-input" id="cs-bm" placeholder="e.g. Betway, Sportybet" oninput="updateSlipPreview()"/></div>
                   <div class="form-group"><label class="form-label">Booking Code <span style="color:var(--accent2)">*</span></label><input class="form-input" id="cs-code" placeholder="e.g. A1B2C3" oninput="updateSlipPreview()"/></div>
@@ -1622,7 +1719,6 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
           <span id="bulk-odds-count" style="background:var(--gold);color:#0f0e0d;font-size:10px;font-family:var(--font-mono);font-weight:700;padding:1px 6px;border-radius:20px;margin-left:5px;display:none">0</span>
         </button>
       </div>
-
       <!-- TAB 1: Pick -->
       <div class="bulk-tab-panel active" id="bulk-panel-pick">
         <div class="search-group" style="margin-bottom:8px"><i class="fa fa-search"></i><input class="form-input" id="bb-search" placeholder="Search by team or league…" oninput="filterBulkGames()" style="padding-left:36px" autocomplete="off"/></div>
@@ -1642,7 +1738,6 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
           <div id="bb-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
       </div>
-
       <!-- TAB 2: Odds -->
       <div class="bulk-tab-panel" id="bulk-panel-odds">
         <div id="bulk-odds-empty" style="padding:32px;text-align:center;color:var(--muted)">
@@ -1671,7 +1766,6 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
         </div>
         <div id="bulk-odds-list" class="bulk-game-odds-list" style="display:none"></div>
       </div>
-
       <!-- Progress -->
       <div id="bulk-progress" style="display:none;margin-top:14px">
         <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="bulk-progress-label">Submitting…</div>
@@ -1801,37 +1895,8 @@ hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
   <div class="mobile-more-item" onclick="logout()"><i class="fa fa-arrow-right-from-bracket" style="color:var(--accent2)"></i> Sign Out</div>
 </div>
 
-<!-- MOBILE NAV STYLES (inline to avoid flash) -->
-<style>
-.mobile-nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:3px; cursor:pointer; color:var(--muted); font-size:10px; font-weight:600;
-  letter-spacing:.3px; text-transform:uppercase; padding:6px 2px;
-  border:none; background:none; font-family:var(--font);
-  transition:color .12s; -webkit-tap-highlight-color:transparent; position:relative;
-}
-.mobile-nav-item i { font-size:18px; transition:transform .15s; }
-.mobile-nav-item.active { color:var(--accent); }
-.mobile-nav-item.active i { transform:translateY(-2px); }
-.mobile-nav-item.active::after {
-  content:''; position:absolute; bottom:0; left:25%; right:25%;
-  height:2px; background:var(--accent); border-radius:2px 2px 0 0;
-}
-.mobile-more-item {
-  display:flex; align-items:center; gap:14px; padding:14px 20px;
-  font-size:14px; font-weight:500; color:var(--text2); cursor:pointer;
-  border-bottom:1px solid var(--border); transition:background .1s;
-  -webkit-tap-highlight-color:transparent;
-}
-.mobile-more-item:last-child { border-bottom:none; }
-.mobile-more-item:active { background:var(--panel); }
-.mobile-more-item i { width:20px; text-align:center; font-size:15px; flex-shrink:0; }
-.mobile-more-item.active { color:var(--accent); }
-</style>
-
-<!-- PASTE YOUR SCRIPT TAG HERE -->
-<script>
-  // ════════════════════════════════════════════════════════════
+  <script>
+// ════════════════════════════════════════════════════════════
 //  BetChale Admin — FULL MERGED SCRIPT
 //  Paste this entire block as ONE <script> tag at the bottom
 //  of your HTML, replacing both the old script and the stub.
@@ -2225,764 +2290,154 @@ async function toggleVip(id){try{const r=await PATCH(`/api/v1/admin/games/${id}/
 async function unpublish(id){try{const r=await PATCH(`/api/v1/admin/games/${id}/unpublish`);updateGameLocal(r.data);showToast('Unpublished','red');}catch(e){showToast(e.message,'red');}}
 function updateGameLocal(updated){ALL_GAMES=ALL_GAMES.map(g=>g.id===updated.id?updated:g);renderGamesList(ALL_GAMES);}
 
-// ── BOOK GAME MODAL (game picker — no manual UUID) ────────────
+// ── BOOK GAME MODAL ───────────────────────────────────────────
 
 let BM_GAMES_ALL = [], BM_SELECTED_GAME = null, BM_DATE_FILTER = 'today';
 
 function openBookModal() {
-  BM_SELECTED_GAME = null;
-  BM_DATE_FILTER = 'today';
-  BM_GAMES_ALL = [];
+  BM_SELECTED_GAME = null; BM_DATE_FILTER = 'today'; BM_GAMES_ALL = [];
   document.getElementById('bm-search').value = '';
   document.getElementById('bm-selected-banner').classList.remove('show');
   document.getElementById('bm-odds-section').classList.remove('show');
   const cd = document.getElementById('bm-custom-date'); if(cd) cd.value = '';
-  ['bg-hw','bg-draw','bg-aw','bg-o15','bg-o25','bg-o35'].forEach(id => {
-    const e = document.getElementById(id); if(e) e.value = '';
-  });
-  document.getElementById('bg-pub').checked  = true;
-  document.getElementById('bg-vip').checked  = false;
-  document.getElementById('bg-feat').checked = false;
-  document.querySelectorAll('#book-modal .csdf').forEach(b => b.classList.remove('active'));
+  ['bg-hw','bg-draw','bg-aw','bg-o15','bg-o25','bg-o35'].forEach(id => { const e=document.getElementById(id); if(e)e.value=''; });
+  document.getElementById('bg-pub').checked=true; document.getElementById('bg-vip').checked=false; document.getElementById('bg-feat').checked=false;
+  document.querySelectorAll('#book-modal .csdf').forEach(b=>b.classList.remove('active'));
   document.querySelector('#book-modal .csdf[data-d="today"]')?.classList.add('active');
   openModal('book-modal');
   loadBookModalGames();
 }
 
 async function loadBookModalGames() {
-  const el = document.getElementById('bm-game-list'); if(!el) return;
-  el.innerHTML = '<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
+  const el=document.getElementById('bm-game-list'); if(!el)return;
+  el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
   try {
-    let endpoint = '/api/v1/admin/games/today';
-    if      (BM_DATE_FILTER === 'tomorrow')  endpoint = '/api/v1/admin/games/tomorrow';
-    else if (BM_DATE_FILTER === 'day-after') endpoint = '/api/v1/admin/games/day-after-tomorrow';
-    else if (BM_DATE_FILTER === 'next-week') endpoint = '/api/v1/admin/games/next-week';
-    else if (BM_DATE_FILTER === 'custom') {
-      const d = document.getElementById('bm-custom-date')?.value;
-      if(d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res = await GET(endpoint);
-    BM_GAMES_ALL = res.data || [];
+    let endpoint='/api/v1/admin/games/today';
+    if(BM_DATE_FILTER==='tomorrow')  endpoint='/api/v1/admin/games/tomorrow';
+    else if(BM_DATE_FILTER==='day-after') endpoint='/api/v1/admin/games/day-after-tomorrow';
+    else if(BM_DATE_FILTER==='next-week') endpoint='/api/v1/admin/games/next-week';
+    else if(BM_DATE_FILTER==='custom'){const d=document.getElementById('bm-custom-date')?.value;if(d)endpoint=`/api/v1/admin/games/by-date?date=${d}`;}
+    const res=await GET(endpoint);
+    BM_GAMES_ALL=res.data||[];
     renderBookModalGameList(BM_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML = `<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
+  } catch(e){el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;}
 }
 
-function setBookModalDateFilter(d, el) {
-  BM_DATE_FILTER = d;
-  document.querySelectorAll('#book-modal .csdf').forEach(b => b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  if(d !== 'custom') { const c = document.getElementById('bm-custom-date'); if(c) c.value = ''; }
-  clearBookModalGame();
-  loadBookModalGames();
-}
-
-function filterBookModalGames() {
-  const q = (document.getElementById('bm-search')?.value || '').toLowerCase();
-  const list = q ? BM_GAMES_ALL.filter(g =>
-    (g.homeTeam||'').toLowerCase().includes(q) ||
-    (g.awayTeam||'').toLowerCase().includes(q) ||
-    (g.league||'').toLowerCase().includes(q)
-  ) : BM_GAMES_ALL;
-  renderBookModalGameList(list);
-}
+function setBookModalDateFilter(d,el){BM_DATE_FILTER=d;document.querySelectorAll('#book-modal .csdf').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');if(d!=='custom'){const c=document.getElementById('bm-custom-date');if(c)c.value='';}clearBookModalGame();loadBookModalGames();}
+function filterBookModalGames(){const q=(document.getElementById('bm-search')?.value||'').toLowerCase();const list=q?BM_GAMES_ALL.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q)):BM_GAMES_ALL;renderBookModalGameList(list);}
 
 function renderBookModalGameList(games) {
-  const el = document.getElementById('bm-game-list'); if(!el) return;
-  if(!games.length) {
-    el.innerHTML = '<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';
-    return;
-  }
-  const selId = BM_SELECTED_GAME?.id;
-  el.innerHTML = games.map(g => {
-    const isSel  = g.id === selId;
-    const hasOdds= g.homeWinOdds || g.drawOdds || g.awayWinOdds;
-    return `
-      <div class="game-picker-item ${isSel?'selected':''}"
-        onclick="selectBookModalGame(${JSON.stringify(g).replace(/"/g,'&quot;')})">
-        <div class="game-picker-item-teams">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span>
-          ${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}
-        </div>
-        <div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}${g.country?' · '+g.country:''}</div>
-        ${hasOdds?`<div class="game-picker-item-odds">
-          ${g.homeWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>`:''}
-          ${g.drawOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>`:''}
-          ${g.awayWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>`:''}
-          ${g.over25Odds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>`:''}
-        </div>`:''}
-      </div>`;
-  }).join('');
-}
-
-function selectBookModalGame(g) {
-  BM_SELECTED_GAME = g;
-  if(g.homeWinOdds) document.getElementById('bg-hw').value   = g.homeWinOdds;
-  if(g.drawOdds)    document.getElementById('bg-draw').value  = g.drawOdds;
-  if(g.awayWinOdds) document.getElementById('bg-aw').value    = g.awayWinOdds;
-  if(g.over15Odds)  document.getElementById('bg-o15').value   = g.over15Odds;
-  if(g.over25Odds)  document.getElementById('bg-o25').value   = g.over25Odds;
-  if(g.over35Odds)  document.getElementById('bg-o35').value   = g.over35Odds;
-  document.getElementById('bm-selected-label').textContent = `${g.homeTeam} vs ${g.awayTeam}`;
-  document.getElementById('bm-selected-meta').textContent  = `${g.league||''} · ${fmtTime(g.kickoffTime)}`;
-  document.getElementById('bm-selected-banner').classList.add('show');
-  document.getElementById('bm-odds-section').classList.add('show');
-  filterBookModalGames();
-}
-
-function clearBookModalGame() {
-  BM_SELECTED_GAME = null;
-  document.getElementById('bm-selected-banner').classList.remove('show');
-  document.getElementById('bm-odds-section').classList.remove('show');
-  filterBookModalGames();
-}
-
-async function submitBookGame() {
-  if(!BM_SELECTED_GAME) return showToast('Please select a game first', 'red');
-  const body = {
-    gameId:      BM_SELECTED_GAME.id,
-    published:   document.getElementById('bg-pub').checked,
-    featured:    document.getElementById('bg-feat').checked,
-    vipOnly:     document.getElementById('bg-vip').checked,
-    homeWinOdds: numOrNull('bg-hw'),
-    drawOdds:    numOrNull('bg-draw'),
-    awayWinOdds: numOrNull('bg-aw'),
-    over15Odds:  numOrNull('bg-o15'),
-    over25Odds:  numOrNull('bg-o25'),
-    over35Odds:  numOrNull('bg-o35'),
-  };
-  await submitBtn('book-submit-btn', async () => {
-    const res = await POST('/api/v1/admin/games/book', body);
-    if(!res.success) throw new Error(res.message);
-    ALL_GAMES = [...ALL_GAMES.filter(g => g.id !== res.data.id), res.data];
-    renderGamesList(ALL_GAMES);
-    closeModal('book-modal');
-    showToast(`${BM_SELECTED_GAME.homeTeam} vs ${BM_SELECTED_GAME.awayTeam} booked`, 'green');
-  });
-}
-
-// ── BULK BOOK MODAL (tab UI + per-game odds) ──────────────────
-
-let BB_SELECTED    = {};
-let BB_GAMES_ALL   = [];
-let BB_DATE_FILTER = 'today';
-let BB_CURR_TAB    = 'pick';
-
-function openBulkModal() {
-  BB_SELECTED = {}; BB_GAMES_ALL = []; BB_DATE_FILTER = 'today'; BB_CURR_TAB = 'pick';
-  document.getElementById('bb-search').value = '';
-  document.getElementById('bb-selected-wrap').style.display = 'none';
-  document.getElementById('bb-chips').innerHTML = '';
-  document.getElementById('bb-count').textContent = '0';
-  const cd = document.getElementById('bb-custom-date'); if(cd) cd.value = '';
-  ['bbd-hw','bbd-draw','bbd-aw','bbd-o15','bbd-o25','bbd-o35'].forEach(id => {
-    const e = document.getElementById(id); if(e) e.value = '';
-  });
-  document.getElementById('bbd-pub').checked  = true;
-  document.getElementById('bbd-vip').checked  = false;
-  document.getElementById('bbd-feat').checked = false;
-  document.querySelectorAll('#bulk-modal .csdf').forEach(b => b.classList.remove('active'));
-  document.querySelector('#bulk-modal .csdf[data-d="today"]')?.classList.add('active');
-  switchBulkTab('pick');
-  openModal('bulk-modal');
-  loadBulkGames();
-}
-
-function switchBulkTab(tab) {
-  BB_CURR_TAB = tab;
-  document.querySelectorAll('.bulk-tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.bulk-tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`bulk-tab-${tab}`)?.classList.add('active');
-  document.getElementById(`bulk-panel-${tab}`)?.classList.add('active');
-  if(tab === 'odds') renderBulkOddsRows();
-}
-
-async function loadBulkGames() {
-  const el = document.getElementById('bb-game-list'); if(!el) return;
-  el.innerHTML = '<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
-  try {
-    let endpoint = '/api/v1/admin/games/today';
-    if      (BB_DATE_FILTER === 'tomorrow')  endpoint = '/api/v1/admin/games/tomorrow';
-    else if (BB_DATE_FILTER === 'day-after') endpoint = '/api/v1/admin/games/day-after-tomorrow';
-    else if (BB_DATE_FILTER === 'next-week') endpoint = '/api/v1/admin/games/next-week';
-    else if (BB_DATE_FILTER === 'custom') {
-      const d = document.getElementById('bb-custom-date')?.value;
-      if(d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res = await GET(endpoint);
-    BB_GAMES_ALL = res.data || [];
-    renderBulkGameList(BB_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML = `<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
-}
-
-function setBulkDateFilter(d, el) {
-  BB_DATE_FILTER = d;
-  document.querySelectorAll('#bulk-modal .csdf').forEach(b => b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  if(d !== 'custom') { const c = document.getElementById('bb-custom-date'); if(c) c.value = ''; }
-  loadBulkGames();
-}
-
-function filterBulkGames() {
-  const q = (document.getElementById('bb-search')?.value || '').toLowerCase();
-  const list = q ? BB_GAMES_ALL.filter(g =>
-    (g.homeTeam||'').toLowerCase().includes(q) ||
-    (g.awayTeam||'').toLowerCase().includes(q) ||
-    (g.league||'').toLowerCase().includes(q)
-  ) : BB_GAMES_ALL;
-  renderBulkGameList(list);
-}
-
-function renderBulkGameList(games) {
-  const el = document.getElementById('bb-game-list'); if(!el) return;
-  if(!games.length) {
-    el.innerHTML = '<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';
-    return;
-  }
-  el.innerHTML = games.map(g => {
-    const isSel = !!BB_SELECTED[g.id];
-    return `
-      <div class="game-picker-item ${isSel?'selected':''}"
-        onclick="toggleBulkGame(${JSON.stringify(g).replace(/"/g,'&quot;')})">
-        <div class="game-picker-item-teams">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span>
-          <div style="width:20px;height:20px;border-radius:50%;
-            border:2px solid ${isSel?'var(--accent)':'var(--border2)'};
-            background:${isSel?'var(--accent)':'transparent'};
-            display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">
-            ${isSel?'<i class="fa fa-check" style="color:#0f0e0d;font-size:9px"></i>':''}
-          </div>
-        </div>
-        <div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-      </div>`;
-  }).join('');
-}
-
-function toggleBulkGame(g) {
-  if(BB_SELECTED[g.id]) {
-    delete BB_SELECTED[g.id];
-  } else {
-    BB_SELECTED[g.id] = {
-      game:        g,
-      homeWinOdds: g.homeWinOdds || null,
-      drawOdds:    g.drawOdds    || null,
-      awayWinOdds: g.awayWinOdds || null,
-      over15Odds:  g.over15Odds  || null,
-      over25Odds:  g.over25Odds  || null,
-      over35Odds:  g.over35Odds  || null,
-      published:   true,
-      vipOnly:     false,
-      featured:    false,
-    };
-  }
-  filterBulkGames();
-  renderBulkSelectedChips();
-  updateBulkCounts();
-}
-
-function renderBulkSelectedChips() {
-  const entries = Object.values(BB_SELECTED);
-  const wrap  = document.getElementById('bb-selected-wrap');
-  const chips = document.getElementById('bb-chips');
-  const count = document.getElementById('bb-count');
-  wrap.style.display = entries.length ? '' : 'none';
-  count.textContent  = entries.length;
-  chips.innerHTML = entries.map(entry => `
-    <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
-      background:var(--accent-lt);border:1px solid #1a4d32;border-radius:20px;
-      font-size:11.5px;font-weight:600;color:var(--accent)">
-      ${entry.game.homeTeam} vs ${entry.game.awayTeam}
-      <i class="fa fa-xmark" style="cursor:pointer;opacity:.7;font-size:10px"
-        onclick="delete BB_SELECTED['${entry.game.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts()"></i>
-    </span>`).join('');
-}
-
-function clearAllBulkGames() {
-  BB_SELECTED = {};
-  renderBulkSelectedChips();
-  filterBulkGames();
-  updateBulkCounts();
-  renderBulkOddsRows();
-}
-
-function updateBulkCounts() {
-  const n = Object.keys(BB_SELECTED).length;
-  const pickBadge = document.getElementById('bulk-pick-count');
-  const oddsBadge = document.getElementById('bulk-odds-count');
-  if(pickBadge){ pickBadge.textContent = n; pickBadge.style.display = n ? '' : 'none'; }
-  if(oddsBadge){ oddsBadge.textContent = n; oddsBadge.style.display = n ? '' : 'none'; }
-  const lbl = document.getElementById('bulk-submit-label');
-  if(lbl) lbl.textContent = n ? `${n} Game${n>1?'s':''}` : 'Selected';
-}
-
-function renderBulkOddsRows() {
-  const entries  = Object.values(BB_SELECTED);
-  const empty    = document.getElementById('bulk-odds-empty');
-  const list     = document.getElementById('bulk-odds-list');
-  const defs     = document.getElementById('bulk-apply-defaults');
-  if(!entries.length) {
-    if(empty) empty.style.display = '';
-    if(list)  list.style.display  = 'none';
-    if(defs)  defs.style.display  = 'none';
-    return;
-  }
-  if(empty) empty.style.display = 'none';
-  if(list)  list.style.display  = '';
-  if(defs)  defs.style.display  = '';
-
-  list.innerHTML = entries.map(entry => {
-    const g = entry.game;
-    return `
-    <div class="bulk-game-odds-row" id="bgor-${g.id}">
-      <div class="bgor-header" onclick="toggleBulkOddsRow('${g.id}')">
-        <button class="bgor-expand-btn" id="bgor-btn-${g.id}"><i class="fa fa-chevron-down"></i></button>
-        <div>
-          <div class="bgor-teams">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-          <div class="bgor-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-        </div>
-        <div style="display:flex;gap:6px;margin-left:auto;align-items:center">
-          ${entry.published?`<span class="chip chip-green" style="font-size:10px">Published</span>`:`<span class="chip chip-gray" style="font-size:10px">Draft</span>`}
-          ${entry.vipOnly?`<span class="chip chip-gold" style="font-size:10px">VIP</span>`:''}
-          <button class="bgor-remove" onclick="event.stopPropagation();delete BB_SELECTED['${g.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts();renderBulkOddsRows()">
-            <i class="fa fa-xmark"></i>
-          </button>
-        </div>
-      </div>
-      <div class="bgor-body" id="bgor-body-${g.id}">
-        <div class="bgor-odds-grid">
-          <div class="bgor-input-wrap"><label class="form-label">Home Win</label><input class="form-input" type="number" step="0.01" placeholder="2.10" value="${entry.homeWinOdds||''}" oninput="BB_SELECTED['${g.id}'].homeWinOdds=parseFloat(this.value)||null"/></div>
-          <div class="bgor-input-wrap"><label class="form-label">Draw</label><input class="form-input" type="number" step="0.01" placeholder="3.40" value="${entry.drawOdds||''}" oninput="BB_SELECTED['${g.id}'].drawOdds=parseFloat(this.value)||null"/></div>
-          <div class="bgor-input-wrap"><label class="form-label">Away Win</label><input class="form-input" type="number" step="0.01" placeholder="3.20" value="${entry.awayWinOdds||''}" oninput="BB_SELECTED['${g.id}'].awayWinOdds=parseFloat(this.value)||null"/></div>
-        </div>
-        <div class="bgor-odds-grid2">
-          <div class="bgor-input-wrap"><label class="form-label">Over 1.5</label><input class="form-input" type="number" step="0.01" placeholder="1.30" value="${entry.over15Odds||''}" oninput="BB_SELECTED['${g.id}'].over15Odds=parseFloat(this.value)||null"/></div>
-          <div class="bgor-input-wrap"><label class="form-label">Over 2.5</label><input class="form-input" type="number" step="0.01" placeholder="1.90" value="${entry.over25Odds||''}" oninput="BB_SELECTED['${g.id}'].over25Odds=parseFloat(this.value)||null"/></div>
-          <div class="bgor-input-wrap"><label class="form-label">Over 3.5</label><input class="form-input" type="number" step="0.01" placeholder="3.50" value="${entry.over35Odds||''}" oninput="BB_SELECTED['${g.id}'].over35Odds=parseFloat(this.value)||null"/></div>
-        </div>
-        <div class="bgor-flags">
-          <div class="checkbox-row">
-            <input type="checkbox" id="bgor-pub-${g.id}" ${entry.published?'checked':''} onchange="BB_SELECTED['${g.id}'].published=this.checked;renderBulkOddsRows()">
-            <label for="bgor-pub-${g.id}">Published</label>
-          </div>
-          <div class="checkbox-row">
-            <input type="checkbox" id="bgor-vip-${g.id}" ${entry.vipOnly?'checked':''} onchange="BB_SELECTED['${g.id}'].vipOnly=this.checked;renderBulkOddsRows()">
-            <label for="bgor-vip-${g.id}">VIP Only</label>
-          </div>
-          <div class="checkbox-row">
-            <input type="checkbox" id="bgor-feat-${g.id}" ${entry.featured?'checked':''} onchange="BB_SELECTED['${g.id}'].featured=this.checked">
-            <label for="bgor-feat-${g.id}">Featured</label>
-          </div>
-        </div>
-      </div>
+  const el=document.getElementById('bm-game-list'); if(!el)return;
+  if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';return;}
+  const selId=BM_SELECTED_GAME?.id;
+  el.innerHTML=games.map(g=>{
+    const isSel=g.id===selId, hasOdds=g.homeWinOdds||g.drawOdds||g.awayWinOdds;
+    return `<div class="game-picker-item ${isSel?'selected':''}" onclick="selectBookModalGame(${JSON.stringify(g).replace(/"/g,'&quot;')})">
+      <div class="game-picker-item-teams">${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}<span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span>${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}</div>
+      <div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}${g.country?' · '+g.country:''}</div>
+      ${hasOdds?`<div class="game-picker-item-odds">${g.homeWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>`:''}${g.drawOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>`:''}${g.awayWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>`:''}${g.over25Odds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>`:''}</div>`:''}
     </div>`;
   }).join('');
 }
 
-function toggleBulkOddsRow(id) {
-  const body = document.getElementById(`bgor-body-${id}`);
-  const btn  = document.getElementById(`bgor-btn-${id}`);
-  if(!body) return;
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  btn?.classList.toggle('open', !isOpen);
+function selectBookModalGame(g){BM_SELECTED_GAME=g;if(g.homeWinOdds)document.getElementById('bg-hw').value=g.homeWinOdds;if(g.drawOdds)document.getElementById('bg-draw').value=g.drawOdds;if(g.awayWinOdds)document.getElementById('bg-aw').value=g.awayWinOdds;if(g.over15Odds)document.getElementById('bg-o15').value=g.over15Odds;if(g.over25Odds)document.getElementById('bg-o25').value=g.over25Odds;if(g.over35Odds)document.getElementById('bg-o35').value=g.over35Odds;document.getElementById('bm-selected-label').textContent=`${g.homeTeam} vs ${g.awayTeam}`;document.getElementById('bm-selected-meta').textContent=`${g.league||''} · ${fmtTime(g.kickoffTime)}`;document.getElementById('bm-selected-banner').classList.add('show');document.getElementById('bm-odds-section').classList.add('show');filterBookModalGames();}
+function clearBookModalGame(){BM_SELECTED_GAME=null;document.getElementById('bm-selected-banner').classList.remove('show');document.getElementById('bm-odds-section').classList.remove('show');filterBookModalGames();}
+
+async function submitBookGame() {
+  if(!BM_SELECTED_GAME) return showToast('Please select a game first','red');
+  const body={gameId:BM_SELECTED_GAME.id,published:document.getElementById('bg-pub').checked,featured:document.getElementById('bg-feat').checked,vipOnly:document.getElementById('bg-vip').checked,homeWinOdds:numOrNull('bg-hw'),drawOdds:numOrNull('bg-draw'),awayWinOdds:numOrNull('bg-aw'),over15Odds:numOrNull('bg-o15'),over25Odds:numOrNull('bg-o25'),over35Odds:numOrNull('bg-o35')};
+  await submitBtn('book-submit-btn',async()=>{const res=await POST('/api/v1/admin/games/book',body);if(!res.success)throw new Error(res.message);ALL_GAMES=[...ALL_GAMES.filter(g=>g.id!==res.data.id),res.data];renderGamesList(ALL_GAMES);closeModal('book-modal');showToast(`${BM_SELECTED_GAME.homeTeam} vs ${BM_SELECTED_GAME.awayTeam} booked`,'green');});
 }
 
-function applyDefaultsToAll() {
-  const hw   = parseFloat(document.getElementById('bbd-hw')?.value)   || null;
-  const draw = parseFloat(document.getElementById('bbd-draw')?.value) || null;
-  const aw   = parseFloat(document.getElementById('bbd-aw')?.value)   || null;
-  const o15  = parseFloat(document.getElementById('bbd-o15')?.value)  || null;
-  const o25  = parseFloat(document.getElementById('bbd-o25')?.value)  || null;
-  const o35  = parseFloat(document.getElementById('bbd-o35')?.value)  || null;
-  const pub  = document.getElementById('bbd-pub').checked;
-  const vip  = document.getElementById('bbd-vip').checked;
-  const feat = document.getElementById('bbd-feat').checked;
-  Object.keys(BB_SELECTED).forEach(id => {
-    if(hw   !== null) BB_SELECTED[id].homeWinOdds = hw;
-    if(draw !== null) BB_SELECTED[id].drawOdds    = draw;
-    if(aw   !== null) BB_SELECTED[id].awayWinOdds = aw;
-    if(o15  !== null) BB_SELECTED[id].over15Odds  = o15;
-    if(o25  !== null) BB_SELECTED[id].over25Odds  = o25;
-    if(o35  !== null) BB_SELECTED[id].over35Odds  = o35;
-    BB_SELECTED[id].published = pub;
-    BB_SELECTED[id].vipOnly   = vip;
-    BB_SELECTED[id].featured  = feat;
-  });
-  renderBulkOddsRows();
-  showToast('Defaults applied to all games', 'blue');
+// ── BULK BOOK MODAL ───────────────────────────────────────────
+
+let BB_SELECTED={}, BB_GAMES_ALL=[], BB_DATE_FILTER='today', BB_CURR_TAB='pick';
+
+function openBulkModal(){BB_SELECTED={};BB_GAMES_ALL=[];BB_DATE_FILTER='today';BB_CURR_TAB='pick';document.getElementById('bb-search').value='';document.getElementById('bb-selected-wrap').style.display='none';document.getElementById('bb-chips').innerHTML='';document.getElementById('bb-count').textContent='0';const cd=document.getElementById('bb-custom-date');if(cd)cd.value='';['bbd-hw','bbd-draw','bbd-aw','bbd-o15','bbd-o25','bbd-o35'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('bbd-pub').checked=true;document.getElementById('bbd-vip').checked=false;document.getElementById('bbd-feat').checked=false;document.querySelectorAll('#bulk-modal .csdf').forEach(b=>b.classList.remove('active'));document.querySelector('#bulk-modal .csdf[data-d="today"]')?.classList.add('active');switchBulkTab('pick');openModal('bulk-modal');loadBulkGames();}
+function switchBulkTab(tab){BB_CURR_TAB=tab;document.querySelectorAll('.bulk-tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.bulk-tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`bulk-tab-${tab}`)?.classList.add('active');document.getElementById(`bulk-panel-${tab}`)?.classList.add('active');if(tab==='odds')renderBulkOddsRows();}
+
+async function loadBulkGames(){
+  const el=document.getElementById('bb-game-list');if(!el)return;
+  el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
+  try{let endpoint='/api/v1/admin/games/today';if(BB_DATE_FILTER==='tomorrow')endpoint='/api/v1/admin/games/tomorrow';else if(BB_DATE_FILTER==='day-after')endpoint='/api/v1/admin/games/day-after-tomorrow';else if(BB_DATE_FILTER==='next-week')endpoint='/api/v1/admin/games/next-week';else if(BB_DATE_FILTER==='custom'){const d=document.getElementById('bb-custom-date')?.value;if(d)endpoint=`/api/v1/admin/games/by-date?date=${d}`;}const res=await GET(endpoint);BB_GAMES_ALL=res.data||[];renderBulkGameList(BB_GAMES_ALL);}catch(e){el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;}
 }
 
-async function submitBulkBook() {
-  const entries = Object.values(BB_SELECTED);
-  if(!entries.length) return showToast('Select at least one game', 'red');
+function setBulkDateFilter(d,el){BB_DATE_FILTER=d;document.querySelectorAll('#bulk-modal .csdf').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');if(d!=='custom'){const c=document.getElementById('bb-custom-date');if(c)c.value='';}loadBulkGames();}
+function filterBulkGames(){const q=(document.getElementById('bb-search')?.value||'').toLowerCase();const list=q?BB_GAMES_ALL.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q)):BB_GAMES_ALL;renderBulkGameList(list);}
 
-  // Build List<BookGameRequest> — one per game with its own odds/flags
-  const requests = entries.map(entry => ({
-    gameId:      entry.game.id,
-    published:   entry.published,
-    vipOnly:     entry.vipOnly,
-    featured:    entry.featured,
-    homeWinOdds: entry.homeWinOdds,
-    drawOdds:    entry.drawOdds,
-    awayWinOdds: entry.awayWinOdds,
-    over15Odds:  entry.over15Odds,
-    over25Odds:  entry.over25Odds,
-    over35Odds:  entry.over35Odds,
-  }));
+function renderBulkGameList(games){
+  const el=document.getElementById('bb-game-list');if(!el)return;
+  if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';return;}
+  el.innerHTML=games.map(g=>{const isSel=!!BB_SELECTED[g.id];return`<div class="game-picker-item ${isSel?'selected':''}" onclick="toggleBulkGame(${JSON.stringify(g).replace(/"/g,'&quot;')})"><div class="game-picker-item-teams">${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}<span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span><div style="width:20px;height:20px;border-radius:50%;border:2px solid ${isSel?'var(--accent)':'var(--border2)'};background:${isSel?'var(--accent)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">${isSel?'<i class="fa fa-check" style="color:#0f0e0d;font-size:9px"></i>':''}</div></div><div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div></div>`;}).join('');
+}
 
-  const btn   = document.getElementById('bulk-submit-btn');
-  const prog  = document.getElementById('bulk-progress');
-  const progL = document.getElementById('bulk-progress-label');
-  const progF = document.getElementById('bulk-progress-fill');
+function toggleBulkGame(g){if(BB_SELECTED[g.id]){delete BB_SELECTED[g.id];}else{BB_SELECTED[g.id]={game:g,homeWinOdds:g.homeWinOdds||null,drawOdds:g.drawOdds||null,awayWinOdds:g.awayWinOdds||null,over15Odds:g.over15Odds||null,over25Odds:g.over25Odds||null,over35Odds:g.over35Odds||null,published:true,vipOnly:false,featured:false};}filterBulkGames();renderBulkSelectedChips();updateBulkCounts();}
 
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Booking…';
-  if(prog) prog.style.display = '';
+function renderBulkSelectedChips(){const entries=Object.values(BB_SELECTED);const wrap=document.getElementById('bb-selected-wrap');const chips=document.getElementById('bb-chips');const count=document.getElementById('bb-count');wrap.style.display=entries.length?'':'none';count.textContent=entries.length;chips.innerHTML=entries.map(entry=>`<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:var(--accent-lt);border:1px solid #1a4d32;border-radius:20px;font-size:11.5px;font-weight:600;color:var(--accent)">${entry.game.homeTeam} vs ${entry.game.awayTeam}<i class="fa fa-xmark" style="cursor:pointer;opacity:.7;font-size:10px" onclick="delete BB_SELECTED['${entry.game.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts()"></i></span>`).join('');}
+function clearAllBulkGames(){BB_SELECTED={};renderBulkSelectedChips();filterBulkGames();updateBulkCounts();renderBulkOddsRows();}
+function updateBulkCounts(){const n=Object.keys(BB_SELECTED).length;const pickBadge=document.getElementById('bulk-pick-count');const oddsBadge=document.getElementById('bulk-odds-count');if(pickBadge){pickBadge.textContent=n;pickBadge.style.display=n?'':'none';}if(oddsBadge){oddsBadge.textContent=n;oddsBadge.style.display=n?'':'none';}const lbl=document.getElementById('bulk-submit-label');if(lbl)lbl.textContent=n?`${n} Game${n>1?'s':''}`: 'Selected';}
 
-  try {
-    if(progL) progL.textContent = `Submitting ${requests.length} game${requests.length>1?'s':''}…`;
-    if(progF) progF.style.width = '20%';
-    const res = await POST('/api/v1/admin/games/book/bulk', requests);
-    if(progF) progF.style.width = '100%';
-    if(!res.success) throw new Error(res.message);
-    (res.data||[]).forEach(g => { ALL_GAMES = [...ALL_GAMES.filter(x => x.id !== g.id), g]; });
-    renderGamesList(ALL_GAMES);
-    closeModal('bulk-modal');
-    BB_SELECTED = {};
-    showToast(`${(res.data||[]).length} game${(res.data||[]).length!==1?'s':''} booked`, 'green');
-  } catch(e) {
-    showToast(e.message, 'red');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span>`;
-    setTimeout(() => {
-      if(prog)  prog.style.display = 'none';
-      if(progF) progF.style.width  = '0%';
-    }, 1200);
-  }
+function renderBulkOddsRows(){const entries=Object.values(BB_SELECTED);const empty=document.getElementById('bulk-odds-empty');const list=document.getElementById('bulk-odds-list');const defs=document.getElementById('bulk-apply-defaults');if(!entries.length){if(empty)empty.style.display='';if(list)list.style.display='none';if(defs)defs.style.display='none';return;}if(empty)empty.style.display='none';if(list)list.style.display='';if(defs)defs.style.display='';list.innerHTML=entries.map(entry=>{const g=entry.game;return`<div class="bulk-game-odds-row" id="bgor-${g.id}"><div class="bgor-header" onclick="toggleBulkOddsRow('${g.id}')"><button class="bgor-expand-btn" id="bgor-btn-${g.id}"><i class="fa fa-chevron-down"></i></button><div><div class="bgor-teams">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div><div class="bgor-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div></div><div style="display:flex;gap:6px;margin-left:auto;align-items:center">${entry.published?`<span class="chip chip-green" style="font-size:10px">Published</span>`:`<span class="chip chip-gray" style="font-size:10px">Draft</span>`}${entry.vipOnly?`<span class="chip chip-gold" style="font-size:10px">VIP</span>`:''}<button class="bgor-remove" onclick="event.stopPropagation();delete BB_SELECTED['${g.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts();renderBulkOddsRows()"><i class="fa fa-xmark"></i></button></div></div><div class="bgor-body" id="bgor-body-${g.id}"><div class="bgor-odds-grid"><div class="bgor-input-wrap"><label class="form-label">Home Win</label><input class="form-input" type="number" step="0.01" placeholder="2.10" value="${entry.homeWinOdds||''}" oninput="BB_SELECTED['${g.id}'].homeWinOdds=parseFloat(this.value)||null"/></div><div class="bgor-input-wrap"><label class="form-label">Draw</label><input class="form-input" type="number" step="0.01" placeholder="3.40" value="${entry.drawOdds||''}" oninput="BB_SELECTED['${g.id}'].drawOdds=parseFloat(this.value)||null"/></div><div class="bgor-input-wrap"><label class="form-label">Away Win</label><input class="form-input" type="number" step="0.01" placeholder="3.20" value="${entry.awayWinOdds||''}" oninput="BB_SELECTED['${g.id}'].awayWinOdds=parseFloat(this.value)||null"/></div></div><div class="bgor-odds-grid2"><div class="bgor-input-wrap"><label class="form-label">Over 1.5</label><input class="form-input" type="number" step="0.01" placeholder="1.30" value="${entry.over15Odds||''}" oninput="BB_SELECTED['${g.id}'].over15Odds=parseFloat(this.value)||null"/></div><div class="bgor-input-wrap"><label class="form-label">Over 2.5</label><input class="form-input" type="number" step="0.01" placeholder="1.90" value="${entry.over25Odds||''}" oninput="BB_SELECTED['${g.id}'].over25Odds=parseFloat(this.value)||null"/></div><div class="bgor-input-wrap"><label class="form-label">Over 3.5</label><input class="form-input" type="number" step="0.01" placeholder="3.50" value="${entry.over35Odds||''}" oninput="BB_SELECTED['${g.id}'].over35Odds=parseFloat(this.value)||null"/></div></div><div class="bgor-flags"><div class="checkbox-row"><input type="checkbox" id="bgor-pub-${g.id}" ${entry.published?'checked':''} onchange="BB_SELECTED['${g.id}'].published=this.checked;renderBulkOddsRows()"><label for="bgor-pub-${g.id}">Published</label></div><div class="checkbox-row"><input type="checkbox" id="bgor-vip-${g.id}" ${entry.vipOnly?'checked':''} onchange="BB_SELECTED['${g.id}'].vipOnly=this.checked;renderBulkOddsRows()"><label for="bgor-vip-${g.id}">VIP Only</label></div><div class="checkbox-row"><input type="checkbox" id="bgor-feat-${g.id}" ${entry.featured?'checked':''} onchange="BB_SELECTED['${g.id}'].featured=this.checked"><label for="bgor-feat-${g.id}">Featured</label></div></div></div></div>`;}).join('');}
+
+function toggleBulkOddsRow(id){const body=document.getElementById(`bgor-body-${id}`);const btn=document.getElementById(`bgor-btn-${id}`);if(!body)return;const isOpen=body.classList.contains('open');body.classList.toggle('open',!isOpen);btn?.classList.toggle('open',!isOpen);}
+
+function applyDefaultsToAll(){const hw=parseFloat(document.getElementById('bbd-hw')?.value)||null;const draw=parseFloat(document.getElementById('bbd-draw')?.value)||null;const aw=parseFloat(document.getElementById('bbd-aw')?.value)||null;const o15=parseFloat(document.getElementById('bbd-o15')?.value)||null;const o25=parseFloat(document.getElementById('bbd-o25')?.value)||null;const o35=parseFloat(document.getElementById('bbd-o35')?.value)||null;const pub=document.getElementById('bbd-pub').checked;const vip=document.getElementById('bbd-vip').checked;const feat=document.getElementById('bbd-feat').checked;Object.keys(BB_SELECTED).forEach(id=>{if(hw!==null)BB_SELECTED[id].homeWinOdds=hw;if(draw!==null)BB_SELECTED[id].drawOdds=draw;if(aw!==null)BB_SELECTED[id].awayWinOdds=aw;if(o15!==null)BB_SELECTED[id].over15Odds=o15;if(o25!==null)BB_SELECTED[id].over25Odds=o25;if(o35!==null)BB_SELECTED[id].over35Odds=o35;BB_SELECTED[id].published=pub;BB_SELECTED[id].vipOnly=vip;BB_SELECTED[id].featured=feat;});renderBulkOddsRows();showToast('Defaults applied to all games','blue');}
+
+async function submitBulkBook(){
+  const entries=Object.values(BB_SELECTED);
+  if(!entries.length)return showToast('Select at least one game','red');
+  const requests=entries.map(entry=>({gameId:entry.game.id,published:entry.published,vipOnly:entry.vipOnly,featured:entry.featured,homeWinOdds:entry.homeWinOdds,drawOdds:entry.drawOdds,awayWinOdds:entry.awayWinOdds,over15Odds:entry.over15Odds,over25Odds:entry.over25Odds,over35Odds:entry.over35Odds}));
+  const btn=document.getElementById('bulk-submit-btn');const prog=document.getElementById('bulk-progress');const progL=document.getElementById('bulk-progress-label');const progF=document.getElementById('bulk-progress-fill');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Booking…';if(prog)prog.style.display='';
+  try{if(progL)progL.textContent=`Submitting ${requests.length} game${requests.length>1?'s':''}…`;if(progF)progF.style.width='20%';const res=await POST('/api/v1/admin/games/book/bulk',requests);if(progF)progF.style.width='100%';if(!res.success)throw new Error(res.message);(res.data||[]).forEach(g=>{ALL_GAMES=[...ALL_GAMES.filter(x=>x.id!==g.id),g];});renderGamesList(ALL_GAMES);closeModal('bulk-modal');BB_SELECTED={};showToast(`${(res.data||[]).length} game${(res.data||[]).length!==1?'s':''} booked`,'green');}catch(e){showToast(e.message,'red');}
+  finally{btn.disabled=false;btn.innerHTML=`<i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span>`;setTimeout(()=>{if(prog)prog.style.display='none';if(progF)progF.style.width='0%';},1200);}
 }
 
 // ── USERS ─────────────────────────────────────────────────────
 
 let userRoleFilter='';
-async function loadUsers() {
-  document.getElementById('users-tbody').innerHTML='<tr><td colspan="7"><div class="loading-state"><div class="spinner"></div> Loading…</div></td></tr>';
-  try {
-    const res=await GET('/api/v1/admin/users');
-    ALL_USERS=res.data||[];
-    renderUsers(ALL_USERS);
-    buildUsersCharts(ALL_USERS);
-  } catch(e) {
-    document.getElementById('users-tbody').innerHTML=`<tr><td colspan="7"><div class="loading-state" style="color:var(--accent2)">${e.message}</div></td></tr>`;
-  }
-}
+async function loadUsers(){document.getElementById('users-tbody').innerHTML='<tr><td colspan="7"><div class="loading-state"><div class="spinner"></div> Loading…</div></td></tr>';try{const res=await GET('/api/v1/admin/users');ALL_USERS=res.data||[];renderUsers(ALL_USERS);buildUsersCharts(ALL_USERS);}catch(e){document.getElementById('users-tbody').innerHTML=`<tr><td colspan="7"><div class="loading-state" style="color:var(--accent2)">${e.message}</div></td></tr>`;}}
 
-function buildUsersCharts(users) {
-  const vip=users.filter(u=>u.role==='VIP').length;
-  const free=users.filter(u=>u.role!=='VIP').length;
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const weeks={};
-  users.forEach(u=>{
-    if(!u.createdAt)return;
-    const d=new Date(u.createdAt);
-    const weekStart=new Date(d); weekStart.setDate(d.getDate()-d.getDay());
-    const wk=weekStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-    weeks[wk]=(weeks[wk]||0)+1;
-  });
-  const wkLabels=Object.keys(weeks).slice(-8);
-  const wkData=wkLabels.map(k=>weeks[k]);
-  const rc=document.getElementById('regChart');
-  if(rc){try{Chart.getChart(rc)?.destroy();}catch{}
-    new Chart(rc,{type:'bar',data:{labels:wkLabels.length?wkLabels:['No data'],datasets:[{label:'New Users',data:wkData.length?wkData:[0],backgroundColor:'#3a72c8',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-  }
-  const cc=document.getElementById('convChart');
-  if(cc){try{Chart.getChart(cc)?.destroy();}catch{}
-    new Chart(cc,{type:'doughnut',data:{labels:[`Free (${free})`,`VIP (${vip})`],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
-  }
-}
+function buildUsersCharts(users){const vip=users.filter(u=>u.role==='VIP').length;const free=users.filter(u=>u.role!=='VIP').length;const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};const weeks={};users.forEach(u=>{if(!u.createdAt)return;const d=new Date(u.createdAt);const weekStart=new Date(d);weekStart.setDate(d.getDate()-d.getDay());const wk=weekStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});weeks[wk]=(weeks[wk]||0)+1;});const wkLabels=Object.keys(weeks).slice(-8);const wkData=wkLabels.map(k=>weeks[k]);const rc=document.getElementById('regChart');if(rc){try{Chart.getChart(rc)?.destroy();}catch{}new Chart(rc,{type:'bar',data:{labels:wkLabels.length?wkLabels:['No data'],datasets:[{label:'New Users',data:wkData.length?wkData:[0],backgroundColor:'#3a72c8',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});}const cc=document.getElementById('convChart');if(cc){try{Chart.getChart(cc)?.destroy();}catch{}new Chart(cc,{type:'doughnut',data:{labels:[`Free (${free})`,`VIP (${vip})`],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});}}
 
-function renderUsers(list) {
-  if(!list.length){document.getElementById('users-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">No users found</td></tr>';return;}
-  document.getElementById('users-tbody').innerHTML=list.map(u=>`
-    <tr>
-      <td><div style="display:flex;align-items:center;gap:10px">
-        <div style="width:30px;height:30px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text2)">${(u.fullName||'?').slice(0,2).toUpperCase()}</div>
-        <span style="font-weight:500">${u.fullName||'—'}</span>
-      </div></td>
-      <td class="mono" style="color:var(--text2)">${u.email||'—'}</td>
-      <td class="mono" style="color:var(--text2)">${u.phoneNumber||'—'}</td>
-      <td>${u.role==='VIP'?`<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>`:`<span class="chip chip-gray">Free</span>`}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.lastLogin)}</td>
-      <td><button class="btn btn-ghost btn-xs" onclick="viewUser('${u.id}')"><i class="fa fa-eye"></i></button></td>
-    </tr>`).join('');
-}
+function renderUsers(list){if(!list.length){document.getElementById('users-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">No users found</td></tr>';return;}document.getElementById('users-tbody').innerHTML=list.map(u=>`<tr><td><div style="display:flex;align-items:center;gap:10px"><div style="width:30px;height:30px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text2)">${(u.fullName||'?').slice(0,2).toUpperCase()}</div><span style="font-weight:500">${u.fullName||'—'}</span></div></td><td class="mono" style="color:var(--text2)">${u.email||'—'}</td><td class="mono" style="color:var(--text2)">${u.phoneNumber||'—'}</td><td>${u.role==='VIP'?`<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>`:`<span class="chip chip-gray">Free</span>`}</td><td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td><td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.lastLogin)}</td><td><button class="btn btn-ghost btn-xs" onclick="viewUser('${u.id}')"><i class="fa fa-eye"></i></button></td></tr>`).join('');}
 function filterUsers(){const q=v('user-search').toLowerCase();let list=ALL_USERS.filter(u=>(u.fullName||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));if(userRoleFilter)list=list.filter(u=>u.role===userRoleFilter);renderUsers(list);}
 function filterUserRole(val){userRoleFilter=val;filterUsers();}
 async function viewUser(id){try{const res=await GET(`/api/v1/admin/users/${id}`);if(res.success)showToast(`${res.data.fullName} · ${res.data.role}`,'blue');}catch(e){showToast(e.message,'red');}}
 
 // ── SLIPS ─────────────────────────────────────────────────────
 
-async function loadSlips() {
-  document.getElementById('slips-grid').innerHTML =
-    '<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading slips…</div>';
-  try {
-    const res = await GET('/api/v1/admin/games/slips');
-    const slips = res.data || [];
-    window._ALL_SLIPS = slips;
-    renderSlips(slips);
-    buildSlipsChart(slips);
-  } catch(e) {
-    document.getElementById('slips-grid').innerHTML =
-      `<div class="loading-state" style="grid-column:1/-1;color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;
-  }
+async function loadSlips(){
+  document.getElementById('slips-grid').innerHTML='<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading slips…</div>';
+  try{const res=await GET('/api/v1/admin/games/slips');const slips=res.data||[];window._ALL_SLIPS=slips;renderSlips(slips);buildSlipsChart(slips);}
+  catch(e){document.getElementById('slips-grid').innerHTML=`<div class="loading-state" style="grid-column:1/-1;color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;}
 }
 
-function buildSlipsChart(slips) {
-  const won    = slips.filter(s => s.status === 'WON').length;
-  const lost   = slips.filter(s => s.status === 'LOST').length;
-  const active = slips.filter(s => !s.status || s.status === 'ACTIVE').length;
-  const voided = slips.filter(s => s.status === 'VOID').length;
-  const CDm = {font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const sc = document.getElementById('slipChart');
-  if(sc) {
-    try{Chart.getChart(sc)?.destroy();}catch{}
-    new Chart(sc, {
-      type:'bar',
-      data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderRadius:6,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}
-    });
-  }
-}
+function buildSlipsChart(slips){const won=slips.filter(s=>s.status==='WON').length;const lost=slips.filter(s=>s.status==='LOST').length;const active=slips.filter(s=>!s.status||s.status==='ACTIVE').length;const voided=slips.filter(s=>s.status==='VOID').length;const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};const sc=document.getElementById('slipChart');if(sc){try{Chart.getChart(sc)?.destroy();}catch{}new Chart(sc,{type:'bar',data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}});}}
 
 const fmtOdd = v => v && parseFloat(v) > 0 ? parseFloat(v).toFixed(2) : null;
 
-function determineSlipResult(s) {
-  if (s.homeScore == null || s.awayScore == null) return '';
-  const h = parseInt(s.homeScore), a = parseInt(s.awayScore);
-  const results = {
-    HOME_WIN:h>a, AWAY_WIN:a>h, DRAW:h===a, BTTS:h>0&&a>0,
-    OVER_0_5:(h+a)>0, OVER_1_5:(h+a)>1, OVER_2_5:(h+a)>2, OVER_3_5:(h+a)>3,
-    UNDER_1_5:(h+a)<2, UNDER_2_5:(h+a)<3,
-  };
-  const raw = ((s.bookingCode||'') + ' ' + (s.description||'')).toUpperCase();
-  const found = Object.keys(results).filter(k => raw.includes(k));
-  if (!found.length) return '';
-  return `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;justify-content:center">` +
-    found.map(k => {
-      const hit = results[k];
-      return `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:600;
-        background:${hit?'var(--accent-lt)':'var(--accent2-lt)'};color:${hit?'var(--accent)':'var(--accent2)'};
-        border:1px solid ${hit?'#1a4d32':'#5a2518'}">
-        <i class="fa ${hit?'fa-check':'fa-xmark'}" style="font-size:9px"></i> ${k.replace(/_/g,' ')}
-      </span>`;
-    }).join('') + `</div>`;
-}
+function determineSlipResult(s){if(s.homeScore==null||s.awayScore==null)return'';const h=parseInt(s.homeScore),a=parseInt(s.awayScore);const results={HOME_WIN:h>a,AWAY_WIN:a>h,DRAW:h===a,BTTS:h>0&&a>0,OVER_0_5:(h+a)>0,OVER_1_5:(h+a)>1,OVER_2_5:(h+a)>2,OVER_3_5:(h+a)>3,UNDER_1_5:(h+a)<2,UNDER_2_5:(h+a)<3};const raw=((s.bookingCode||'')+' '+(s.description||'')).toUpperCase();const found=Object.keys(results).filter(k=>raw.includes(k));if(!found.length)return'';return`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;justify-content:center">`+found.map(k=>{const hit=results[k];return`<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:600;background:${hit?'var(--accent-lt)':'var(--accent2-lt)'};color:${hit?'var(--accent)':'var(--accent2)'};border:1px solid ${hit?'#1a4d32':'#5a2518'}"><i class="fa ${hit?'fa-check':'fa-xmark'}" style="font-size:9px"></i> ${k.replace(/_/g,' ')}</span>`;}).join('')+`</div>`;}
 
-function renderSlips(slips) {
-  const sc = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
-  if(!slips.length) {
-    document.getElementById('slips-grid').innerHTML=`
-      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">
-        <i class="fa fa-ticket" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>
-        No slips yet — <a style="color:var(--accent);cursor:pointer;font-weight:600" onclick="nav('create-slip',null)">Create one</a>
-      </div>`;
-    return;
-  }
-  document.getElementById('slips-grid').innerHTML = slips.map(s => {
-    const isPred      = s.bookingCode==='PREDICTION' || s.bookingCode==='ACCUMULATOR';
-    const showBigOdds = !isPred && s.totalOdds && parseFloat(s.totalOdds) > 1;
-    const isActive    = !s.status || s.status === 'ACTIVE';
-    const isFinished  = s.gameStatus === 'FINISHED';
-    const oddPills = [
-      s.homeWinOdds ? `<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>` : '',
-      s.drawOdds    ? `<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`    : '',
-      s.awayWinOdds ? `<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>` : '',
-      s.over25Odds  ? `<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>` : '',
-      s.over15Odds  ? `<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>` : '',
-    ].filter(Boolean).join('');
-    return `
-    <div class="slip-card" onclick="openSlipDetail('${s.id}')" style="cursor:pointer">
-      <div class="slip-top">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px">
-          <div><div class="slip-bookmaker">${s.bookmaker}</div><div class="slip-code">${s.bookingCode}</div></div>
-          <span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span>
-        </div>
-        ${s.homeTeam ? `
-        <div style="padding:10px 12px;background:var(--panel);border-radius:8px;border:1px solid var(--border);margin-bottom:8px">
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:var(--font-mono)">
-            Match ${isFinished ? `<span style="color:var(--accent);margin-left:6px">● Finished</span>` : (s.gameStatus==='LIVE' ? `<span style="color:var(--accent2);margin-left:6px"><span class="live-dot" style="width:5px;height:5px;margin-right:2px"></span>Live</span>` : '')}
-          </div>
-          <div style="display:flex;align-items:center;gap:6px">
-            ${s.homeLogo ? `<img src="${s.homeLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-            <div style="flex:1;font-size:13px;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.homeTeam}</div>
-            <div style="font-family:var(--font-mono);font-size:14px;font-weight:700;padding:3px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;white-space:nowrap;flex-shrink:0">
-              ${s.homeScore != null ? `${s.homeScore} – ${s.awayScore}` : 'vs'}
-            </div>
-            <div style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.awayTeam}</div>
-            ${s.awayLogo ? `<img src="${s.awayLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-          </div>
-          ${s.league||s.kickoffTime ? `<div style="font-size:11px;color:var(--muted);margin-top:5px;text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>` : ''}
-          ${isFinished ? determineSlipResult(s) : ''}
-        </div>
-        ${oddPills ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">${oddPills}</div>` : ''}` : ''}
-        ${showBigOdds ? `<div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--gold);margin:4px 0 2px">${parseFloat(s.totalOdds).toFixed(2)}</div>` : ''}
-        ${s.imageUrl ? `<img src="${s.imageUrl}" style="width:100%;border-radius:6px;margin-top:6px;object-fit:cover;max-height:120px">` : ''}
-      </div>
-      <div class="slip-bottom">
-        ${s.type==='VIP' ? `<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>` : `<span class="chip chip-blue">Free</span>`}
-        ${s.published ? `<span class="chip chip-green">Published</span>` : `<span class="chip chip-gray">Draft</span>`}
-        <div style="margin-left:auto;display:flex;gap:5px">
-          ${isActive && isFinished ? `<button class="btn btn-success btn-xs" title="Auto-settle" onclick="event.stopPropagation();settleSlipFromResult('${s.id}')"><i class="fa fa-wand-magic-sparkles"></i></button>` : ''}
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipDetail('${s.id}')"><i class="fa fa-eye"></i></button>
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipStatus('${s.id}','${s.status||'ACTIVE'}')"><i class="fa fa-pen"></i></button>
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();toggleSlipPublish('${s.id}')"><i class="fa ${s.published?'fa-eye-slash':'fa-eye'}"></i></button>
-          <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteSlip('${s.id}')"><i class="fa fa-trash"></i></button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
+function renderSlips(slips){const sc={WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};if(!slips.length){document.getElementById('slips-grid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><i class="fa fa-ticket" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>No slips yet — <a style="color:var(--accent);cursor:pointer;font-weight:600" onclick="nav('create-slip',null)">Create one</a></div>`;return;}document.getElementById('slips-grid').innerHTML=slips.map(s=>{const isPred=s.bookingCode==='PREDICTION'||s.bookingCode==='ACCUMULATOR';const showBigOdds=!isPred&&s.totalOdds&&parseFloat(s.totalOdds)>1;const isActive=!s.status||s.status==='ACTIVE';const isFinished=s.gameStatus==='FINISHED';const oddPills=[s.homeWinOdds?`<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>`:'',s.drawOdds?`<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`:'',s.awayWinOdds?`<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>`:'',s.over25Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>`:'',s.over15Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>`:''].filter(Boolean).join('');return`<div class="slip-card" onclick="openSlipDetail('${s.id}')" style="cursor:pointer"><div class="slip-top"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px"><div><div class="slip-bookmaker">${s.bookmaker}</div><div class="slip-code">${s.bookingCode}</div></div><span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span></div>${s.homeTeam?`<div style="padding:10px 12px;background:var(--panel);border-radius:8px;border:1px solid var(--border);margin-bottom:8px"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:var(--font-mono)">Match ${isFinished?`<span style="color:var(--accent);margin-left:6px">● Finished</span>`:(s.gameStatus==='LIVE'?`<span style="color:var(--accent2);margin-left:6px"><span class="live-dot" style="width:5px;height:5px;margin-right:2px"></span>Live</span>`:'')}</div><div style="display:flex;align-items:center;gap:6px">${s.homeLogo?`<img src="${s.homeLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">`:''}<div style="flex:1;font-size:13px;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.homeTeam}</div><div style="font-family:var(--font-mono);font-size:14px;font-weight:700;padding:3px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;white-space:nowrap;flex-shrink:0">${s.homeScore!=null?`${s.homeScore} – ${s.awayScore}`:'vs'}</div><div style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.awayTeam}</div>${s.awayLogo?`<img src="${s.awayLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">`:''}}</div>${s.league||s.kickoffTime?`<div style="font-size:11px;color:var(--muted);margin-top:5px;text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>`:''}${isFinished?determineSlipResult(s):''}</div>${oddPills?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">${oddPills}</div>`:''}`:''}${showBigOdds?`<div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--gold);margin:4px 0 2px">${parseFloat(s.totalOdds).toFixed(2)}</div>`:''}</div><div class="slip-bottom">${s.type==='VIP'?`<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>`:`<span class="chip chip-blue">Free</span>`}${s.published?`<span class="chip chip-green">Published</span>`:`<span class="chip chip-gray">Draft</span>`}<div style="margin-left:auto;display:flex;gap:5px">${isActive&&isFinished?`<button class="btn btn-success btn-xs" title="Auto-settle" onclick="event.stopPropagation();settleSlipFromResult('${s.id}')"><i class="fa fa-wand-magic-sparkles"></i></button>`:''}<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipDetail('${s.id}')"><i class="fa fa-eye"></i></button><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipStatus('${s.id}','${s.status||'ACTIVE'}')"><i class="fa fa-pen"></i></button><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();toggleSlipPublish('${s.id}')"><i class="fa ${s.published?'fa-eye-slash':'fa-eye'}"></i></button><button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteSlip('${s.id}')"><i class="fa fa-trash"></i></button></div></div></div>`;}).join('');}
 
-function openSlipDetail(id) {
-  const s = (window._ALL_SLIPS||[]).find(x => x.id === id);
-  if (!s) return;
-  const modal = document.getElementById('slip-status-modal');
-  if (!modal) return;
-  const sc = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
-  const fmtDt = dt => { try { return new Date(dt).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}); } catch{return dt||'—';} };
-  modal.querySelector('.modal-title').textContent = `${s.bookmaker} · ${s.bookingCode}`;
-  let hiddenId = modal.querySelector('#slip-status-id');
-  if (!hiddenId) {
-    hiddenId = document.createElement('input'); hiddenId.type='hidden'; hiddenId.id='slip-status-id';
-    modal.appendChild(hiddenId);
-  }
-  hiddenId.value = s.id;
-  modal.querySelector('.modal-body').innerHTML = `
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
-      <span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span>
-      <span class="chip ${s.type==='VIP'?'chip-gold':'chip-blue'}">${s.type||'FREE'}</span>
-      <span class="chip ${s.published?'chip-green':'chip-gray'}">${s.published?'Published':'Draft'}</span>
-    </div>
-    ${s.homeTeam ? `
-    <div style="padding:14px;background:var(--panel);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:var(--font-mono)">
-        Linked Match
-        ${s.gameStatus==='FINISHED'?`<span style="color:var(--accent);margin-left:8px">● Finished</span>`:s.gameStatus==='LIVE'?`<span style="color:var(--accent2);margin-left:8px"><span class="live-dot" style="width:5px;height:5px;margin-right:3px"></span>Live</span>`:''}
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        ${s.homeLogo?`<img src="${s.homeLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}
-        <div style="flex:1;font-size:14px;font-weight:700;text-align:right">${s.homeTeam}</div>
-        <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;white-space:nowrap">
-          ${s.homeScore!=null ? `${s.homeScore} – ${s.awayScore}` : 'vs'}
-        </div>
-        <div style="flex:1;font-size:14px;font-weight:700">${s.awayTeam}</div>
-        ${s.awayLogo?`<img src="${s.awayLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}
-      </div>
-      <div style="font-size:11.5px;color:var(--muted);text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>
-      ${[s.homeWinOdds,s.drawOdds,s.awayWinOdds].some(Boolean)?`
-      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:center">
-        ${s.homeWinOdds?`<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>`:''}
-        ${s.drawOdds?`<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`:''}
-        ${s.awayWinOdds?`<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>`:''}
-        ${s.over25Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>`:''}
-        ${s.over15Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>`:''}
-      </div>`:''}
-      ${s.gameStatus==='FINISHED' ? determineSlipResult(s) : ''}
-    </div>` : ''}
-    ${s.totalOdds && parseFloat(s.totalOdds)>1 ? `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gold-lt);border:1px solid #3a2810;border-radius:8px;margin-bottom:14px">
-      <span style="font-size:13px;color:var(--gold);font-weight:600">Total Odds</span>
-      <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--gold)">${parseFloat(s.totalOdds).toFixed(2)}</span>
-    </div>` : ''}
-    ${s.imageUrl?`<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;object-fit:cover">`:''}
-    <div style="font-size:11.5px;color:var(--muted);margin-bottom:16px">
-      Created: ${fmtDt(s.createdAt)}${s.validUntil?` · Valid until: ${fmtDt(s.validUntil)}`:''}
-    </div>
-    <hr style="margin-bottom:16px"/>
-    <div class="form-group" style="margin-bottom:12px">
-      <label class="form-label">Update Status</label>
-      <select class="form-input" id="slip-status-val">
-        <option value="ACTIVE"  ${(s.status||'ACTIVE')==='ACTIVE'?'selected':''}>ACTIVE</option>
-        <option value="WON"     ${s.status==='WON'?'selected':''}>WON</option>
-        <option value="LOST"    ${s.status==='LOST'?'selected':''}>LOST</option>
-        <option value="EXPIRED" ${s.status==='EXPIRED'?'selected':''}>EXPIRED</option>
-        <option value="VOID"    ${s.status==='VOID'?'selected':''}>VOID</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm" id="slip-status-btn" onclick="submitSlipStatus()" style="flex:1">
-        <i class="fa fa-check"></i> Save Status
-      </button>
-      ${s.gameStatus==='FINISHED' && (!s.status||s.status==='ACTIVE') ? `
-      <button class="btn btn-success btn-sm" onclick="settleSlipFromResult('${s.id}');closeModal('slip-status-modal')">
-        <i class="fa fa-wand-magic-sparkles"></i> Auto-Settle
-      </button>`:''}
-      <button class="btn btn-danger btn-sm" onclick="deleteSlip('${s.id}');closeModal('slip-status-modal')">
-        <i class="fa fa-trash"></i>
-      </button>
-    </div>`;
-  openModal('slip-status-modal');
-}
+function openSlipDetail(id){const s=(window._ALL_SLIPS||[]).find(x=>x.id===id);if(!s)return;const modal=document.getElementById('slip-status-modal');if(!modal)return;const sc={WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};const fmtDt=dt=>{try{return new Date(dt).toLocaleString([],{dateStyle:'medium',timeStyle:'short'});}catch{return dt||'—';}};modal.querySelector('.modal-title').textContent=`${s.bookmaker} · ${s.bookingCode}`;let hiddenId=modal.querySelector('#slip-status-id');if(!hiddenId){hiddenId=document.createElement('input');hiddenId.type='hidden';hiddenId.id='slip-status-id';modal.appendChild(hiddenId);}hiddenId.value=s.id;modal.querySelector('.modal-body').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"><span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span><span class="chip ${s.type==='VIP'?'chip-gold':'chip-blue'}">${s.type||'FREE'}</span><span class="chip ${s.published?'chip-green':'chip-gray'}">${s.published?'Published':'Draft'}</span></div>${s.homeTeam?`<div style="padding:14px;background:var(--panel);border-radius:10px;border:1px solid var(--border);margin-bottom:16px"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:var(--font-mono)">Linked Match${s.gameStatus==='FINISHED'?`<span style="color:var(--accent);margin-left:8px">● Finished</span>`:s.gameStatus==='LIVE'?`<span style="color:var(--accent2);margin-left:8px"><span class="live-dot" style="width:5px;height:5px;margin-right:3px"></span>Live</span>`:''}</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">${s.homeLogo?`<img src="${s.homeLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}  <div style="flex:1;font-size:14px;font-weight:700;text-align:right">${s.homeTeam}</div><div style="font-family:var(--font-mono);font-size:20px;font-weight:700;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;white-space:nowrap">${s.homeScore!=null?`${s.homeScore} – ${s.awayScore}`:'vs'}</div><div style="flex:1;font-size:14px;font-weight:700">${s.awayTeam}</div>${s.awayLogo?`<img src="${s.awayLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}}</div><div style="font-size:11.5px;color:var(--muted);text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>${[s.homeWinOdds,s.drawOdds,s.awayWinOdds].some(Boolean)?`<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:center">${s.homeWinOdds?`<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>`:''}${s.drawOdds?`<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`:''}${s.awayWinOdds?`<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>`:''}${s.over25Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>`:''}${s.over15Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>`:''}</div>`:''}${s.gameStatus==='FINISHED'?determineSlipResult(s):''}</div>`:''}${s.totalOdds&&parseFloat(s.totalOdds)>1?`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gold-lt);border:1px solid #3a2810;border-radius:8px;margin-bottom:14px"><span style="font-size:13px;color:var(--gold);font-weight:600">Total Odds</span><span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--gold)">${parseFloat(s.totalOdds).toFixed(2)}</span></div>`:''}${s.imageUrl?`<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;object-fit:cover">`:''}  <div style="font-size:11.5px;color:var(--muted);margin-bottom:16px">Created: ${fmtDt(s.createdAt)}${s.validUntil?` · Valid until: ${fmtDt(s.validUntil)}`:''}</div><hr style="margin-bottom:16px"/><div class="form-group" style="margin-bottom:12px"><label class="form-label">Update Status</label><select class="form-input" id="slip-status-val"><option value="ACTIVE" ${(s.status||'ACTIVE')==='ACTIVE'?'selected':''}>ACTIVE</option><option value="WON" ${s.status==='WON'?'selected':''}>WON</option><option value="LOST" ${s.status==='LOST'?'selected':''}>LOST</option><option value="EXPIRED" ${s.status==='EXPIRED'?'selected':''}>EXPIRED</option><option value="VOID" ${s.status==='VOID'?'selected':''}>VOID</option></select></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="slip-status-btn" onclick="submitSlipStatus()" style="flex:1"><i class="fa fa-check"></i> Save Status</button>${s.gameStatus==='FINISHED'&&(!s.status||s.status==='ACTIVE')?`<button class="btn btn-success btn-sm" onclick="settleSlipFromResult('${s.id}');closeModal('slip-status-modal')"><i class="fa fa-wand-magic-sparkles"></i> Auto-Settle</button>`:''}<button class="btn btn-danger btn-sm" onclick="deleteSlip('${s.id}');closeModal('slip-status-modal')"><i class="fa fa-trash"></i></button></div>`;openModal('slip-status-modal');}
 
-function openSlipStatus(id, current) { openSlipDetail(id); }
+function openSlipStatus(id,current){openSlipDetail(id);}
 
-async function submitSlipStatus() {
-  const id = v('slip-status-id'), status = v('slip-status-val');
-  await submitBtn('slip-status-btn', async () => {
-    const res = await PATCH(`/api/v1/admin/games/slips/${id}/status`, { status });
-    if (!res.success) throw new Error(res.message);
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.map(s => s.id===id ? {...s, status} : s);
-    closeModal('slip-status-modal');
-    showToast(`Status → ${status}`, status==='WON'?'green':status==='LOST'?'red':'blue');
-    CHARTS_INIT.slips = false; loadSlips();
-  });
-}
-
-async function toggleSlipPublish(id) {
-  try {
-    const res = await PATCH(`/api/v1/admin/games/slips/${id}/toggle-publish`);
-    if (!res.success) throw new Error(res.message);
-    showToast(res.data?.published ? 'Published' : 'Unpublished', 'green');
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
-
-async function deleteSlip(id) {
-  if (!confirm('Delete this slip?')) return;
-  try {
-    await DEL(`/api/v1/admin/games/slips/${id}`);
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.filter(s => s.id !== id);
-    showToast('Slip deleted', 'red');
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
-
-async function settleSlipFromResult(slipId) {
-  try {
-    const res = await PATCH(`/api/v1/admin/games/slips/${slipId}/auto-settle`);
-    if (!res.success) throw new Error(res.message);
-    const d = res.data;
-    showToast(`Settled → ${d.status}`, d.status === 'WON' ? 'green' : 'red');
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.map(s => s.id===slipId ? {...s, status:d.status} : s);
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
+async function submitSlipStatus(){const id=v('slip-status-id'),status=v('slip-status-val');await submitBtn('slip-status-btn',async()=>{const res=await PATCH(`/api/v1/admin/games/slips/${id}/status`,{status});if(!res.success)throw new Error(res.message);if(window._ALL_SLIPS)window._ALL_SLIPS=window._ALL_SLIPS.map(s=>s.id===id?{...s,status}:s);closeModal('slip-status-modal');showToast(`Status → ${status}`,status==='WON'?'green':status==='LOST'?'red':'blue');CHARTS_INIT.slips=false;loadSlips();});}
+async function toggleSlipPublish(id){try{const res=await PATCH(`/api/v1/admin/games/slips/${id}/toggle-publish`);if(!res.success)throw new Error(res.message);showToast(res.data?.published?'Published':'Unpublished','green');CHARTS_INIT.slips=false;loadSlips();}catch(e){showToast(e.message,'red');}}
+async function deleteSlip(id){if(!confirm('Delete this slip?'))return;try{await DEL(`/api/v1/admin/games/slips/${id}`);if(window._ALL_SLIPS)window._ALL_SLIPS=window._ALL_SLIPS.filter(s=>s.id!==id);showToast('Slip deleted','red');CHARTS_INIT.slips=false;loadSlips();}catch(e){showToast(e.message,'red');}}
+async function settleSlipFromResult(slipId){try{const res=await PATCH(`/api/v1/admin/games/slips/${slipId}/auto-settle`);if(!res.success)throw new Error(res.message);const d=res.data;showToast(`Settled → ${d.status}`,d.status==='WON'?'green':'red');if(window._ALL_SLIPS)window._ALL_SLIPS=window._ALL_SLIPS.map(s=>s.id===slipId?{...s,status:d.status}:s);CHARTS_INIT.slips=false;loadSlips();}catch(e){showToast(e.message,'red');}}
 
 // ── CREATE SLIP PAGE ──────────────────────────────────────────
 
 let CS_TYPE='booking', CS_GAME=null, CS_PREDICTIONS=[], CS_ODDS_LEGS=[];
 let CS_GAMES_ALL=[], CS_GAME_FILTER='all', CS_DATE_FILTER='today';
-let CS_SLIP_QUEUE = [];
+let CS_SLIP_QUEUE=[];
 
-function initCreateSlipPage() {
-  CS_TYPE='booking'; CS_GAME=null; CS_PREDICTIONS=[]; CS_ODDS_LEGS=[];
-  CS_SLIP_QUEUE=[];
+function initCreateSlipPage(){
+  CS_TYPE='booking';CS_GAME=null;CS_PREDICTIONS=[];CS_ODDS_LEGS=[];CS_SLIP_QUEUE=[];
   document.querySelectorAll('.slip-type-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('stc-booking')?.classList.add('active');
   document.querySelectorAll('.slip-section').forEach(s=>s.classList.remove('active'));
@@ -2992,13 +2447,17 @@ function initCreateSlipPage() {
   const cstype=document.getElementById('cs-type');if(cstype)cstype.value='FREE';
   const cspub=document.getElementById('cs-pub');if(cspub)cspub.checked=true;
   const cspredconf=document.getElementById('cs-pred-conf');if(cspredconf)cspredconf.value='';
+  // Reset fetch bar
+  const fetchCode=document.getElementById('cs-fetch-code');if(fetchCode)fetchCode.value='';
+  const fetchBm=document.getElementById('cs-fetch-bm');if(fetchBm)fetchBm.value='sportybet-gh';
+  clearFetchResult();
   clearCreateSlipGame();
   document.getElementById('cs-pred-no-game').style.display='';
   document.getElementById('cs-pred-outcomes').style.display='none';
   document.getElementById('cs-odds-from-game').style.display='none';
   document.getElementById('cs-odds-legs').innerHTML='';
   document.getElementById('cs-combined-odds').textContent='—';
-  CS_GAME_FILTER='all'; CS_DATE_FILTER='today';
+  CS_GAME_FILTER='all';CS_DATE_FILTER='today';
   document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
   document.querySelector('.csgf[data-f="all"]')?.classList.add('active');
   document.querySelectorAll('#page-create-slip .csdf').forEach(b=>b.classList.remove('active'));
@@ -3009,852 +2468,327 @@ function initCreateSlipPage() {
   loadCreateSlipGames();
 }
 
-function setCreateSlipType(type) {
+function setCreateSlipType(type){
   CS_TYPE=type;
   document.querySelectorAll('.slip-type-card').forEach(c=>c.classList.remove('active'));
   document.getElementById('stc-'+type)?.classList.add('active');
   document.querySelectorAll('.slip-section').forEach(s=>s.classList.remove('active'));
   document.getElementById('cs-section-'+type)?.classList.add('active');
-  if(type==='odds' && CS_GAME) populateCreateOddsFromGame(CS_GAME);
-  if(type==='prediction' && CS_GAME) renderCreatePredOutcomes(CS_GAME);
+  if(type==='odds'&&CS_GAME)populateCreateOddsFromGame(CS_GAME);
+  if(type==='prediction'&&CS_GAME)renderCreatePredOutcomes(CS_GAME);
   updateSlipPreview();
 }
 
-function setCreateSlipDateFilter(d, el) {
-  CS_DATE_FILTER = d;
-  document.querySelectorAll('#page-create-slip .csdf').forEach(b => b.classList.remove('active'));
-  if (el) el.classList.add('active');
-  if (d !== 'custom') { const csd=document.getElementById('cs-custom-date'); if(csd)csd.value=''; }
-  loadCreateSlipGames();
-}
+function setCreateSlipDateFilter(d,el){CS_DATE_FILTER=d;document.querySelectorAll('#page-create-slip .csdf').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');if(d!=='custom'){const csd=document.getElementById('cs-custom-date');if(csd)csd.value='';}loadCreateSlipGames();}
 
-async function loadCreateSlipGames() {
-  const el=document.getElementById('cs-game-list'); if(!el)return;
+async function loadCreateSlipGames(){
+  const el=document.getElementById('cs-game-list');if(!el)return;
   el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading games…</div>';
-  try {
-    let endpoint = '/api/v1/admin/games/today';
-    if      (CS_DATE_FILTER==='tomorrow')  endpoint='/api/v1/admin/games/tomorrow';
-    else if (CS_DATE_FILTER==='day-after') endpoint='/api/v1/admin/games/day-after-tomorrow';
-    else if (CS_DATE_FILTER==='next-week') endpoint='/api/v1/admin/games/next-week';
-    else if (CS_DATE_FILTER==='custom') {
-      const d=document.getElementById('cs-custom-date')?.value;
-      if(d) endpoint=`/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res = await GET(endpoint);
-    CS_GAMES_ALL = res.data||[];
-    renderCreateSlipGameList(CS_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
+  try{let endpoint='/api/v1/admin/games/today';if(CS_DATE_FILTER==='tomorrow')endpoint='/api/v1/admin/games/tomorrow';else if(CS_DATE_FILTER==='day-after')endpoint='/api/v1/admin/games/day-after-tomorrow';else if(CS_DATE_FILTER==='next-week')endpoint='/api/v1/admin/games/next-week';else if(CS_DATE_FILTER==='custom'){const d=document.getElementById('cs-custom-date')?.value;if(d)endpoint=`/api/v1/admin/games/by-date?date=${d}`;}const res=await GET(endpoint);CS_GAMES_ALL=res.data||[];renderCreateSlipGameList(CS_GAMES_ALL);}
+  catch(e){el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;}
 }
 
-function setCreateSlipGameFilter(f,el) {
-  CS_GAME_FILTER=f;
-  document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  filterCreateSlipGames();
-}
+function setCreateSlipGameFilter(f,el){CS_GAME_FILTER=f;document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');filterCreateSlipGames();}
 
-function filterCreateSlipGames() {
-  const q=(document.getElementById('cs-game-search')?.value||'').toLowerCase();
-  let list=CS_GAMES_ALL;
-  if(CS_GAME_FILTER==='live')     list=list.filter(g=>g.status==='LIVE');
-  if(CS_GAME_FILTER==='upcoming') list=list.filter(g=>g.status==='UPCOMING');
-  if(CS_GAME_FILTER==='odds')     list=list.filter(g=>g.homeWinOdds||g.drawOdds||g.awayWinOdds);
-  if(q) list=list.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q));
-  renderCreateSlipGameList(list);
-}
+function filterCreateSlipGames(){const q=(document.getElementById('cs-game-search')?.value||'').toLowerCase();let list=CS_GAMES_ALL;if(CS_GAME_FILTER==='live')list=list.filter(g=>g.status==='LIVE');if(CS_GAME_FILTER==='upcoming')list=list.filter(g=>g.status==='UPCOMING');if(CS_GAME_FILTER==='odds')list=list.filter(g=>g.homeWinOdds||g.drawOdds||g.awayWinOdds);if(q)list=list.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q));renderCreateSlipGameList(list);}
 
-function renderCreateSlipGameList(games) {
-  const el=document.getElementById('cs-game-list'); if(!el)return;
+function renderCreateSlipGameList(games){
+  const el=document.getElementById('cs-game-list');if(!el)return;
   if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';return;}
   const selId=CS_GAME?.id;
-  el.innerHTML=games.map(g=>{
-    const isSel=g.id===selId, hasOdds=g.homeWinOdds||g.drawOdds||g.awayWinOdds;
-    return `
-      <div onclick="selectCreateSlipGame(${JSON.stringify(g).replace(/"/g,'&quot;')})"
-        style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s"
-        onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'"
-        onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-          </div>
-          ${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}
-        </div>
-        ${hasOdds?`<div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">
-          ${g.homeWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>`:''}
-          ${g.drawOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>`:''}
-          ${g.awayWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>`:''}
-          ${g.over25Odds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>`:''}
-        </div>`:``}
-      </div>`;
-  }).join('');
+  el.innerHTML=games.map(g=>{const isSel=g.id===selId,hasOdds=g.homeWinOdds||g.drawOdds||g.awayWinOdds;return`<div onclick="selectCreateSlipGame(${JSON.stringify(g).replace(/"/g,'&quot;')})" style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s" onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'" onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'"><div style="display:flex;align-items:center;gap:8px">${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div><div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div></div>${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}</div>${hasOdds?`<div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">${g.homeWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>`:''}${g.drawOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>`:''}${g.awayWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>`:''}${g.over25Odds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>`:''}</div>`:''}</div>`;}).join('');
 }
 
-function selectCreateSlipGame(g) {
-  CS_GAME=g;
-  document.getElementById('cs-gid').value=g.id;
-  document.getElementById('cs-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;
-  document.getElementById('cs-game-selected').style.display='flex';
-  document.getElementById('preview-game').style.display='';
-  document.getElementById('preview-game-name').textContent=`${g.homeTeam} vs ${g.awayTeam}`;
-  document.getElementById('preview-game-meta').textContent=`${g.league||''} · ${fmtTime(g.kickoffTime)}`;
-  filterCreateSlipGames();
-  if(CS_TYPE==='prediction') renderCreatePredOutcomes(g);
-  if(CS_TYPE==='odds') populateCreateOddsFromGame(g);
-  updateSlipPreview();
-}
+function selectCreateSlipGame(g){CS_GAME=g;document.getElementById('cs-gid').value=g.id;document.getElementById('cs-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;document.getElementById('cs-game-selected').style.display='flex';document.getElementById('preview-game').style.display='';document.getElementById('preview-game-name').textContent=`${g.homeTeam} vs ${g.awayTeam}`;document.getElementById('preview-game-meta').textContent=`${g.league||''} · ${fmtTime(g.kickoffTime)}`;filterCreateSlipGames();if(CS_TYPE==='prediction')renderCreatePredOutcomes(g);if(CS_TYPE==='odds')populateCreateOddsFromGame(g);updateSlipPreview();}
+function clearCreateSlipGame(){CS_GAME=null;document.getElementById('cs-gid').value='';document.getElementById('cs-game-selected').style.display='none';document.getElementById('preview-game').style.display='none';document.getElementById('cs-pred-outcomes').style.display='none';document.getElementById('cs-pred-no-game').style.display='';document.getElementById('cs-odds-from-game').style.display='none';CS_PREDICTIONS=[];filterCreateSlipGames();updateSlipPreview();}
 
-function clearCreateSlipGame() {
-  CS_GAME=null;
-  document.getElementById('cs-gid').value='';
-  document.getElementById('cs-game-selected').style.display='none';
-  document.getElementById('preview-game').style.display='none';
-  document.getElementById('cs-pred-outcomes').style.display='none';
-  document.getElementById('cs-pred-no-game').style.display='';
-  document.getElementById('cs-odds-from-game').style.display='none';
-  CS_PREDICTIONS=[];
-  filterCreateSlipGames();
-  updateSlipPreview();
-}
+function renderCreatePredOutcomes(g){document.getElementById('cs-pred-no-game').style.display='none';document.getElementById('cs-pred-outcomes').style.display='';const outcomes=[{key:'HOME_WIN',label:`${g.homeTeam} Win`,sub:g.homeWinOdds?`Odds: ${g.homeWinOdds}`:null},{key:'DRAW',label:'Draw',sub:g.drawOdds?`Odds: ${g.drawOdds}`:null},{key:'AWAY_WIN',label:`${g.awayTeam} Win`,sub:g.awayWinOdds?`Odds: ${g.awayWinOdds}`:null},{key:'BTTS',label:'Both Teams Score',sub:null},{key:'OVER_1_5',label:'Over 1.5',sub:g.over15Odds?`Odds: ${g.over15Odds}`:null},{key:'OVER_2_5',label:'Over 2.5',sub:g.over25Odds?`Odds: ${g.over25Odds}`:null},{key:'OVER_3_5',label:'Over 3.5',sub:g.over35Odds?`Odds: ${g.over35Odds}`:null},{key:'UNDER_2_5',label:'Under 2.5',sub:g.under25Odds?`Odds: ${g.under25Odds}`:null}];document.getElementById('cs-pred-grid').innerHTML=outcomes.map(o=>`<button class="outcome-btn ${CS_PREDICTIONS.includes(o.key)?'selected':''}" onclick="toggleCreatePred('${o.key}',this)"><div>${o.label}</div>${o.sub?`<div style="font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px;font-family:var(--font-mono)">${o.sub}</div>`:''}</button>`).join('');}
 
-function renderCreatePredOutcomes(g) {
-  document.getElementById('cs-pred-no-game').style.display='none';
-  document.getElementById('cs-pred-outcomes').style.display='';
-  const outcomes=[
-    {key:'HOME_WIN',label:`${g.homeTeam} Win`,sub:g.homeWinOdds?`Odds: ${g.homeWinOdds}`:null},
-    {key:'DRAW',label:'Draw',sub:g.drawOdds?`Odds: ${g.drawOdds}`:null},
-    {key:'AWAY_WIN',label:`${g.awayTeam} Win`,sub:g.awayWinOdds?`Odds: ${g.awayWinOdds}`:null},
-    {key:'BTTS',label:'Both Teams Score',sub:null},
-    {key:'OVER_1_5',label:'Over 1.5',sub:g.over15Odds?`Odds: ${g.over15Odds}`:null},
-    {key:'OVER_2_5',label:'Over 2.5',sub:g.over25Odds?`Odds: ${g.over25Odds}`:null},
-    {key:'OVER_3_5',label:'Over 3.5',sub:g.over35Odds?`Odds: ${g.over35Odds}`:null},
-    {key:'UNDER_2_5',label:'Under 2.5',sub:g.under25Odds?`Odds: ${g.under25Odds}`:null},
-  ];
-  document.getElementById('cs-pred-grid').innerHTML=outcomes.map(o=>`
-    <button class="outcome-btn ${CS_PREDICTIONS.includes(o.key)?'selected':''}" onclick="toggleCreatePred('${o.key}',this)">
-      <div>${o.label}</div>
-      ${o.sub?`<div style="font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px;font-family:var(--font-mono)">${o.sub}</div>`:''}
-    </button>`).join('');
-}
+function toggleCreatePred(key,el){if(CS_PREDICTIONS.includes(key)){CS_PREDICTIONS=CS_PREDICTIONS.filter(k=>k!==key);el.classList.remove('selected');}else{CS_PREDICTIONS.push(key);el.classList.add('selected');}updateSlipPreview();}
 
-function toggleCreatePred(key,el) {
-  if(CS_PREDICTIONS.includes(key)){CS_PREDICTIONS=CS_PREDICTIONS.filter(k=>k!==key);el.classList.remove('selected');}
-  else{CS_PREDICTIONS.push(key);el.classList.add('selected');}
-  updateSlipPreview();
-}
-
-function populateCreateOddsFromGame(g) {
-  const pills=[];
-  if(g.homeWinOdds)pills.push({label:`${g.homeTeam} Win`,odds:g.homeWinOdds});
-  if(g.drawOdds)   pills.push({label:'Draw',odds:g.drawOdds});
-  if(g.awayWinOdds)pills.push({label:`${g.awayTeam} Win`,odds:g.awayWinOdds});
-  if(g.over25Odds) pills.push({label:'Over 2.5',odds:g.over25Odds});
-  if(g.over15Odds) pills.push({label:'Over 1.5',odds:g.over15Odds});
-  const container=document.getElementById('cs-odds-from-game');
-  if(!pills.length){container.style.display='none';return;}
-  container.style.display='';
-  document.getElementById('cs-odds-game-pills').innerHTML=pills.map(p=>`
-    <button class="odd-pill" style="cursor:pointer;border:none;font-size:11px" onclick="addCreateOddsLegFromGame('${p.label.replace(/'/g,"\\'")}',${p.odds})">
-      <i class="fa fa-plus" style="font-size:9px;margin-right:3px"></i>${p.label}: ${p.odds}
-    </button>`).join('');
-}
+function populateCreateOddsFromGame(g){const pills=[];if(g.homeWinOdds)pills.push({label:`${g.homeTeam} Win`,odds:g.homeWinOdds});if(g.drawOdds)pills.push({label:'Draw',odds:g.drawOdds});if(g.awayWinOdds)pills.push({label:`${g.awayTeam} Win`,odds:g.awayWinOdds});if(g.over25Odds)pills.push({label:'Over 2.5',odds:g.over25Odds});if(g.over15Odds)pills.push({label:'Over 1.5',odds:g.over15Odds});const container=document.getElementById('cs-odds-from-game');if(!pills.length){container.style.display='none';return;}container.style.display='';document.getElementById('cs-odds-game-pills').innerHTML=pills.map(p=>`<button class="odd-pill" style="cursor:pointer;border:none;font-size:11px" onclick="addCreateOddsLegFromGame('${p.label.replace(/'/g,"\\'")}',${p.odds})"><i class="fa fa-plus" style="font-size:9px;margin-right:3px"></i>${p.label}: ${p.odds}</button>`).join('');}
 
 function addCreateOddsLegFromGame(label,odds){CS_ODDS_LEGS.push({label,odds:parseFloat(odds)});renderCreateOddsLegs();}
 function addCreateOddsLeg(){CS_ODDS_LEGS.push({label:'',odds:''});renderCreateOddsLegs();const inputs=document.querySelectorAll('.cs-leg-label');if(inputs.length)inputs[inputs.length-1].focus();}
 function removeCreateOddsLeg(i){CS_ODDS_LEGS.splice(i,1);renderCreateOddsLegs();}
 
-function renderCreateOddsLegs() {
-  const el=document.getElementById('cs-odds-legs');
-  if(!CS_ODDS_LEGS.length){
-    el.innerHTML=`<div style="padding:14px;text-align:center;font-size:12.5px;color:var(--muted);background:var(--panel);border-radius:8px">No legs — add one or click a quick-add pill above</div>`;
-    document.getElementById('cs-combined-odds').textContent='—';
-    return;
-  }
-  el.innerHTML=CS_ODDS_LEGS.map((leg,i)=>`
-    <div class="odds-leg">
-      <input class="form-input cs-leg-label" style="flex:2;margin-bottom:0;font-size:13px" placeholder="Selection (e.g. Arsenal Win)" value="${leg.label}"
-        oninput="CS_ODDS_LEGS[${i}].label=this.value;updateSlipPreview()"/>
-      <input class="form-input" style="flex:1;margin-bottom:0;font-size:13px;font-family:var(--font-mono)" placeholder="Odds" type="number" step="0.01" min="1" value="${leg.odds}"
-        oninput="CS_ODDS_LEGS[${i}].odds=parseFloat(this.value)||'';calcCreateCombinedOdds()"/>
-      <button class="btn btn-ghost btn-xs" onclick="removeCreateOddsLeg(${i})"><i class="fa fa-trash" style="color:var(--accent2)"></i></button>
-    </div>`).join('');
-  calcCreateCombinedOdds();
-}
+function renderCreateOddsLegs(){const el=document.getElementById('cs-odds-legs');if(!CS_ODDS_LEGS.length){el.innerHTML=`<div style="padding:14px;text-align:center;font-size:12.5px;color:var(--muted);background:var(--panel);border-radius:8px">No legs — add one or click a quick-add pill above</div>`;document.getElementById('cs-combined-odds').textContent='—';return;}el.innerHTML=CS_ODDS_LEGS.map((leg,i)=>`<div class="odds-leg"><input class="form-input cs-leg-label" style="flex:2;margin-bottom:0;font-size:13px" placeholder="Selection (e.g. Arsenal Win)" value="${leg.label}" oninput="CS_ODDS_LEGS[${i}].label=this.value;updateSlipPreview()"/><input class="form-input" style="flex:1;margin-bottom:0;font-size:13px;font-family:var(--font-mono)" placeholder="Odds" type="number" step="0.01" min="1" value="${leg.odds}" oninput="CS_ODDS_LEGS[${i}].odds=parseFloat(this.value)||'';calcCreateCombinedOdds()"/><button class="btn btn-ghost btn-xs" onclick="removeCreateOddsLeg(${i})"><i class="fa fa-trash" style="color:var(--accent2)"></i></button></div>`).join('');calcCreateCombinedOdds();}
 
-function calcCreateCombinedOdds() {
-  const total=CS_ODDS_LEGS.reduce((acc,leg)=>{const o=parseFloat(leg.odds);return(o>0)?acc*o:acc;},1);
-  const hasAny=CS_ODDS_LEGS.some(l=>parseFloat(l.odds)>0);
-  document.getElementById('cs-combined-odds').textContent=hasAny?total.toFixed(2):'—';
-  updateSlipPreview();
-}
+function calcCreateCombinedOdds(){const total=CS_ODDS_LEGS.reduce((acc,leg)=>{const o=parseFloat(leg.odds);return(o>0)?acc*o:acc;},1);const hasAny=CS_ODDS_LEGS.some(l=>parseFloat(l.odds)>0);document.getElementById('cs-combined-odds').textContent=hasAny?total.toFixed(2):'—';updateSlipPreview();}
 
-function updateSlipPreview() {
-  let bookmaker='Bookmaker', code='CODE', odds='—', desc='';
-  if(CS_TYPE==='booking'){
-    bookmaker=v('cs-bm')||'Bookmaker'; code=v('cs-code')||'CODE';
-    odds=(v('cs-odds-bk')||'—')+(v('cs-odds-bk')?'×':''); desc=v('cs-desc')||'';
-  } else if(CS_TYPE==='prediction'){
-    bookmaker='Prediction Slip';
-    code=CS_PREDICTIONS.length?CS_PREDICTIONS.join(', '):'No outcomes selected';
-    odds='—'; desc=v('cs-pred-notes')||'';
-  } else if(CS_TYPE==='odds'){
-    bookmaker='Odds Accumulator';
-    code=CS_ODDS_LEGS.length?`${CS_ODDS_LEGS.length} leg${CS_ODDS_LEGS.length>1?'s':''}`:' No legs yet';
-    const combined=document.getElementById('cs-combined-odds')?.textContent||'—';
-    odds=combined!=='—'?combined+'×':'—'; desc=v('cs-odds-desc')||'';
-  }
+function updateSlipPreview(){
+  let bookmaker='Bookmaker',code='CODE',odds='—',desc='';
+  if(CS_TYPE==='booking'){bookmaker=v('cs-bm')||'Bookmaker';code=v('cs-code')||'CODE';odds=(v('cs-odds-bk')||'—')+(v('cs-odds-bk')?'×':'');desc=v('cs-desc')||'';}
+  else if(CS_TYPE==='prediction'){bookmaker='Prediction Slip';code=CS_PREDICTIONS.length?CS_PREDICTIONS.join(', '):'No outcomes selected';odds='—';desc=v('cs-pred-notes')||'';}
+  else if(CS_TYPE==='odds'){bookmaker='Odds Accumulator';code=CS_ODDS_LEGS.length?`${CS_ODDS_LEGS.length} leg${CS_ODDS_LEGS.length>1?'s':''}`:' No legs yet';const combined=document.getElementById('cs-combined-odds')?.textContent||'—';odds=combined!=='—'?combined+'×':'—';desc=v('cs-odds-desc')||'';}
   document.getElementById('preview-bookmaker').textContent=bookmaker;
   document.getElementById('preview-code').textContent=code;
   document.getElementById('preview-odds').textContent=odds;
   document.getElementById('preview-desc').textContent=desc;
-  const typeChip=document.getElementById('preview-slip-type');
-  if(typeChip){
-    const t=document.getElementById('cs-type')?.value||'FREE';
-    typeChip.textContent=t;
-    typeChip.className=`chip ${t==='VIP'?'chip-gold':t==='PREMIUM'?'chip-gold':'chip-blue'}`;
-  }
+  const typeChip=document.getElementById('preview-slip-type');if(typeChip){const t=document.getElementById('cs-type')?.value||'FREE';typeChip.textContent=t;typeChip.className=`chip ${t==='VIP'?'chip-gold':t==='PREMIUM'?'chip-gold':'chip-blue'}`;}
   const typeIcons={booking:'fa-ticket',prediction:'fa-bullseye',odds:'fa-percent'};
   document.getElementById('preview-type-chip').innerHTML=`<span class="chip chip-gray"><i class="fa ${typeIcons[CS_TYPE]}" style="font-size:9px"></i> ${CS_TYPE.charAt(0).toUpperCase()+CS_TYPE.slice(1)}</span>`;
 }
 
-async function submitCreateSlipPage() {
-  if(CS_TYPE==='booking' && (!v('cs-bm')||!v('cs-code'))) return showToast('Bookmaker and booking code required','red');
-  if(CS_TYPE==='prediction' && !CS_PREDICTIONS.length) return showToast('Select at least one outcome','red');
-  if(CS_TYPE==='odds' && !CS_ODDS_LEGS.length) return showToast('Add at least one odds leg','red');
-  await submitBtn('cs-submit-btn', async()=>{
-    const fd = new FormData();
-    fd.append('type', document.getElementById('cs-type').value);
-    fd.append('published', document.getElementById('cs-pub').checked ? 'true' : 'false');
-    const gameId = document.getElementById('cs-gid').value;
-    if(gameId) fd.append('gameId', gameId);
-    const validUntil = v('cs-valid');
-    if(validUntil) fd.append('validUntil', validUntil);
-    if(CS_TYPE==='booking'){
-      fd.append('bookmaker',   v('cs-bm'));
-      fd.append('bookingCode', v('cs-code'));
-      fd.append('description', v('cs-desc') || '');
-      fd.append('totalOdds',   v('cs-odds-bk') || '1.0');
-      const img = document.getElementById('cs-img').files[0];
-      if(img) fd.append('image', img);
-    } else if(CS_TYPE==='prediction'){
-      const conf=document.getElementById('cs-pred-conf').value, notes=v('cs-pred-notes')||'';
-      fd.append('bookmaker',   'Prediction');
-      fd.append('bookingCode', 'PREDICTION');
-      fd.append('description', `${CS_PREDICTIONS.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`);
-      fd.append('totalOdds',   '1.0');
-      const img = document.getElementById('cs-img-pred').files[0];
-      if(img) fd.append('image', img);
-    } else if(CS_TYPE==='odds'){
-      const legsStr=CS_ODDS_LEGS.map(l=>`${l.label} @ ${l.odds}`).join(' | ');
-      const combined=document.getElementById('cs-combined-odds').textContent;
-      const userDesc=v('cs-odds-desc')||'';
-      fd.append('bookmaker',   'Odds Slip');
-      fd.append('bookingCode', 'ACCUMULATOR');
-      fd.append('description', `${legsStr}${userDesc?' — '+userDesc:''}`);
-      fd.append('totalOdds',   combined !== '—' ? combined : '1.0');
-      const img = document.getElementById('cs-img-odds').files[0];
-      if(img) fd.append('image', img);
+// ── BOOKING CODE AUTO-FETCH (NEW) ─────────────────────────────
+
+/**
+ * fetchBookingCode
+ *
+ * Calls GET /api/v1/admin/games/slips/preview-code?code=X&bookmaker=Y
+ * which hits the bookmaker's share URL server-side, parses it, and
+ * returns a BookingCodeResult without saving anything.
+ *
+ * On success: pre-fills cs-bm, cs-code, cs-desc, cs-odds-bk fields
+ * and renders the selection preview panel above the form.
+ *
+ * On failure: shows the inline error strip.
+ */
+async function fetchBookingCode() {
+  const code     = (document.getElementById('cs-fetch-code')?.value || '').trim().toUpperCase();
+  const bookmaker = document.getElementById('cs-fetch-bm')?.value || 'sportybet-gh';
+
+  if (!code) return showToast('Enter a booking code first', 'red');
+
+  // Reset previous results / errors
+  clearFetchResult();
+  const errorEl  = document.getElementById('cs-fetch-error');
+  const errorMsg = document.getElementById('cs-fetch-error-msg');
+  if (errorEl) errorEl.style.display = 'none';
+
+  const btn = document.getElementById('cs-fetch-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Fetching…';
+
+  try {
+    const res = await GET(
+      `/api/v1/admin/games/slips/preview-code?code=${encodeURIComponent(code)}&bookmaker=${encodeURIComponent(bookmaker)}`
+    );
+
+    if (!res.success) throw new Error(res.message || 'Fetch failed');
+
+    const result = res.data; // BookingCodeResult
+
+    // ── Pre-fill the manual form fields ──────────────────────
+    const bmInput   = document.getElementById('cs-bm');
+    const codeInput = document.getElementById('cs-code');
+    const descInput = document.getElementById('cs-desc');
+    const oddsInput = document.getElementById('cs-odds-bk');
+
+    if (bmInput)   bmInput.value   = result.bookmaker   || bookmaker;
+    if (codeInput) codeInput.value = result.bookingCode || code;
+    if (oddsInput) oddsInput.value = result.totalOdds   ? parseFloat(result.totalOdds).toFixed(2) : '';
+
+    // Build description from selections
+    const selections = result.selections || [];
+    if (descInput && selections.length) {
+      descInput.value = selections
+        .map(s => `${s.homeTeam} vs ${s.awayTeam} (${s.league}) — ${s.outcome} @ ${parseFloat(s.odds).toFixed(2)}`)
+        .join('\n');
     }
-    const res = await POST('/api/v1/admin/games/slips', fd, true);
-    if(!res.success) throw new Error(res.message || 'Failed to create slip');
-    showToast('Slip created successfully', 'green');
-    CHARTS_INIT.slips = false;
-    nav('slips', null);
-  });
+
+    // ── Render the preview panel ──────────────────────────────
+    renderFetchResultPreview(result);
+
+    // ── Update the live preview card on the right ─────────────
+    updateSlipPreview();
+
+    showToast(`Fetched ${selections.length} selection${selections.length !== 1 ? 's' : ''} from ${result.bookmaker}`, 'green');
+
+  } catch (e) {
+    if (errorEl && errorMsg) {
+      errorMsg.textContent = e.message || 'Failed to fetch booking code';
+      errorEl.style.display = 'flex';
+    } else {
+      showToast(e.message || 'Failed to fetch booking code', 'red');
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa fa-bolt"></i> Fetch';
+  }
+}
+
+/**
+ * renderFetchResultPreview
+ *
+ * Builds and shows the .bc-preview-panel above the manual form fields,
+ * listing each selection row with: match name, league, pick, and odds.
+ */
+function renderFetchResultPreview(result) {
+  const panel       = document.getElementById('cs-fetch-result');
+  const bmEl        = document.getElementById('bc-res-bm');
+  const codeEl      = document.getElementById('bc-res-code');
+  const countEl     = document.getElementById('bc-res-count');
+  const oddsEl      = document.getElementById('bc-res-odds');
+  const selectionsEl= document.getElementById('bc-res-selections');
+
+  if (!panel) return;
+
+  const selections = result.selections || [];
+
+  if (bmEl)    bmEl.textContent    = result.bookmaker   || '—';
+  if (codeEl)  codeEl.textContent  = result.bookingCode || '—';
+  if (countEl) countEl.textContent = `${selections.length} selection${selections.length !== 1 ? 's' : ''}`;
+  if (oddsEl)  oddsEl.textContent  = result.totalOdds ? `${parseFloat(result.totalOdds).toFixed(2)}×` : '—×';
+
+  if (selectionsEl) {
+    if (!selections.length) {
+      selectionsEl.innerHTML = `<div style="padding:12px;text-align:center;font-size:12.5px;color:var(--muted)">No selections returned</div>`;
+    } else {
+      selectionsEl.innerHTML = selections.map((s, i) => `
+        <div class="bc-selection-row">
+          <div class="bc-sel-num">${i + 1}</div>
+          <div class="bc-sel-teams">
+            <div class="bc-sel-match">${s.homeTeam || '?'} vs ${s.awayTeam || '?'}</div>
+            <div class="bc-sel-meta">${[s.league, s.kickoffTime ? fmtTime(s.kickoffTime) : null].filter(Boolean).join(' · ') || '—'}</div>
+          </div>
+          <span class="bc-sel-pick">${s.outcome || s.market || '—'}</span>
+          <span class="bc-sel-odds">${s.odds ? parseFloat(s.odds).toFixed(2) : '—'}</span>
+        </div>`).join('');
+    }
+  }
+
+  panel.style.display = '';
+}
+
+/**
+ * clearFetchResult
+ *
+ * Hides the fetch result preview panel and resets its content.
+ * Called on page init, type switch, or when the admin clicks "Clear".
+ */
+function clearFetchResult() {
+  const panel = document.getElementById('cs-fetch-result');
+  if (panel) panel.style.display = 'none';
+  const errorEl = document.getElementById('cs-fetch-error');
+  if (errorEl) errorEl.style.display = 'none';
 }
 
 // ── SLIP QUEUE ────────────────────────────────────────────────
 
-function _snapshotSlipForm() {
-  const type       = CS_TYPE || 'booking';
-  const slipType   = document.getElementById('cs-type')?.value  || 'FREE';
-  const published  = document.getElementById('cs-pub')?.checked ?? true;
-  const validUntil = document.getElementById('cs-valid')?.value || null;
-  const gameId     = document.getElementById('cs-gid')?.value   || null;
-  const gameName   = document.getElementById('cs-game-label')?.textContent || null;
+function _snapshotSlipForm(){const type=CS_TYPE||'booking';const slipType=document.getElementById('cs-type')?.value||'FREE';const published=document.getElementById('cs-pub')?.checked??true;const validUntil=document.getElementById('cs-valid')?.value||null;const gameId=document.getElementById('cs-gid')?.value||null;const gameName=document.getElementById('cs-game-label')?.textContent||null;let bookmaker,code,desc,odds,image=null;if(type==='booking'){bookmaker=v('cs-bm');code=v('cs-code');desc=v('cs-desc')||'';odds=parseFloat(v('cs-odds-bk'))||null;const f=document.getElementById('cs-img')?.files?.[0];if(f)image=f;if(!bookmaker||!code)return null;}else if(type==='prediction'){if(!CS_PREDICTIONS.length)return null;bookmaker='Prediction';code='PREDICTION';const conf=document.getElementById('cs-pred-conf')?.value||'';const notes=v('cs-pred-notes')||'';desc=`${CS_PREDICTIONS.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`;odds=null;const f=document.getElementById('cs-img-pred')?.files?.[0];if(f)image=f;}else if(type==='odds'){if(!CS_ODDS_LEGS.length)return null;bookmaker='Odds Slip';code='ACCUMULATOR';const legsStr=CS_ODDS_LEGS.map(l=>`${l.label} @ ${l.odds}`).join(' | ');const userDesc=v('cs-odds-desc')||'';desc=`${legsStr}${userDesc?' — '+userDesc:''}`;const combined=document.getElementById('cs-combined-odds')?.textContent;odds=combined&&combined!=='—'?parseFloat(combined):null;const f=document.getElementById('cs-img-odds')?.files?.[0];if(f)image=f;}return{type,bookmaker,code,desc,odds,slipType,published,validUntil,gameId,gameName,image,_qid:Date.now()+Math.random()};}
 
-  let bookmaker, code, desc, odds, image = null;
+function addSlipToQueue(){const snap=_snapshotSlipForm();if(!snap){if(CS_TYPE==='booking')return showToast('Bookmaker and booking code required','red');if(CS_TYPE==='prediction')return showToast('Select at least one outcome','red');if(CS_TYPE==='odds')return showToast('Add at least one odds leg','red');return;}CS_SLIP_QUEUE.push(snap);renderSlipQueue();showToast(`Added to queue — ${CS_SLIP_QUEUE.length} slip${CS_SLIP_QUEUE.length>1?'s':''} queued`,'blue');}
 
-  if(type === 'booking') {
-    bookmaker = v('cs-bm'); code = v('cs-code');
-    desc  = v('cs-desc') || '';
-    odds  = parseFloat(v('cs-odds-bk')) || null;
-    const f = document.getElementById('cs-img')?.files?.[0]; if(f) image = f;
-    if(!bookmaker || !code) return null;
-  } else if(type === 'prediction') {
-    if(!CS_PREDICTIONS.length) return null;
-    bookmaker = 'Prediction'; code = 'PREDICTION';
-    const conf  = document.getElementById('cs-pred-conf')?.value || '';
-    const notes = v('cs-pred-notes') || '';
-    desc  = `${CS_PREDICTIONS.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`;
-    odds  = null;
-    const f = document.getElementById('cs-img-pred')?.files?.[0]; if(f) image = f;
-  } else if(type === 'odds') {
-    if(!CS_ODDS_LEGS.length) return null;
-    bookmaker = 'Odds Slip'; code = 'ACCUMULATOR';
-    const legsStr = CS_ODDS_LEGS.map(l=>`${l.label} @ ${l.odds}`).join(' | ');
-    const userDesc = v('cs-odds-desc') || '';
-    desc  = `${legsStr}${userDesc?' — '+userDesc:''}`;
-    const combined = document.getElementById('cs-combined-odds')?.textContent;
-    odds  = combined && combined !== '—' ? parseFloat(combined) : null;
-    const f = document.getElementById('cs-img-odds')?.files?.[0]; if(f) image = f;
-  }
+function renderSlipQueue(){const wrap=document.getElementById('cs-queue-wrap');const list=document.getElementById('cs-queue-list');const count=document.getElementById('cs-queue-count');const previewWrap=document.getElementById('preview-queue-summary');const previewCount=document.getElementById('preview-queue-count-text');if(!wrap)return;if(!CS_SLIP_QUEUE.length){wrap.style.display='none';if(previewWrap)previewWrap.style.display='none';return;}wrap.style.display='';if(count)count.textContent=CS_SLIP_QUEUE.length;if(previewWrap)previewWrap.style.display='';if(previewCount)previewCount.textContent=`${CS_SLIP_QUEUE.length} slip${CS_SLIP_QUEUE.length>1?'s':''} in queue`;const typeIcon={booking:'fa-ticket',prediction:'fa-bullseye',odds:'fa-percent'};const typeColor={booking:'ic-green',prediction:'ic-red',odds:'ic-gold'};if(list)list.innerHTML=CS_SLIP_QUEUE.map((snap,i)=>`<div class="slip-queue-item"><div class="sqi-icon ${typeColor[snap.type]||'ic-gray'}"><i class="fa ${typeIcon[snap.type]||'fa-ticket'}"></i></div><div class="sqi-info"><div class="sqi-bm">${snap.bookmaker} · <span style="font-family:var(--font-mono);color:var(--accent)">${snap.code}</span></div><div class="sqi-meta">${snap.slipType==='VIP'?`<span style="color:var(--gold)">VIP</span> · `:''}${snap.gameName&&snap.gameName!=='—'?snap.gameName+' · ':''}${snap.odds?`<span style="color:var(--gold)">${parseFloat(snap.odds).toFixed(2)}×</span>`:''}${!snap.published?' · <span style="color:var(--muted)">Draft</span>':''}</div></div><div class="sqi-actions"><button class="btn btn-danger btn-xs" onclick="removeSlipFromQueue(${i})"><i class="fa fa-xmark"></i></button></div></div>`).join('');}
 
-  return { type, bookmaker, code, desc, odds, slipType, published,
-           validUntil, gameId, gameName, image, _qid: Date.now()+Math.random() };
+function removeSlipFromQueue(index){CS_SLIP_QUEUE.splice(index,1);renderSlipQueue();}
+function clearSlipQueue(){CS_SLIP_QUEUE=[];renderSlipQueue();}
+
+async function submitCreateSlipPage(){
+  if(CS_TYPE==='booking'&&(!v('cs-bm')||!v('cs-code')))return showToast('Bookmaker and booking code required','red');
+  if(CS_TYPE==='prediction'&&!CS_PREDICTIONS.length)return showToast('Select at least one outcome','red');
+  if(CS_TYPE==='odds'&&!CS_ODDS_LEGS.length)return showToast('Add at least one odds leg','red');
+  await submitBtn('cs-submit-btn',async()=>{
+    const fd=new FormData();
+    fd.append('type',document.getElementById('cs-type').value);
+    fd.append('published',document.getElementById('cs-pub').checked?'true':'false');
+    const gameId=document.getElementById('cs-gid').value;if(gameId)fd.append('gameId',gameId);
+    const validUntil=v('cs-valid');if(validUntil)fd.append('validUntil',validUntil);
+    if(CS_TYPE==='booking'){fd.append('bookmaker',v('cs-bm'));fd.append('bookingCode',v('cs-code'));fd.append('description',v('cs-desc')||'');fd.append('totalOdds',v('cs-odds-bk')||'1.0');const img=document.getElementById('cs-img').files[0];if(img)fd.append('image',img);}
+    else if(CS_TYPE==='prediction'){const conf=document.getElementById('cs-pred-conf').value,notes=v('cs-pred-notes')||'';fd.append('bookmaker','Prediction');fd.append('bookingCode','PREDICTION');fd.append('description',`${CS_PREDICTIONS.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`);fd.append('totalOdds','1.0');const img=document.getElementById('cs-img-pred').files[0];if(img)fd.append('image',img);}
+    else if(CS_TYPE==='odds'){const legsStr=CS_ODDS_LEGS.map(l=>`${l.label} @ ${l.odds}`).join(' | ');const combined=document.getElementById('cs-combined-odds').textContent;const userDesc=v('cs-odds-desc')||'';fd.append('bookmaker','Odds Slip');fd.append('bookingCode','ACCUMULATOR');fd.append('description',`${legsStr}${userDesc?' — '+userDesc:''}`);fd.append('totalOdds',combined!=='—'?combined:'1.0');const img=document.getElementById('cs-img-odds').files[0];if(img)fd.append('image',img);}
+    const res=await POST('/api/v1/admin/games/slips',fd,true);
+    if(!res.success)throw new Error(res.message||'Failed to create slip');
+    showToast('Slip created successfully','green');
+    CHARTS_INIT.slips=false;
+    nav('slips',null);
+  });
 }
 
-function addSlipToQueue() {
-  const snap = _snapshotSlipForm();
-  if(!snap) {
-    if(CS_TYPE==='booking')    return showToast('Bookmaker and booking code required','red');
-    if(CS_TYPE==='prediction') return showToast('Select at least one outcome','red');
-    if(CS_TYPE==='odds')       return showToast('Add at least one odds leg','red');
-    return;
-  }
-  CS_SLIP_QUEUE.push(snap);
-  renderSlipQueue();
-  showToast(`Added to queue — ${CS_SLIP_QUEUE.length} slip${CS_SLIP_QUEUE.length>1?'s':''} queued`, 'blue');
-}
-
-function renderSlipQueue() {
-  const wrap        = document.getElementById('cs-queue-wrap');
-  const list        = document.getElementById('cs-queue-list');
-  const count       = document.getElementById('cs-queue-count');
-  const previewWrap = document.getElementById('preview-queue-summary');
-  const previewCount= document.getElementById('preview-queue-count-text');
-  if(!wrap) return;
-
-  if(!CS_SLIP_QUEUE.length) {
-    wrap.style.display = 'none';
-    if(previewWrap) previewWrap.style.display = 'none';
-    return;
-  }
-  wrap.style.display = '';
-  if(count) count.textContent = CS_SLIP_QUEUE.length;
-  if(previewWrap)  previewWrap.style.display  = '';
-  if(previewCount) previewCount.textContent   = `${CS_SLIP_QUEUE.length} slip${CS_SLIP_QUEUE.length>1?'s':''} in queue`;
-
-  const typeIcon  = { booking:'fa-ticket', prediction:'fa-bullseye', odds:'fa-percent' };
-  const typeColor = { booking:'ic-green',  prediction:'ic-red',      odds:'ic-gold'    };
-
-  if(list) list.innerHTML = CS_SLIP_QUEUE.map((snap, i) => `
-    <div class="slip-queue-item">
-      <div class="sqi-icon ${typeColor[snap.type]||'ic-gray'}"><i class="fa ${typeIcon[snap.type]||'fa-ticket'}"></i></div>
-      <div class="sqi-info">
-        <div class="sqi-bm">${snap.bookmaker} · <span style="font-family:var(--font-mono);color:var(--accent)">${snap.code}</span></div>
-        <div class="sqi-meta">
-          ${snap.slipType==='VIP'?`<span style="color:var(--gold)">VIP</span> · `:''}
-          ${snap.gameName&&snap.gameName!=='—'?snap.gameName+' · ':''}
-          ${snap.odds?`<span style="color:var(--gold)">${parseFloat(snap.odds).toFixed(2)}×</span>`:''}
-          ${!snap.published?' · <span style="color:var(--muted)">Draft</span>':''}
-        </div>
-      </div>
-      <div class="sqi-actions">
-        <button class="btn btn-danger btn-xs" onclick="removeSlipFromQueue(${i})"><i class="fa fa-xmark"></i></button>
-      </div>
-    </div>`).join('');
-}
-
-function removeSlipFromQueue(index) {
-  CS_SLIP_QUEUE.splice(index, 1);
-  renderSlipQueue();
-}
-
-function clearSlipQueue() {
-  CS_SLIP_QUEUE = [];
-  renderSlipQueue();
-}
-
-async function submitSlipQueue() {
-  if(!CS_SLIP_QUEUE.length) return showToast('Queue is empty', 'red');
-
-  const btn   = document.getElementById('cs-queue-submit-btn');
-  const prog  = document.getElementById('cs-queue-progress');
-  const progL = document.getElementById('cs-queue-progress-label');
-  const progF = document.getElementById('cs-queue-progress-fill');
-
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Submitting…';
-  if(prog) prog.style.display = '';
-
-  let successCount = 0;
-  const total = CS_SLIP_QUEUE.length;
-
-  for(let i = 0; i < total; i++) {
-    const snap = CS_SLIP_QUEUE[i];
-    if(progL) progL.textContent = `Submitting ${i+1} / ${total}…`;
-    if(progF) progF.style.width = `${Math.round(((i) / total) * 100)}%`;
-    try {
-      const fd = new FormData();
-      fd.append('type',        snap.slipType);
-      fd.append('published',   snap.published ? 'true' : 'false');
-      fd.append('bookmaker',   snap.bookmaker);
-      fd.append('bookingCode', snap.code);
-      fd.append('description', snap.desc || '');
-      fd.append('totalOdds',   snap.odds ? String(snap.odds) : '1.0');
-      if(snap.gameId)     fd.append('gameId',    snap.gameId);
-      if(snap.validUntil) fd.append('validUntil', snap.validUntil);
-      if(snap.image)      fd.append('image',      snap.image);
-      const res = await POST('/api/v1/admin/games/slips', fd, true);
-      if(!res.success) throw new Error(res.message);
-      successCount++;
-    } catch(e) {
-      console.warn(`Queue slip ${i+1} failed:`, e.message);
-    }
-  }
-
-  if(progF) progF.style.width = '100%';
-  if(progL) progL.textContent = `Done — ${successCount}/${total} created`;
-
-  setTimeout(() => {
-    if(prog)  prog.style.display = 'none';
-    if(progF) progF.style.width  = '0%';
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fa fa-paper-plane"></i> Submit All in Queue';
-  }, 1500);
-
-  if(successCount > 0) {
-    CS_SLIP_QUEUE = [];
-    renderSlipQueue();
-    showToast(`${successCount} slip${successCount>1?'s':''} created`, 'green');
-    CHARTS_INIT.slips = false;
-    if(successCount === total) nav('slips', null);
-  } else {
-    showToast('All submissions failed — check console', 'red');
-  }
+async function submitSlipQueue(){
+  if(!CS_SLIP_QUEUE.length)return showToast('Queue is empty','red');
+  const btn=document.getElementById('cs-queue-submit-btn');const prog=document.getElementById('cs-queue-progress');const progL=document.getElementById('cs-queue-progress-label');const progF=document.getElementById('cs-queue-progress-fill');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Submitting…';if(prog)prog.style.display='';
+  let successCount=0;const total=CS_SLIP_QUEUE.length;
+  for(let i=0;i<total;i++){const snap=CS_SLIP_QUEUE[i];if(progL)progL.textContent=`Submitting ${i+1} / ${total}…`;if(progF)progF.style.width=`${Math.round(((i)/total)*100)}%`;try{const fd=new FormData();fd.append('type',snap.slipType);fd.append('published',snap.published?'true':'false');fd.append('bookmaker',snap.bookmaker);fd.append('bookingCode',snap.code);fd.append('description',snap.desc||'');fd.append('totalOdds',snap.odds?String(snap.odds):'1.0');if(snap.gameId)fd.append('gameId',snap.gameId);if(snap.validUntil)fd.append('validUntil',snap.validUntil);if(snap.image)fd.append('image',snap.image);const res=await POST('/api/v1/admin/games/slips',fd,true);if(!res.success)throw new Error(res.message);successCount++;}catch(e){console.warn(`Queue slip ${i+1} failed:`,e.message);}}
+  if(progF)progF.style.width='100%';if(progL)progL.textContent=`Done — ${successCount}/${total} created`;
+  setTimeout(()=>{if(prog)prog.style.display='none';if(progF)progF.style.width='0%';btn.disabled=false;btn.innerHTML='<i class="fa fa-paper-plane"></i> Submit All in Queue';},1500);
+  if(successCount>0){CS_SLIP_QUEUE=[];renderSlipQueue();showToast(`${successCount} slip${successCount>1?'s':''} created`,'green');CHARTS_INIT.slips=false;if(successCount===total)nav('slips',null);}else{showToast('All submissions failed — check console','red');}
 }
 
 // ── VIP ───────────────────────────────────────────────────────
 
-const CUR_SYM = { USD:'$', GHS:'₵', NGN:'₦', EUR:'€', GBP:'£' };
-function curSym(c) { return CUR_SYM[c] || c+' '; }
-const FALLBACK_RATES_USD = { USD:1, GHS:15.5, NGN:1600, EUR:0.92, GBP:0.79 };
+const CUR_SYM={USD:'$',GHS:'₵',NGN:'₦',EUR:'€',GBP:'£'};
+function curSym(c){return CUR_SYM[c]||c+' ';}
+const FALLBACK_RATES_USD={USD:1,GHS:15.5,NGN:1600,EUR:0.92,GBP:0.79};
 
-async function fetchModalRates() {
-  if (_vipModalRates) return _vipModalRates;
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/USD');
-    const json = await res.json();
-    if (json.result === 'success') { _vipModalRates = json.rates; return _vipModalRates; }
-  } catch {}
-  return FALLBACK_RATES_USD;
+async function fetchModalRates(){if(_vipModalRates)return _vipModalRates;try{const res=await fetch('https://open.er-api.com/v6/latest/USD');const json=await res.json();if(json.result==='success'){_vipModalRates=json.rates;return _vipModalRates;}}catch{}return FALLBACK_RATES_USD;}
+async function convertAmount(amount,baseCur,targetCur){if(baseCur===targetCur)return amount;const rates=await fetchModalRates();const usdToBase=rates[baseCur]||FALLBACK_RATES_USD[baseCur]||1;const usdToTarget=rates[targetCur]||FALLBACK_RATES_USD[targetCur]||1;return Math.round((amount/usdToBase)*usdToTarget*100)/100;}
+
+async function updateVipModalPreview(){const price=parseFloat(document.getElementById('vp-price')?.value);const baseCur=document.getElementById('vp-currency')?.value||'USD';const preview=document.getElementById('vip-modal-preview');const equivEl=document.getElementById('vip-modal-equiv');const noteEl=document.getElementById('vip-modal-rate-note');if(!preview||!equivEl)return;if(!price||price<=0){preview.style.display='none';return;}preview.style.display='';equivEl.innerHTML=`<span style="font-size:11px;color:var(--muted)"><div class="spinner" style="width:12px;height:12px;border-width:1.5px;display:inline-block"></div> Fetching rates…</span>`;try{const results=await Promise.all(['GHS','NGN','USD'].map(async cur=>({cur,converted:await convertAmount(price,baseCur,cur)})));const classes={GHS:'ghs',NGN:'ngn',USD:''};equivEl.innerHTML=results.map(({cur,converted})=>`<div class="vip-equiv-card" style="flex:1;min-width:80px"><div class="vip-equiv-label">${cur}</div><div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div></div>`).join('');const rates=await fetchModalRates();const usdToBase=rates[baseCur]||FALLBACK_RATES_USD[baseCur]||1;if(noteEl)noteEl.textContent=`1 USD = ${curSym(baseCur)}${usdToBase.toFixed(2)} ${baseCur} · ${rates!==FALLBACK_RATES_USD?'🟢 Live rate':'🟡 Fallback rate'}`;}catch(e){equivEl.innerHTML=`<span style="font-size:11px;color:var(--muted)">Could not load rates</span>`;}}
+
+async function loadVip(){
+  try{const [priceRes,statsRes]=await Promise.allSettled([GET('/api/v1/admin/vip/price'),GET('/api/v1/admin/stats')]);
+  if(priceRes.status==='fulfilled'&&priceRes.value.success){const p=priceRes.value.data;document.getElementById('vip-price-display').innerHTML=`<div style="font-size:52px;font-family:var(--font-mono);font-weight:700;color:var(--gold);line-height:1">${curSym(p.currency)}${Number(p.price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div style="font-size:13px;color:var(--muted);margin-top:6px">Base price · Set in <span style="color:var(--text)">${p.currency}</span></div><div style="font-size:13px;color:var(--text2);margin-top:2px;margin-bottom:16px">${p.description||''}</div><div id="vip-equiv-display" class="vip-currency-grid"><div class="vip-equiv-card"><div class="vip-equiv-label">Loading</div><div class="vip-equiv-val"><div class="spinner" style="width:12px;height:12px;border-width:1.5px"></div></div></div></div><div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-live-rate-note"></div><button class="btn btn-gold" style="margin-top:18px" onclick="openVipModal(${p.price},'${p.currency}',\`${(p.description||'').replace(/`/g,"'")}\`)"><i class="fa fa-pen"></i> Update Pricing</button>`;renderVipEquivalents(p.price,p.currency);}
+  else{document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--muted);font-size:13px">No price set yet</div><button class="btn btn-gold" style="margin-top:16px" onclick="openModal('vip-modal')"><i class="fa fa-plus"></i> Set Price</button>`;}
+  if(statsRes.status==='fulfilled'&&statsRes.value.success){const d=statsRes.value.data;document.getElementById('vip-metrics').innerHTML=`<div class="metric-row"><span class="m-label">Active VIP Users</span><span class="m-val" style="color:var(--gold)">${d.activeVipUsers??'—'}</span></div><div class="metric-row"><span class="m-label">Total Predictions</span><span class="m-val">${d.totalPredictions??'—'}</span></div><div class="metric-row"><span class="m-label">Won Predictions</span><span class="m-val" style="color:var(--accent)">${d.wonPredictions??'—'}</span></div><div class="metric-row"><span class="m-label">Win Rate</span><span class="m-val">${d.winRate!=null?d.winRate.toFixed(1)+'%':'—'}</span></div><div class="metric-row"><span class="m-label">Active VIP Slips</span><span class="m-val" style="color:var(--gold)">${d.activeVipSlips??'—'}</span></div><div class="metric-row"><span class="m-label">Active Free Slips</span><span class="m-val" style="color:var(--blue)">${d.activeFreeSlips??'—'}</span></div>`;buildVipCharts(d);}}
+  catch(e){document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--accent2);font-size:13px">${e.message}</div>`;}
 }
 
-async function convertAmount(amount, baseCur, targetCur) {
-  if (baseCur === targetCur) return amount;
-  const rates = await fetchModalRates();
-  const usdToBase   = rates[baseCur]   || FALLBACK_RATES_USD[baseCur]   || 1;
-  const usdToTarget = rates[targetCur] || FALLBACK_RATES_USD[targetCur] || 1;
-  return Math.round((amount / usdToBase) * usdToTarget * 100) / 100;
-}
+async function renderVipEquivalents(price,baseCur){const equivEl=document.getElementById('vip-equiv-display');const noteEl=document.getElementById('vip-live-rate-note');if(!equivEl)return;try{const results=await Promise.all(['GHS','NGN','USD'].map(async cur=>({cur,converted:await convertAmount(price,baseCur,cur)})));const classes={GHS:'ghs',NGN:'ngn',USD:''};equivEl.innerHTML=results.map(({cur,converted})=>`<div class="vip-equiv-card"><div class="vip-equiv-label">${cur}</div><div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div></div>`).join('');const rates=await fetchModalRates();if(noteEl)noteEl.textContent=`${rates!==FALLBACK_RATES_USD?'🟢 Live exchange rates':'🟡 Fallback rates'} · Users pay in their local currency`;}catch(e){if(equivEl)equivEl.innerHTML=`<div style="color:var(--muted);font-size:12px">Could not load equivalents</div>`;}}
+async function refreshVipRates(){_vipModalRates=null;CHARTS_INIT.vip=false;loadVip();showToast('Exchange rates refreshed','green');}
 
-async function updateVipModalPreview() {
-  const price = parseFloat(document.getElementById('vp-price')?.value);
-  const baseCur = document.getElementById('vp-currency')?.value || 'USD';
-  const preview = document.getElementById('vip-modal-preview');
-  const equivEl = document.getElementById('vip-modal-equiv');
-  const noteEl  = document.getElementById('vip-modal-rate-note');
-  if (!preview || !equivEl) return;
-  if (!price || price <= 0) { preview.style.display = 'none'; return; }
-  preview.style.display = '';
-  equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)"><div class="spinner" style="width:12px;height:12px;border-width:1.5px;display:inline-block"></div> Fetching rates…</span>`;
-  try {
-    const results = await Promise.all(['GHS','NGN','USD'].map(async cur => ({ cur, converted: await convertAmount(price, baseCur, cur) })));
-    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
-    equivEl.innerHTML = results.map(({cur,converted}) => `
-      <div class="vip-equiv-card" style="flex:1;min-width:80px">
-        <div class="vip-equiv-label">${cur}</div>
-        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-      </div>`).join('');
-    const rates = await fetchModalRates();
-    const usdToBase = rates[baseCur] || FALLBACK_RATES_USD[baseCur] || 1;
-    if(noteEl) noteEl.textContent = `1 USD = ${curSym(baseCur)}${usdToBase.toFixed(2)} ${baseCur} · ${rates !== FALLBACK_RATES_USD ? '🟢 Live rate' : '🟡 Fallback rate'}`;
-  } catch(e) {
-    equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)">Could not load rates</span>`;
-  }
-}
+function buildVipCharts(d){const vip=d.activeVipUsers||0,total=d.totalUsers||0,free=Math.max(0,total-vip);const won=d.wonPredictions||0,lost=Math.max(0,(d.totalPredictions||0)-won);const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};const vgc=document.getElementById('vipGrowthChart');if(vgc){try{Chart.getChart(vgc)?.destroy();}catch{}new Chart(vgc,{type:'bar',data:{labels:['Free Users','VIP Users'],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});}const vrc=document.getElementById('vipRevChart');if(vrc){try{Chart.getChart(vrc)?.destroy();}catch{}new Chart(vrc,{type:'bar',data:{labels:['Won','Lost'],datasets:[{data:[won,lost],backgroundColor:['#2d9e6e','#e05a2b'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}});}}
 
-async function loadVip() {
-  try {
-    const [priceRes,statsRes]=await Promise.allSettled([GET('/api/v1/admin/vip/price'),GET('/api/v1/admin/stats')]);
-    if(priceRes.status==='fulfilled'&&priceRes.value.success){
-      const p=priceRes.value.data;
-      document.getElementById('vip-price-display').innerHTML=`
-        <div style="font-size:52px;font-family:var(--font-mono);font-weight:700;color:var(--gold);line-height:1">${curSym(p.currency)}${Number(p.price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:6px">Base price · Set in <span style="color:var(--text)">${p.currency}</span></div>
-        <div style="font-size:13px;color:var(--text2);margin-top:2px;margin-bottom:16px">${p.description||''}</div>
-        <div id="vip-equiv-display" class="vip-currency-grid">
-          <div class="vip-equiv-card"><div class="vip-equiv-label">Loading</div><div class="vip-equiv-val"><div class="spinner" style="width:12px;height:12px;border-width:1.5px"></div></div></div>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-live-rate-note"></div>
-        <button class="btn btn-gold" style="margin-top:18px" onclick="openVipModal(${p.price},'${p.currency}',\`${(p.description||'').replace(/`/g,"'")}\`)">
-          <i class="fa fa-pen"></i> Update Pricing
-        </button>`;
-      renderVipEquivalents(p.price, p.currency);
-    } else {
-      document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--muted);font-size:13px">No price set yet</div><button class="btn btn-gold" style="margin-top:16px" onclick="openModal('vip-modal')"><i class="fa fa-plus"></i> Set Price</button>`;
-    }
-    if(statsRes.status==='fulfilled'&&statsRes.value.success){
-      const d=statsRes.value.data;
-      document.getElementById('vip-metrics').innerHTML=`
-        <div class="metric-row"><span class="m-label">Active VIP Users</span><span class="m-val" style="color:var(--gold)">${d.activeVipUsers??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Total Predictions</span><span class="m-val">${d.totalPredictions??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Won Predictions</span><span class="m-val" style="color:var(--accent)">${d.wonPredictions??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Win Rate</span><span class="m-val">${d.winRate!=null?d.winRate.toFixed(1)+'%':'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Active VIP Slips</span><span class="m-val" style="color:var(--gold)">${d.activeVipSlips??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Active Free Slips</span><span class="m-val" style="color:var(--blue)">${d.activeFreeSlips??'—'}</span></div>`;
-      buildVipCharts(d);
-    }
-  } catch(e) {
-    document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--accent2);font-size:13px">${e.message}</div>`;
-  }
-}
-
-async function renderVipEquivalents(price, baseCur) {
-  const equivEl = document.getElementById('vip-equiv-display');
-  const noteEl  = document.getElementById('vip-live-rate-note');
-  if (!equivEl) return;
-  try {
-    const results = await Promise.all(['GHS','NGN','USD'].map(async cur => ({ cur, converted: await convertAmount(price, baseCur, cur) })));
-    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
-    equivEl.innerHTML = results.map(({cur,converted}) => `
-      <div class="vip-equiv-card">
-        <div class="vip-equiv-label">${cur}</div>
-        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-      </div>`).join('');
-    const rates = await fetchModalRates();
-    if (noteEl) noteEl.textContent = `${rates !== FALLBACK_RATES_USD ? '🟢 Live exchange rates' : '🟡 Fallback rates'} · Users pay in their local currency`;
-  } catch(e) {
-    if(equivEl) equivEl.innerHTML = `<div style="color:var(--muted);font-size:12px">Could not load equivalents</div>`;
-  }
-}
-
-async function refreshVipRates() {
-  _vipModalRates=null; CHARTS_INIT.vip=false; loadVip(); showToast('Exchange rates refreshed','green');
-}
-
-function buildVipCharts(d) {
-  const vip=d.activeVipUsers||0, total=d.totalUsers||0, free=Math.max(0,total-vip);
-  const won=d.wonPredictions||0, lost=Math.max(0,(d.totalPredictions||0)-won);
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const vgc=document.getElementById('vipGrowthChart');
-  if(vgc){try{Chart.getChart(vgc)?.destroy();}catch{}
-    new Chart(vgc,{type:'bar',data:{labels:['Free Users','VIP Users'],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-  }
-  const vrc=document.getElementById('vipRevChart');
-  if(vrc){try{Chart.getChart(vrc)?.destroy();}catch{}
-    new Chart(vrc,{type:'bar',data:{labels:['Won','Lost'],datasets:[{data:[won,lost],backgroundColor:['#2d9e6e','#e05a2b'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}});
-  }
-}
-
-function openVipModal(price, currency, desc) {
-  document.getElementById('vp-price').value    = price;
-  document.getElementById('vp-currency').value = currency;
-  document.getElementById('vp-desc').value     = desc;
-  document.getElementById('vip-modal-preview').style.display = 'none';
-  openModal('vip-modal');
-  setTimeout(updateVipModalPreview, 50);
-}
-
-async function submitVipPrice(){
-  const price=parseFloat(v('vp-price'));
-  if(!price||price<=0) return showToast('Enter a valid price greater than zero','red');
-  const currency=v('vp-currency');
-  if(!currency) return showToast('Select a currency','red');
-  await submitBtn('vip-submit-btn',async()=>{
-    const res=await POST('/api/v1/admin/vip/price',{price,currency,description:v('vp-desc')});
-    if(!res.success)throw new Error(res.message);
-    closeModal('vip-modal');
-    showToast(`VIP price set: ${curSym(currency)}${price} ${currency}`,'green');
-    _vipModalRates=null; CHARTS_INIT.vip=false; loadVip();
-  });
-}
+function openVipModal(price,currency,desc){document.getElementById('vp-price').value=price;document.getElementById('vp-currency').value=currency;document.getElementById('vp-desc').value=desc;document.getElementById('vip-modal-preview').style.display='none';openModal('vip-modal');setTimeout(updateVipModalPreview,50);}
+async function submitVipPrice(){const price=parseFloat(v('vp-price'));if(!price||price<=0)return showToast('Enter a valid price greater than zero','red');const currency=v('vp-currency');if(!currency)return showToast('Select a currency','red');await submitBtn('vip-submit-btn',async()=>{const res=await POST('/api/v1/admin/vip/price',{price,currency,description:v('vp-desc')});if(!res.success)throw new Error(res.message);closeModal('vip-modal');showToast(`VIP price set: ${curSym(currency)}${price} ${currency}`,'green');_vipModalRates=null;CHARTS_INIT.vip=false;loadVip();});}
 
 // ── PROMOS ────────────────────────────────────────────────────
 
-async function loadPromos() {
-  document.getElementById('promos-grid').innerHTML='<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading promos…</div>';
-  try {
-    const res=await GET('/api/v1/admin/promos');
-    const promos=res.data||[];
-    renderPromos(promos);
-    buildPromoChart(promos);
-  } catch(e) {
-    document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1" class="loading-state" style="color:var(--accent2)">${e.message}</div>`;
-  }
-}
+async function loadPromos(){document.getElementById('promos-grid').innerHTML='<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading promos…</div>';try{const res=await GET('/api/v1/admin/promos');const promos=res.data||[];renderPromos(promos);buildPromoChart(promos);}catch(e){document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1" class="loading-state" style="color:var(--accent2)">${e.message}</div>`;}}
 
-function buildPromoChart(promos) {
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const labels=promos.map(p=>p.title||'Promo');
-  const data=promos.map(p=>p.discountPercent||0);
-  const pc=document.getElementById('promoChart');
-  if(pc){try{Chart.getChart(pc)?.destroy();}catch{}
-    new Chart(pc,{type:'bar',data:{labels:labels.length?labels:['No promos'],datasets:[{label:'Discount %',data:data.length?data:[0],backgroundColor:promos.map((_,i)=>['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610'][i%4]),borderColor:promos.map((_,i)=>['#2d9e6e','#c8943a','#3a72c8','#e05a2b'][i%4]),borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,callback:v=>v+'%'}}}}});
-  }
-}
+function buildPromoChart(promos){const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};const labels=promos.map(p=>p.title||'Promo');const data=promos.map(p=>p.discountPercent||0);const pc=document.getElementById('promoChart');if(pc){try{Chart.getChart(pc)?.destroy();}catch{}new Chart(pc,{type:'bar',data:{labels:labels.length?labels:['No promos'],datasets:[{label:'Discount %',data:data.length?data:[0],backgroundColor:promos.map((_,i)=>['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610'][i%4]),borderColor:promos.map((_,i)=>['#2d9e6e','#c8943a','#3a72c8','#e05a2b'][i%4]),borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,callback:v=>v+'%'}}}}});}}
 
-function renderPromos(promos) {
-  const icons=['🎉','🎁','🤝','⚡','🔥','🏆'];
-  const bgs=['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610','#1e1030','#2d1e0a'];
-  if(!promos.length){
-    document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><i class="fa fa-tags" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>No promos</div>`;
-    return;
-  }
-  document.getElementById('promos-grid').innerHTML=promos.map((p,i)=>`
-    <div class="promo-card">
-      <div class="promo-banner" style="background:${bgs[i%bgs.length]}">${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover">`:icons[i%icons.length]}</div>
-      <div class="promo-body">
-        <div style="font-size:15px;font-weight:700;margin-bottom:2px">${p.title}</div>
-        <div class="promo-discount">${p.discountPercent??0}% OFF</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">${p.description||''}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:5px">${fmtDate(p.startsAt)} → ${fmtDate(p.expiresAt)}</div>
-        <div style="display:flex;gap:6px;margin-top:10px;align-items:center">
-          <span class="chip ${p.active?'chip-green':'chip-gray'}">${p.active?'Active':'Inactive'}</span>
-          <span class="chip chip-blue" style="font-size:10px">${p.type||''}</span>
-          <button class="btn btn-danger btn-xs" style="margin-left:auto" onclick="deletePromo('${p.id}')"><i class="fa fa-trash"></i></button>
-        </div>
-      </div>
-    </div>`).join('');
-}
+function renderPromos(promos){const icons=['🎉','🎁','🤝','⚡','🔥','🏆'];const bgs=['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610','#1e1030','#2d1e0a'];if(!promos.length){document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><i class="fa fa-tags" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>No promos</div>`;return;}document.getElementById('promos-grid').innerHTML=promos.map((p,i)=>`<div class="promo-card"><div class="promo-banner" style="background:${bgs[i%bgs.length]}">${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover">`:icons[i%icons.length]}</div><div class="promo-body"><div style="font-size:15px;font-weight:700;margin-bottom:2px">${p.title}</div><div class="promo-discount">${p.discountPercent??0}% OFF</div><div style="font-size:12px;color:var(--text2);margin-top:4px">${p.description||''}</div><div style="font-size:11px;color:var(--muted);margin-top:5px">${fmtDate(p.startsAt)} → ${fmtDate(p.expiresAt)}</div><div style="display:flex;gap:6px;margin-top:10px;align-items:center"><span class="chip ${p.active?'chip-green':'chip-gray'}">${p.active?'Active':'Inactive'}</span><span class="chip chip-blue" style="font-size:10px">${p.type||''}</span><button class="btn btn-danger btn-xs" style="margin-left:auto" onclick="deletePromo('${p.id}')"><i class="fa fa-trash"></i></button></div></div></div>`).join('');}
 
-async function submitCreatePromo() {
-  const title = v('pm-title');
-  if (!title) return showToast('Title required', 'red');
-  const startRaw = v('pm-start'), endRaw = v('pm-end');
-  if (!startRaw) return showToast('Start time is required', 'red');
-  if (!endRaw)   return showToast('Expiry time is required', 'red');
-  const startsAt  = toISOWithSeconds(startRaw);
-  const expiresAt = toISOWithSeconds(endRaw);
-  if (new Date(startsAt) >= new Date(expiresAt)) return showToast('Expiry must be after start time', 'red');
-  await submitBtn('promo-submit-btn', async () => {
-    const fd = new FormData();
-    fd.append('title',           title);
-    fd.append('description',     v('pm-desc'));
-    fd.append('type',            v('pm-type'));
-    fd.append('discountPercent', v('pm-disc') || '0');
-    fd.append('startsAt',        startsAt);
-    fd.append('expiresAt',       expiresAt);
-    const img = document.getElementById('pm-img').files[0];
-    if (img) fd.append('image', img);
-    const res = await POST('/api/v1/admin/promos', fd, true);
-    if (!res.success) throw new Error(res.message);
-    closeModal('promo-modal');
-    showToast('Promotion created', 'green');
-    CHARTS_INIT.promos = false; loadPromos();
-  });
-}
-
-async function deletePromo(id){
-  if(!confirm('Delete this promotion?')) return;
-  try { await DEL(`/api/v1/admin/promos/${id}`); showToast('Promo deleted','red'); CHARTS_INIT.promos=false; loadPromos(); }
-  catch(e) { showToast(e.message,'red'); }
-}
+async function submitCreatePromo(){const title=v('pm-title');if(!title)return showToast('Title required','red');const startRaw=v('pm-start'),endRaw=v('pm-end');if(!startRaw)return showToast('Start time is required','red');if(!endRaw)return showToast('Expiry time is required','red');const startsAt=toISOWithSeconds(startRaw);const expiresAt=toISOWithSeconds(endRaw);if(new Date(startsAt)>=new Date(expiresAt))return showToast('Expiry must be after start time','red');await submitBtn('promo-submit-btn',async()=>{const fd=new FormData();fd.append('title',title);fd.append('description',v('pm-desc'));fd.append('type',v('pm-type'));fd.append('discountPercent',v('pm-disc')||'0');fd.append('startsAt',startsAt);fd.append('expiresAt',expiresAt);const img=document.getElementById('pm-img').files[0];if(img)fd.append('image',img);const res=await POST('/api/v1/admin/promos',fd,true);if(!res.success)throw new Error(res.message);closeModal('promo-modal');showToast('Promotion created','green');CHARTS_INIT.promos=false;loadPromos();});}
+async function deletePromo(id){if(!confirm('Delete this promotion?'))return;try{await DEL(`/api/v1/admin/promos/${id}`);showToast('Promo deleted','red');CHARTS_INIT.promos=false;loadPromos();}catch(e){showToast(e.message,'red');}}
 
 // ── ANALYTICS ────────────────────────────────────────────────
 
 let AN_GAMES_ALL=[], AN_GAME_SEL=null, AN_DATE_FILTER='today';
 
-function initAnalyticsPage() {
-  AN_DATE_FILTER='today'; AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
+function initAnalyticsPage(){AN_DATE_FILTER='today';AN_GAME_SEL=null;document.getElementById('an-game-selected').style.display='none';document.getElementById('analytics-result').classList.remove('show');document.getElementById('an-game-search').value='';document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));document.querySelector('#page-analytics .csdf[data-d="today"]')?.classList.add('active');const acd=document.getElementById('an-custom-date');if(acd)acd.value='';loadAnalyticsGames();}
+function setAnalyticsDateFilter(d,el){AN_DATE_FILTER=d;document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');if(d!=='custom'){const acd=document.getElementById('an-custom-date');if(acd)acd.value='';}AN_GAME_SEL=null;document.getElementById('an-game-selected').style.display='none';document.getElementById('analytics-result').classList.remove('show');loadAnalyticsGames();}
+
+async function loadAnalyticsGames(){const el=document.getElementById('an-game-list');if(!el)return;el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>';try{let endpoint='/api/v1/admin/games/today';if(AN_DATE_FILTER==='tomorrow')endpoint='/api/v1/admin/games/tomorrow';else if(AN_DATE_FILTER==='day-after')endpoint='/api/v1/admin/games/day-after-tomorrow';else if(AN_DATE_FILTER==='next-week')endpoint='/api/v1/admin/games/next-week';else if(AN_DATE_FILTER==='custom'){const d=document.getElementById('an-custom-date')?.value;if(d)endpoint=`/api/v1/admin/games/by-date?date=${d}`;}const res=await GET(endpoint);AN_GAMES_ALL=res.data||[];renderAnalyticsGameList(AN_GAMES_ALL);}catch(e){el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;}}
+
+function filterAnalyticsGames(){const q=(document.getElementById('an-game-search')?.value||'').toLowerCase();const list=q?AN_GAMES_ALL.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q)):AN_GAMES_ALL;renderAnalyticsGameList(list);}
+
+function renderAnalyticsGameList(games){const el=document.getElementById('an-game-list');if(!el)return;if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No fixtures found</div>';return;}window._AN_GAMES_MAP={};games.forEach(g=>{window._AN_GAMES_MAP[g.id]=g;});const selId=AN_GAME_SEL?.id;el.innerHTML=games.map(g=>{const isSel=g.id===selId;return`<div onclick="selectAnalyticsGame('${g.id}')" style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s" onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'" onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'"><div style="display:flex;align-items:center;gap:8px">${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div><div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div><div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)">game id: ${g.id}</div></div>${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}</div></div>`;}).join('');}
+
+function selectAnalyticsGame(id){const g=window._AN_GAMES_MAP?.[id];if(!g)return;AN_GAME_SEL=g;document.getElementById('an-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;document.getElementById('an-game-ids').textContent=`game id: ${g.id}`;document.getElementById('an-game-selected').style.display='flex';filterAnalyticsGames();document.getElementById('analytics-result').classList.remove('show');}
+function clearAnalyticsGame(){AN_GAME_SEL=null;document.getElementById('an-game-selected').style.display='none';document.getElementById('analytics-result').classList.remove('show');filterAnalyticsGames();}
+
+async function runAnalytics(){
+  if(!AN_GAME_SEL)return showToast('Please select a fixture above first','red');
+  const gameId=AN_GAME_SEL.id;if(!gameId)return showToast('Selected game has no UUID','red');
+  const btn=document.getElementById('an-btn');btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Analysing…';
   document.getElementById('analytics-result').classList.remove('show');
-  document.getElementById('an-game-search').value='';
-  document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));
-  document.querySelector('#page-analytics .csdf[data-d="today"]')?.classList.add('active');
-  const acd=document.getElementById('an-custom-date'); if(acd)acd.value='';
-  loadAnalyticsGames();
-}
-
-function setAnalyticsDateFilter(d, el) {
-  AN_DATE_FILTER=d;
-  document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  if(d!=='custom'){const acd=document.getElementById('an-custom-date');if(acd)acd.value='';}
-  AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
-  document.getElementById('analytics-result').classList.remove('show');
-  loadAnalyticsGames();
-}
-
-async function loadAnalyticsGames() {
-  const el=document.getElementById('an-game-list'); if(!el)return;
-  el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>';
-  try {
-    let endpoint='/api/v1/admin/games/today';
-    if      (AN_DATE_FILTER==='tomorrow')  endpoint='/api/v1/admin/games/tomorrow';
-    else if (AN_DATE_FILTER==='day-after') endpoint='/api/v1/admin/games/day-after-tomorrow';
-    else if (AN_DATE_FILTER==='next-week') endpoint='/api/v1/admin/games/next-week';
-    else if (AN_DATE_FILTER==='custom') {
-      const d=document.getElementById('an-custom-date')?.value;
-      if(d) endpoint=`/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res=await GET(endpoint);
-    AN_GAMES_ALL=res.data||[];
-    renderAnalyticsGameList(AN_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
-}
-
-function filterAnalyticsGames() {
-  const q=(document.getElementById('an-game-search')?.value||'').toLowerCase();
-  const list=q?AN_GAMES_ALL.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q)):AN_GAMES_ALL;
-  renderAnalyticsGameList(list);
-}
-
-function renderAnalyticsGameList(games) {
-  const el=document.getElementById('an-game-list'); if(!el)return;
-  if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No fixtures found</div>';return;}
-  window._AN_GAMES_MAP={};
-  games.forEach(g=>{window._AN_GAMES_MAP[g.id]=g;});
-  const selId=AN_GAME_SEL?.id;
-  el.innerHTML=games.map(g=>{
-    const isSel=g.id===selId;
-    return `
-      <div onclick="selectAnalyticsGame('${g.id}')"
-        style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s"
-        onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'"
-        onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)">game id: ${g.id}</div>
-          </div>
-          ${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function selectAnalyticsGame(id) {
-  const g=window._AN_GAMES_MAP?.[id]; if(!g)return;
-  AN_GAME_SEL=g;
-  document.getElementById('an-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;
-  document.getElementById('an-game-ids').textContent=`game id: ${g.id}`;
-  document.getElementById('an-game-selected').style.display='flex';
-  filterAnalyticsGames();
-  document.getElementById('analytics-result').classList.remove('show');
-}
-
-function clearAnalyticsGame() {
-  AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
-  document.getElementById('analytics-result').classList.remove('show');
-  filterAnalyticsGames();
-}
-
-async function runAnalytics() {
-  if(!AN_GAME_SEL) return showToast('Please select a fixture above first','red');
-  const gameId=AN_GAME_SEL.id;
-  if(!gameId) return showToast('Selected game has no UUID','red');
-  const btn=document.getElementById('an-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Analysing…';
-  document.getElementById('analytics-result').classList.remove('show');
-  try {
-    const res=await GET(`/api/v1/analytics/match?gameId=${gameId}`);
-    if(!res.success) throw new Error(res.message);
-    const d=res.data;
-    document.getElementById('an-stats').innerHTML=[
-      {label:'Home Win Rate',val:`${d.homeWinRate??0}%`,ic:'ic-green'},
-      {label:'Away Win Rate',val:`${d.awayWinRate??0}%`,ic:'ic-red'},
-      {label:'Draw Rate',    val:`${d.drawRate??0}%`,   ic:'ic-gray'},
-      {label:'Confidence',   val:`${d.confidencePercent??0}%`,ic:'ic-blue'},
-    ].map(s=>`<div class="stat-card"><div class="stat-card-icon ${s.ic}"><i class="fa fa-chart-pie"></i></div><div class="stat-label">${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
-    document.getElementById('an-btts').textContent=(d.bttsRate??0)+'%';
-    document.getElementById('an-o25').textContent=(d.over25Rate??0)+'%';
-    document.getElementById('an-hg').textContent=d.homeAvgGoalsScored??'—';
-    document.getElementById('an-ag').textContent=d.awayAvgGoalsScored??'—';
-    document.getElementById('an-conf').textContent=(d.confidencePercent??0)+'%';
-    document.getElementById('an-risk').textContent=d.riskLevel??'—';
-    document.getElementById('an-outcome').textContent=d.predictedOutcome??'—';
-    document.getElementById('an-tip').textContent='Suggested tip: '+(d.suggestedTip??'—');
-    const riskChip=d.riskLevel?.includes('LOW')?'chip-green':d.riskLevel?.includes('MEDIUM')?'chip-gold':'chip-red';
-    document.getElementById('an-chips').innerHTML=`<span class="chip ${riskChip}">${d.riskLevel??''}</span><span class="chip chip-blue">${d.confidencePercent??0}% Confidence</span>`;
+  try{const res=await GET(`/api/v1/analytics/match?gameId=${gameId}`);if(!res.success)throw new Error(res.message);const d=res.data;
+    document.getElementById('an-stats').innerHTML=[{label:'Home Win Rate',val:`${d.homeWinRate??0}%`,ic:'ic-green'},{label:'Away Win Rate',val:`${d.awayWinRate??0}%`,ic:'ic-red'},{label:'Draw Rate',val:`${d.drawRate??0}%`,ic:'ic-gray'},{label:'Confidence',val:`${d.confidencePercent??0}%`,ic:'ic-blue'}].map(s=>`<div class="stat-card"><div class="stat-card-icon ${s.ic}"><i class="fa fa-chart-pie"></i></div><div class="stat-label">${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
+    document.getElementById('an-btts').textContent=(d.bttsRate??0)+'%';document.getElementById('an-o25').textContent=(d.over25Rate??0)+'%';document.getElementById('an-hg').textContent=d.homeAvgGoalsScored??'—';document.getElementById('an-ag').textContent=d.awayAvgGoalsScored??'—';document.getElementById('an-conf').textContent=(d.confidencePercent??0)+'%';document.getElementById('an-risk').textContent=d.riskLevel??'—';document.getElementById('an-outcome').textContent=d.predictedOutcome??'—';document.getElementById('an-tip').textContent='Suggested tip: '+(d.suggestedTip??'—');
+    const riskChip=d.riskLevel?.includes('LOW')?'chip-green':d.riskLevel?.includes('MEDIUM')?'chip-gold':'chip-red';document.getElementById('an-chips').innerHTML=`<span class="chip ${riskChip}">${d.riskLevel??''}</span><span class="chip chip-blue">${d.confidencePercent??0}% Confidence</span>`;
     document.getElementById('analytics-result').classList.add('show');
-    setTimeout(()=>{
-      if(anProbRef) try{anProbRef.destroy();}catch{}
-      if(anGoalsRef) try{anGoalsRef.destroy();}catch{}
-      const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-      anProbRef=new Chart(document.getElementById('anProbChart'),{type:'doughnut',data:{labels:['Home Win','Draw','Away Win'],datasets:[{data:[d.homeWinRate,d.drawRate,d.awayWinRate],backgroundColor:['#2d9e6e','#5c5a56','#e05a2b'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
-      anGoalsRef=new Chart(document.getElementById('anGoalsChart'),{type:'bar',data:{labels:['Home Scored','Home Conceded','Away Scored','Away Conceded'],datasets:[{data:[d.homeAvgGoalsScored,d.homeAvgGoalsConceded,d.awayAvgGoalsScored,d.awayAvgGoalsConceded],backgroundColor:['#2d9e6e','#0f2d1f','#e05a2b','#2d1610'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-    },60);
-  } catch(e){showToast('Analytics failed: '+e.message,'red');}
+    setTimeout(()=>{if(anProbRef)try{anProbRef.destroy();}catch{}if(anGoalsRef)try{anGoalsRef.destroy();}catch{}const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};anProbRef=new Chart(document.getElementById('anProbChart'),{type:'doughnut',data:{labels:['Home Win','Draw','Away Win'],datasets:[{data:[d.homeWinRate,d.drawRate,d.awayWinRate],backgroundColor:['#2d9e6e','#5c5a56','#e05a2b'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});anGoalsRef=new Chart(document.getElementById('anGoalsChart'),{type:'bar',data:{labels:['Home Scored','Home Conceded','Away Scored','Away Conceded'],datasets:[{data:[d.homeAvgGoalsScored,d.homeAvgGoalsConceded,d.awayAvgGoalsScored,d.awayAvgGoalsConceded],backgroundColor:['#2d9e6e','#0f2d1f','#e05a2b','#2d1610'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});},60);}
+  catch(e){showToast('Analytics failed: '+e.message,'red');}
   finally{btn.disabled=false;btn.innerHTML='<i class="fa fa-brain"></i> Run AI Analysis';}
 }
 
 // ── SCHEDULER ────────────────────────────────────────────────
 
-const JOBS=[
-  {key:'fetchTodayFixtures',     label:'Fetch Today Fixtures',    path:'fixtures',           icon:'fa-futbol', color:'ic-blue'},
-  {key:'fetchOdds',              label:'Fetch Odds',              path:'odds',               icon:'fa-percent',color:'ic-gold'},
-  {key:'fetchLiveScores',        label:'Fetch Live Scores',       path:'live-scores',        icon:'fa-circle', color:'ic-green'},
-  {key:'autoSettlePredictions',  label:'Auto-Settle Predictions', path:'settle-predictions', icon:'fa-check',  color:'ic-blue'},
-  {key:'expireVipSubscriptions', label:'Expire VIP Subscriptions',path:'expire-vip',         icon:'fa-crown',  color:'ic-gold'},
-];
+const JOBS=[{key:'fetchTodayFixtures',label:'Fetch Today Fixtures',path:'fixtures',icon:'fa-futbol',color:'ic-blue'},{key:'fetchOdds',label:'Fetch Odds',path:'odds',icon:'fa-percent',color:'ic-gold'},{key:'fetchLiveScores',label:'Fetch Live Scores',path:'live-scores',icon:'fa-circle',color:'ic-green'},{key:'autoSettlePredictions',label:'Auto-Settle Predictions',path:'settle-predictions',icon:'fa-check',color:'ic-blue'},{key:'expireVipSubscriptions',label:'Expire VIP Subscriptions',path:'expire-vip',icon:'fa-crown',color:'ic-gold'}];
 
-async function loadSchedulerStatus(){
-  try{const res=await GET('/api/v1/admin/scheduler/status');renderSchedulerJobs(res.success?res.data:{});}
-  catch{renderSchedulerJobs({});}
-}
+async function loadSchedulerStatus(){try{const res=await GET('/api/v1/admin/scheduler/status');renderSchedulerJobs(res.success?res.data:{});}catch{renderSchedulerJobs({});}}
 
-function renderSchedulerJobs(status){
-  document.getElementById('scheduler-jobs').innerHTML=JOBS.map(j=>{
-    const st=status[j.key]||{};
-    return `<div class="job-card">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="stat-card-icon ${j.color}" style="width:36px;height:36px;margin:0;flex-shrink:0"><i class="fa ${j.icon}"></i></div>
-        <div><div class="job-name">${j.label}</div><div class="job-meta">${st.running?'⚙️ Running…':(st.lastRun?'✅ Last run: '+fmtDate(st.lastRun):'Never run')}</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="job-status-dot ${st.running?'running':st.lastRun?'done':''}"></div>
-        <button class="btn btn-ghost btn-sm" id="job-btn-${j.key}" onclick="triggerJob('${j.path}','${j.key}')"><i class="fa fa-play"></i> Run</button>
-      </div>
-    </div>`;
-  }).join('');
-}
+function renderSchedulerJobs(status){document.getElementById('scheduler-jobs').innerHTML=JOBS.map(j=>{const st=status[j.key]||{};return`<div class="job-card"><div style="display:flex;align-items:center;gap:12px"><div class="stat-card-icon ${j.color}" style="width:36px;height:36px;margin:0;flex-shrink:0"><i class="fa ${j.icon}"></i></div><div><div class="job-name">${j.label}</div><div class="job-meta">${st.running?'⚙️ Running…':(st.lastRun?'✅ Last run: '+fmtDate(st.lastRun):'Never run')}</div></div></div><div style="display:flex;align-items:center;gap:10px"><div class="job-status-dot ${st.running?'running':st.lastRun?'done':''}"></div><button class="btn btn-ghost btn-sm" id="job-btn-${j.key}" onclick="triggerJob('${j.path}','${j.key}')"><i class="fa fa-play"></i> Run</button></div></div>`;}).join('');}
 
-async function triggerJob(path,key){
-  const btnId=key?'job-btn-'+key:null;
-  if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=true;b.innerHTML='<div class="spinner"></div>';}}
-  try{
-    const res=await POST(`/api/v1/admin/scheduler/run/${path}`);
-    if(!res.success)throw new Error(res.message);
-    showToast(res.message||'Job triggered','green');
-    setTimeout(loadSchedulerStatus,2000);
-  } catch(e){showToast(e.message,'red');}
-  finally{if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=false;b.innerHTML='<i class="fa fa-play"></i> Run';}}}
-}
+async function triggerJob(path,key){const btnId=key?'job-btn-'+key:null;if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=true;b.innerHTML='<div class="spinner"></div>';}}try{const res=await POST(`/api/v1/admin/scheduler/run/${path}`);if(!res.success)throw new Error(res.message);showToast(res.message||'Job triggered','green');setTimeout(loadSchedulerStatus,2000);}catch(e){showToast(e.message,'red');}finally{if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=false;b.innerHTML='<i class="fa fa-play"></i> Run';}}}}
 
 // ── PROFILE ───────────────────────────────────────────────────
 
-async function _doProfileSave(nameId,emailId,curPwId,newPwId,cnfPwId,btnId){
-  const body={fullName:v(nameId),email:v(emailId)};
-  const curPw=v(curPwId),newPw=v(newPwId),cnfPw=v(cnfPwId);
-  if(newPw){
-    if(newPw!==cnfPw){showToast('Passwords do not match','red');return;}
-    body.currentPassword=curPw; body.newPassword=newPw; body.confirmNewPassword=cnfPw;
-  }
-  await submitBtn(btnId,async()=>{
-    const res=await PATCH('/api/v1/admin/me',body);
-    if(!res.success)throw new Error(res.message);
-    ADMIN={...ADMIN,...res.data}; AdminStore.set(ADMIN);
-    document.getElementById('sidebar-name').textContent=ADMIN.fullName;
-    document.getElementById('sidebar-avatar').textContent=ADMIN.fullName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    document.getElementById('prof-name').value=ADMIN.fullName;
-    document.getElementById('prof-email').value=ADMIN.email||'';
-    document.getElementById('modal-prof-name').value=ADMIN.fullName;
-    document.getElementById('modal-prof-email').value=ADMIN.email||'';
-    showToast('Profile updated','green');
-  });
-}
+async function _doProfileSave(nameId,emailId,curPwId,newPwId,cnfPwId,btnId){const body={fullName:v(nameId),email:v(emailId)};const curPw=v(curPwId),newPw=v(newPwId),cnfPw=v(cnfPwId);if(newPw){if(newPw!==cnfPw){showToast('Passwords do not match','red');return;}body.currentPassword=curPw;body.newPassword=newPw;body.confirmNewPassword=cnfPw;}await submitBtn(btnId,async()=>{const res=await PATCH('/api/v1/admin/me',body);if(!res.success)throw new Error(res.message);ADMIN={...ADMIN,...res.data};AdminStore.set(ADMIN);document.getElementById('sidebar-name').textContent=ADMIN.fullName;document.getElementById('sidebar-avatar').textContent=ADMIN.fullName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();document.getElementById('prof-name').value=ADMIN.fullName;document.getElementById('prof-email').value=ADMIN.email||'';document.getElementById('modal-prof-name').value=ADMIN.fullName;document.getElementById('modal-prof-email').value=ADMIN.email||'';showToast('Profile updated','green');});}
 function submitProfile(){_doProfileSave('prof-name','prof-email','prof-cur-pw','prof-new-pw','prof-cnf-pw','prof-save-btn');}
 function submitProfileModal(){_doProfileSave('modal-prof-name','modal-prof-email','modal-prof-cur-pw','modal-prof-new-pw','modal-prof-cnf-pw','profile-submit-btn');closeModal('profile-modal');}
 
@@ -3865,78 +2799,31 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.addEventListener('click',e=>{if(e.target.classList.contains('overlay'))e.target.classList.remove('open');});
 
 let toastTimer;
-function showToast(msg,type='green'){
-  document.querySelector('.toast')?.remove(); clearTimeout(toastTimer);
-  const icons={green:'fa-circle-check',red:'fa-circle-xmark',blue:'fa-circle-info',gold:'fa-crown'};
-  const colors={green:'var(--accent)',red:'var(--accent2)',blue:'var(--blue)',gold:'var(--gold)'};
-  const t=document.createElement('div'); t.className='toast';
-  t.innerHTML=`<i class="fa ${icons[type]||'fa-circle-check'}" style="color:${colors[type]||colors.green};font-size:15px"></i> ${msg}`;
-  document.body.appendChild(t); toastTimer=setTimeout(()=>t.remove(),3500);
-}
+function showToast(msg,type='green'){document.querySelector('.toast')?.remove();clearTimeout(toastTimer);const icons={green:'fa-circle-check',red:'fa-circle-xmark',blue:'fa-circle-info',gold:'fa-crown'};const colors={green:'var(--accent)',red:'var(--accent2)',blue:'var(--blue)',gold:'var(--gold)'};const t=document.createElement('div');t.className='toast';t.innerHTML=`<i class="fa ${icons[type]||'fa-circle-check'}" style="color:${colors[type]||colors.green};font-size:15px"></i> ${msg}`;document.body.appendChild(t);toastTimer=setTimeout(()=>t.remove(),3500);}
 
-async function submitBtn(btnId,fn){
-  const btn=document.getElementById(btnId);
-  if(!btn){await fn();return;}
-  const orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Saving…';
-  try{await fn();}catch(e){showToast(e.message,'red');}
-  finally{btn.disabled=false;btn.innerHTML=orig;}
-}
+async function submitBtn(btnId,fn){const btn=document.getElementById(btnId);if(!btn){await fn();return;}const orig=btn.innerHTML;btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Saving…';try{await fn();}catch(e){showToast(e.message,'red');}finally{btn.disabled=false;btn.innerHTML=orig;}}
 
 const v         = id => document.getElementById(id)?.value?.trim()||'';
 const numOrNull = id => { const val=v(id); return val?parseFloat(val):null; };
 function fmtTime(dt){if(!dt)return'—';try{return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}catch{return dt;}}
 function fmtDate(dt){if(!dt)return'—';try{return new Date(dt).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'});}catch{return dt;}}
-function statusChip(g){
-  if(!g.status)return'';
-  if(g.status==='LIVE')     return`<span class="chip chip-green"><span class="live-dot" style="width:6px;height:6px;margin-right:3px"></span>LIVE${g.elapsedMinutes?` ${g.elapsedMinutes}'`:''}</span>`;
-  if(g.status==='UPCOMING') return`<span class="chip chip-blue">Upcoming</span>`;
-  if(g.status==='FINISHED') return`<span class="chip chip-gray">Finished</span>`;
-  return`<span class="chip chip-gray">${g.status}</span>`;
-}
+function statusChip(g){if(!g.status)return'';if(g.status==='LIVE')return`<span class="chip chip-green"><span class="live-dot" style="width:6px;height:6px;margin-right:3px"></span>LIVE${g.elapsedMinutes?` ${g.elapsedMinutes}'`:''}</span>`;if(g.status==='UPCOMING')return`<span class="chip chip-blue">Upcoming</span>`;if(g.status==='FINISHED')return`<span class="chip chip-gray">Finished</span>`;return`<span class="chip chip-gray">${g.status}</span>`;}
 
 // ── MOBILE NAV ────────────────────────────────────────────────
 
-function syncMobileNav(page) {
-  const map={dashboard:'mn-dash',users:'mn-users',games:'mn-games',slips:'mn-slips','create-slip':'mn-slips'};
-  document.querySelectorAll('.mobile-nav-item').forEach(el=>el.classList.remove('active'));
-  const active=map[page];
-  if(active) document.getElementById(active)?.classList.add('active');
-}
-
-function toggleMoreMenu() {
-  const m=document.getElementById('mobile-more-menu');
-  const isOpen=m.classList.contains('open');
-  if(isOpen){ m.classList.remove('open'); }
-  else {
-    m.classList.add('open');
-    setTimeout(()=>{
-      document.addEventListener('click',function _close(e){
-        if(!m.contains(e.target)&&!e.target.closest('.mobile-nav-more')){
-          m.classList.remove('open');
-          document.removeEventListener('click',_close);
-        }
-      });
-    },50);
-  }
-}
-
-function mobileNavTo(page) {
-  document.getElementById('mobile-more-menu')?.classList.remove('open');
-  nav(page,null);
-}
+function syncMobileNav(page){const map={dashboard:'mn-dash',users:'mn-users',games:'mn-games',slips:'mn-slips','create-slip':'mn-slips'};document.querySelectorAll('.mobile-nav-item').forEach(el=>el.classList.remove('active'));const active=map[page];if(active)document.getElementById(active)?.classList.add('active');}
+function toggleMoreMenu(){const m=document.getElementById('mobile-more-menu');const isOpen=m.classList.contains('open');if(isOpen){m.classList.remove('open');}else{m.classList.add('open');setTimeout(()=>{document.addEventListener('click',function _close(e){if(!m.contains(e.target)&&!e.target.closest('.mobile-nav-more')){m.classList.remove('open');document.removeEventListener('click',_close);}});},50);}}
+function mobileNavTo(page){document.getElementById('mobile-more-menu')?.classList.remove('open');nav(page,null);}
 
 const _navOrig=nav;
-window.nav=function(page,el){ _navOrig(page,el); syncMobileNav(page); };
+window.nav=function(page,el){_navOrig(page,el);syncMobileNav(page);};
 
 const _launchOrig=launchApp;
-window.launchApp=function(){ _launchOrig(); document.getElementById('mobile-nav')?.style.setProperty('display','flex'); };
+window.launchApp=function(){_launchOrig();document.getElementById('mobile-nav')?.style.setProperty('display','flex');};
 
 const _logoutOrig=logout;
-window.logout=function(){
-  _logoutOrig();
-  document.getElementById('mobile-nav')?.style.setProperty('display','none');
-  document.getElementById('mobile-more-menu')?.classList.remove('open');
-};
+window.logout=function(){_logoutOrig();document.getElementById('mobile-nav')?.style.setProperty('display','none');document.getElementById('mobile-more-menu')?.classList.remove('open');};
 </script>
+   
 </body>
 </html>
