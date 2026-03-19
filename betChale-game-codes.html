@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>BetChale — Game Codes</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root {
+  --bg:#0f0e0d; --surface:#1a1917; --panel:#212019;
+  --border:#2e2c29; --border2:#3a3834;
+  --text:#e8e6e1; --text2:#a09d97; --muted:#5c5a56;
+  --accent:#2d9e6e; --accent-lt:#0f2d1f;
+  --accent2:#e05a2b; --accent2-lt:#2d1610;
+  --gold:#c8943a; --gold-lt:#2a1f0a;
+  --blue:#3a72c8; --blue-lt:#0d1e3a;
+  --radius:10px; --radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.5);
+  --font:'Sora',sans-serif;
+  --font-serif:'Crimson Pro',serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --page-pad:28px;
+  --topbar-h:58px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(15,14,13,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 var(--page-pad);height:var(--topbar-h);}
+.topbar-brand{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:32px;height:32px;border-radius:8px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:17px;height:17px;fill:none;stroke:#0f0e0d;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:-.3px;}
+.topbar-title{font-size:15px;font-weight:600;color:var(--text2);flex:1;}
+.topbar-actions{display:flex;gap:8px;align-items:center;}
+
+/* LAYOUT */
+.page-wrap{padding:var(--page-pad);max-width:1200px;margin:0 auto;}
+.page-headline{font-family:var(--font-serif);font-size:28px;font-weight:600;margin-bottom:4px;letter-spacing:-.3px;}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:28px;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.card-pad{padding:20px;}
+.card-hd{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.card-title{font-size:14px;font-weight:700;}
+.card-sub{font-size:12px;color:var(--muted);}
+
+/* FORM */
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:6px;}
+.form-input{width:100%;background:var(--panel);border:1.5px solid var(--border2);border-radius:8px;padding:11px 14px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none;}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,158,110,.15);background:#252320;}
+.form-input::placeholder{color:var(--muted);}
+select.form-input{cursor:pointer;color-scheme:dark;}
+select.form-input option{background:#1a1917;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:8px;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none;min-height:42px;-webkit-tap-highlight-color:transparent;user-select:none;}
+.btn-primary{background:var(--text);color:#0f0e0d;}
+.btn-primary:hover{background:#f0ede8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.4);}
+.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border);}
+.btn-ghost:hover{background:var(--panel);color:var(--text);}
+.btn-success{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;}
+.btn-success:hover{background:#162a1e;}
+.btn-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810;}
+.btn-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040;}
+.btn-danger{background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518;}
+.btn-sm{padding:8px 14px;font-size:12.5px;min-height:38px;}
+.btn-xs{padding:6px 10px;font-size:12px;min-height:34px;border-radius:6px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn:active:not(:disabled){transform:scale(.97)!important;}
+.btn-full{width:100%;}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono);white-space:nowrap;}
+.chip-green{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;}
+.chip-red{background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518;}
+.chip-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810;}
+.chip-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040;}
+.chip-gray{background:var(--panel);color:var(--text2);border:1px solid var(--border2);}
+
+/* SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.mb16{margin-bottom:16px;}
+.mb24{margin-bottom:24px;}
+
+/* FETCH PANEL */
+.fetch-hero{background:linear-gradient(135deg,var(--accent-lt) 0%,var(--gold-lt) 100%);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;margin-bottom:24px;position:relative;overflow:hidden;}
+.fetch-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(45,158,110,.08);pointer-events:none;}
+.fetch-hero-title{font-family:var(--font-serif);font-size:22px;font-weight:600;margin-bottom:6px;}
+.fetch-hero-sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
+.fetch-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+.fetch-row .form-group{margin-bottom:0;}
+
+/* RESULT PREVIEW */
+.result-panel{border:1.5px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.result-header{padding:14px 18px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.result-bm-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.result-bm-name{font-size:16px;font-weight:700;}
+.result-code{font-family:var(--font-mono);font-size:13px;color:var(--accent);background:var(--accent-lt);border:1px solid #1a4d32;padding:3px 10px;border-radius:6px;}
+.result-count{font-size:12px;color:var(--muted);font-family:var(--font-mono);}
+.result-odds-big{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--gold);}
+.selections-wrap{padding:12px 14px;}
+.sel-row{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:border-color .12s;}
+.sel-row:last-child{margin-bottom:0;}
+.sel-row:hover{border-color:var(--border2);}
+.sel-num{width:24px;height:24px;border-radius:50%;background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);}
+.sel-info{flex:1;min-width:0;}
+.sel-match{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sel-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.sel-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sel-pick{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--blue);background:var(--blue-lt);border:1px solid #0d2040;padding:2px 8px;border-radius:5px;}
+.sel-odds{font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--gold);}
+.result-confirm{padding:12px 18px;background:var(--accent-lt);border-top:1px solid #1a4d32;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.result-confirm-msg{font-size:12px;color:var(--accent);flex:1;}
+
+/* UPLOAD SECTION */
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius);padding:28px;text-align:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-lt);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-icon{font-size:28px;color:var(--muted);margin-bottom:10px;}
+.upload-text{font-size:13px;color:var(--text2);margin-bottom:4px;}
+.upload-hint{font-size:11px;color:var(--muted);}
+.upload-preview{display:none;margin-top:14px;}
+.upload-preview img{max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;border:1px solid var(--border);}
+
+/* GAME DETAILS */
+.game-detail-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
+.gd-teams{font-size:16px;font-weight:700;margin-bottom:6px;}
+.gd-score{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--text);}
+.gd-meta{font-size:12px;color:var(--muted);margin-top:4px;}
+.odds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px;}
+.odds-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.odds-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;font-family:var(--font-mono);}
+.odds-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--gold);}
+
+/* HISTORY TABLE */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:480px;}
+thead th{padding:10px 14px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--panel);border-bottom:1px solid var(--border);font-family:var(--font-mono);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--panel);}
+td{padding:11px 14px;font-size:13px;vertical-align:middle;}
+.mono{font-family:var(--font-mono);font-size:12px;}
+
+/* LIVE DOT */
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13px;animation:toastIn .25s ease;min-width:240px;max-width:calc(100vw - 40px);}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* METRIC ROW */
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.metric-row:last-child{border-bottom:none;}
+.m-label{font-size:13px;color:var(--text2);}
+.m-val{font-family:var(--font-mono);font-size:13px;font-weight:600;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 24px;color:var(--muted);}
+.empty-state i{font-size:36px;opacity:.2;display:block;margin-bottom:12px;}
+.empty-state p{font-size:13px;}
+
+/* SECTION HEADER */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.sec-title{font-size:15px;font-weight:700;}
+.sec-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--panel);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  :root{--page-pad:14px;--topbar-h:52px;}
+  html{font-size:13.5px;}
+  .page-headline{font-size:22px;}
+  .page-sub{font-size:12px;margin-bottom:16px;}
+  .g2,.g3{grid-template-columns:1fr!important;}
+  .fetch-hero{padding:18px 16px;margin-bottom:16px;}
+  .fetch-hero-title{font-size:18px;}
+  .fetch-row{flex-direction:column;}
+  .fetch-row .form-group{width:100%;}
+  .fetch-row .btn{width:100%;}
+  .result-header{flex-direction:column;align-items:flex-start;}
+  .result-odds-big{font-size:22px;}
+  .sel-row{flex-wrap:wrap;gap:8px;}
+  .sel-info{width:100%;order:-1;}
+  .card-hd{flex-direction:column;align-items:flex-start;}
+  .form-input{font-size:16px!important;}
+  select.form-input{font-size:16px!important;}
+  .result-confirm{flex-direction:column;align-items:flex-start;}
+  .topbar{padding:0 14px;gap:8px;}
+  .topbar-title{display:none;}
+  td,thead th{padding:9px 11px;font-size:12px;}
+  .upload-zone{padding:20px 14px;}
+  .odds-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:480px){
+  html{font-size:13px;}
+  .page-headline{font-size:20px;}
+  .result-bm-row{flex-direction:column;align-items:flex-start;gap:6px;}
+  .g2{grid-template-columns:1fr;}
+  .odds-grid{grid-template-columns:1fr 1fr;}
+  td:first-child,thead th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);}
+  tbody tr:hover td:first-child{background:var(--panel);}
+}
+@media(min-width:1200px){
+  .page-wrap{padding:32px 40px;}
+  .fetch-hero{padding:32px 28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div class="brand-name">BetChale</div>
+  </div>
+  <div class="topbar-title">
+    <span style="color:var(--muted);font-size:13px;margin-right:8px">/</span>
+    Game Codes &amp; Booking Fetch
+  </div>
+  <div class="topbar-actions">
+    <a href="betChale-admin.html" class="btn btn-ghost btn-sm"><i class="fa fa-arrow-left"></i> <span style="display:none" class="show-sm">Back</span></a>
+    <button class="btn btn-ghost btn-sm" onclick="clearAll()" title="Clear all"><i class="fa fa-rotate"></i></button>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div class="page-headline">Game Codes &amp; Booking Fetch</div>
+  <p class="page-sub">Fetch game details from a bookmaker booking code, review selections, upload proof, then save to platform</p>
+
+  <!-- FETCH HERO -->
+  <div class="fetch-hero">
+    <div class="fetch-hero-title"><i class="fa fa-bolt" style="color:var(--accent);margin-right:8px;font-size:20px"></i>Auto-Fetch from Bookmaker</div>
+    <div class="fetch-hero-sub">Paste a booking code — we'll pull all selections, odds, and match details automatically</div>
+    <div class="fetch-row">
+      <div class="form-group" style="flex:0 0 200px;min-width:150px">
+        <label class="form-label">Bookmaker</label>
+        <select class="form-input" id="fetch-bm">
+          <option value="sportybet-gh">Sportybet Ghana</option>
+          <option value="sportybet-ng">Sportybet Nigeria</option>
+          <option value="betway-gh">Betway Ghana</option>
+          <option value="betway-ng">Betway Nigeria</option>
+          <option value="bet9ja">Bet9ja</option>
+          <option value="1xbet">1xBet</option>
+          <option value="melbet">Melbet</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1;min-width:140px">
+        <label class="form-label">Booking Code <span style="color:var(--accent2)">*</span></label>
+        <input class="form-input" id="fetch-code" placeholder="e.g. ABC123XY" style="font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')fetchCode()"/>
+      </div>
+      <div class="form-group" style="flex:0 0 auto">
+        <label class="form-label" style="opacity:0">Fetch</label>
+        <button class="btn btn-primary" id="fetch-btn" onclick="fetchCode()">
+          <i class="fa fa-bolt"></i> Fetch Details
+        </button>
+      </div>
+    </div>
+    <div id="fetch-error" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(224,90,43,.12);border:1px solid #5a2518;border-radius:8px;font-size:13px;color:var(--accent2)">
+      <i class="fa fa-circle-xmark" style="margin-right:6px"></i><span id="fetch-error-msg">Failed to fetch</span>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="fetch-result" style="display:none" class="mb24">
+    <div class="result-panel">
+      <div class="result-header">
+        <div class="result-bm-row">
+          <div>
+            <div class="result-bm-name" id="res-bm-name">Sportybet</div>
+            <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+              <span class="result-code" id="res-code">—</span>
+              <span class="chip chip-green"><i class="fa fa-circle-check" style="font-size:9px"></i> Fetched</span>
+              <span class="result-count" id="res-count">— selections</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:2px;font-family:var(--font-mono)">TOTAL ODDS</div>
+          <div class="result-odds-big" id="res-odds">—×</div>
+        </div>
+      </div>
+      <div class="selections-wrap" id="res-selections"></div>
+      <div class="result-confirm">
+        <i class="fa fa-circle-info" style="color:var(--accent);flex-shrink:0"></i>
+        <div class="result-confirm-msg">Fields below are pre-filled. Review then upload image &amp; submit.</div>
+        <button class="btn btn-ghost btn-xs" onclick="clearFetchResult()"><i class="fa fa-xmark"></i> Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2 mb24">
+    <!-- LEFT: GAME DETAILS FORM -->
+    <div>
+      <div class="card mb16">
+        <div class="card-hd">
+          <div>
+            <div class="card-title">Game Details</div>
+            <div class="card-sub">Review and edit fetched game information</div>
+          </div>
+          <span class="chip chip-blue" id="detail-status-chip" style="display:none">Auto-filled</span>
+        </div>
+        <div class="card-pad">
+          <div class="g2">
+            <div class="form-group">
+              <label class="form-label">Home Team <span style="color:var(--accent2)">*</span></label>
+              <input class="form-input" id="gd-home" placeholder="e.g. Arsenal"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Away Team <span style="color:var(--accent2)">*</span></label>
+              <input class="form-input" id="gd-away" placeholder="e.g. Chelsea"/>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="form-group">
+              <label class="form-label">League / Competition</label>
+              <input class="form-input" id="gd-league" placeholder="e.g. Premier League"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kickoff Time</label>
+              <input class="form-input" id="gd-kickoff" type="datetime-local"/>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="form-group">
+              <label class="form-label">Bookmaker <span style="color:var(--accent2)">*</span></label>
+              <input class="form-input" id="gd-bookmaker" placeholder="e.g. Sportybet"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Booking Code <span style="color:var(--accent2)">*</span></label>
+              <input class="form-input" id="gd-code" placeholder="e.g. ABC123" style="font-family:var(--font-mono);letter-spacing:1px"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description / Tip</label>
+            <textarea class="form-input" id="gd-desc" rows="3" placeholder="e.g. Arsenal are unbeaten in last 5 home games. Expect goals both sides."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ODDS -->
+      <div class="card mb16">
+        <div class="card-hd">
+          <div class="card-title">Odds Configuration</div>
+        </div>
+        <div class="card-pad">
+          <div class="g3">
+            <div class="form-group">
+              <label class="form-label">Home Win (1)</label>
+              <input class="form-input" id="gd-hw" placeholder="2.10" type="number" step="0.01" style="font-family:var(--font-mono)"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Draw (X)</label>
+              <input class="form-input" id="gd-draw" placeholder="3.40" type="number" step="0.01" style="font-family:var(--font-mono)"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Away Win (2)</label>
+              <input class="form-input" id="gd-aw" placeholder="3.20" type="number" step="0.01" style="font-family:var(--font-mono)"/>
+            </div>
+          </div>
+          <div class="g3">
+            <div class="form-group">
+              <label class="form-label">Over 1.5</label>
+              <input class="form-input" id="gd-o15" placeholder="1.30" type="number" step="0.01" style="font-family:var(--font-mono)"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Over 2.5</label>
+              <input class="form-input" id="gd-o25" placeholder="1.90" type="number" step="0.01" style="font-family:var(--font-mono)"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total Odds</label>
+              <input class="form-input" id="gd-totalodds" placeholder="12.50" type="number" step="0.01" style="font-family:var(--font-mono);color:var(--gold)"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLAGS -->
+      <div class="card">
+        <div class="card-hd"><div class="card-title">Publish Settings</div></div>
+        <div class="card-pad">
+          <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:14px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px">
+              <input type="checkbox" id="gd-pub" checked style="accent-color:var(--accent);width:16px;height:16px"> Published
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px">
+              <input type="checkbox" id="gd-vip" style="accent-color:var(--accent);width:16px;height:16px"> VIP Only
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px">
+              <input type="checkbox" id="gd-feat" style="accent-color:var(--accent);width:16px;height:16px"> Featured
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Slip Type</label>
+            <select class="form-input" id="gd-sliptype">
+              <option value="FREE">FREE</option>
+              <option value="VIP">VIP</option>
+              <option value="PREMIUM">PREMIUM</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valid Until (optional)</label>
+            <input class="form-input" id="gd-valid" type="datetime-local"/>
+          </div>
+          <button class="btn btn-primary btn-full" id="save-btn" onclick="saveGameCode()">
+            <i class="fa fa-check"></i> Save &amp; Publish Game Code
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: UPLOAD + HISTORY -->
+    <div>
+      <!-- UPLOAD PROOF -->
+      <div class="card mb16">
+        <div class="card-hd">
+          <div>
+            <div class="card-title">Upload Slip Image</div>
+            <div class="card-sub">Optional proof / screenshot of the slip</div>
+          </div>
+        </div>
+        <div class="card-pad">
+          <div class="upload-zone" id="upload-zone" onclick="document.getElementById('slip-image').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')">
+            <input type="file" id="slip-image" accept="image/*" onchange="handleImageSelect(event)" style="display:none"/>
+            <div id="upload-placeholder">
+              <div class="upload-icon"><i class="fa fa-cloud-arrow-up"></i></div>
+              <div class="upload-text">Click or drag &amp; drop image here</div>
+              <div class="upload-hint">PNG, JPG, WEBP · Max 5MB</div>
+            </div>
+            <div class="upload-preview" id="upload-preview">
+              <img id="preview-img" src="" alt="Preview"/>
+              <div style="margin-top:10px;font-size:12px;color:var(--accent);display:flex;align-items:center;gap:6px;justify-content:center"><i class="fa fa-circle-check"></i> <span id="preview-filename">image.jpg</span></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn btn-ghost btn-sm" onclick="clearImage()" style="flex:1"><i class="fa fa-xmark"></i> Remove</button>
+            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('slip-image').click()" style="flex:1"><i class="fa fa-arrow-up-from-bracket"></i> Browse</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE PREVIEW CARD -->
+      <div class="card mb16" id="live-preview-card" style="display:none">
+        <div class="card-hd"><div class="card-title"><i class="fa fa-eye" style="color:var(--accent);margin-right:6px"></i>Live Preview</div></div>
+        <div class="card-pad">
+          <div style="font-size:18px;font-weight:700;margin-bottom:4px" id="lp-match">—</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px" id="lp-meta">—</div>
+          <div style="font-family:var(--font-mono);font-size:13px;color:var(--accent);background:var(--accent-lt);border:1px solid #1a4d32;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:12px" id="lp-code">CODE</div>
+          <div id="lp-odds" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+          <div style="font-family:var(--font-mono);font-size:30px;font-weight:700;color:var(--gold);margin-bottom:8px" id="lp-total">—</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="chip chip-blue" id="lp-type-chip">FREE</span>
+            <span class="chip chip-green" id="lp-pub-chip">Published</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT FETCHES -->
+      <div class="card">
+        <div class="card-hd">
+          <div>
+            <div class="card-title">Recent Fetches</div>
+            <div class="card-sub">This session's history</div>
+          </div>
+          <button class="btn btn-ghost btn-xs" onclick="clearHistory()"><i class="fa fa-trash"></i></button>
+        </div>
+        <div id="history-list">
+          <div class="empty-state" style="padding:28px">
+            <i class="fa fa-clock-rotate-left"></i>
+            <p>No fetches yet this session</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVED CODES TABLE -->
+  <div class="card mb24">
+    <div class="card-hd">
+      <div>
+        <div class="card-title">Saved Game Codes</div>
+        <div class="card-sub">All fetched &amp; saved codes in this session</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="loadSavedCodes()"><i class="fa fa-rotate"></i> Refresh</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Match</th><th>Bookmaker</th><th>Code</th><th>Total Odds</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="codes-tbody">
+          <tr><td colspan="7">
+            <div style="text-align:center;padding:28px;color:var(--muted);font-size:13px">
+              <i class="fa fa-ticket" style="opacity:.2;font-size:24px;display:block;margin-bottom:8px"></i>
+              No saved codes yet
+            </div>
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = 'https://bettingbackend-y3ck.onrender.com';
+const token = () => localStorage.getItem('bc_jwt') || '';
+
+async function apiCall(method, path, body=null, isFormData=false) {
+  const headers = {'ngrok-skip-browser-warning':'true'};
+  if(token()) headers['Authorization'] = `Bearer ${token()}`;
+  if(!isFormData && body) headers['Content-Type'] = 'application/json';
+  const opts = {method, headers};
+  if(body) opts.body = isFormData ? body : JSON.stringify(body);
+  try {
+    const res = await fetch(API_BASE + path, opts);
+    const json = await res.json().catch(() => ({}));
+    if(!res.ok) throw new Error(json.message || `HTTP ${res.status}`);
+    return json;
+  } catch(e) { throw e; }
+}
+
+let savedCodes = [];
+let fetchHistory = [];
+let currentFetchResult = null;
+
+// ── FETCH CODE ─────────────────────────────────────────────
+
+async function fetchCode() {
+  const code = (document.getElementById('fetch-code').value || '').trim().toUpperCase();
+  const bookmaker = document.getElementById('fetch-bm').value;
+  if(!code) return showToast('Enter a booking code first','red');
+
+  document.getElementById('fetch-error').style.display = 'none';
+  clearFetchResult();
+
+  const btn = document.getElementById('fetch-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Fetching…';
+
+  try {
+    const res = await apiCall('GET',
+      `/api/v1/admin/games/slips/preview-code?code=${encodeURIComponent(code)}&bookmaker=${encodeURIComponent(bookmaker)}`
+    );
+    if(!res.success) throw new Error(res.message || 'Fetch failed');
+    currentFetchResult = res.data;
+    prefillFromResult(res.data);
+    renderFetchResult(res.data);
+    addToHistory(res.data, code, bookmaker);
+    showToast(`Fetched ${(res.data.selections||[]).length} selection(s) from ${res.data.bookmaker || bookmaker}`, 'green');
+  } catch(e) {
+    const errEl = document.getElementById('fetch-error');
+    document.getElementById('fetch-error-msg').textContent = e.message || 'Failed to fetch booking code';
+    errEl.style.display = '';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa fa-bolt"></i> Fetch Details';
+  }
+}
+
+function prefillFromResult(r) {
+  const set = (id, val) => { if(val && document.getElementById(id)) document.getElementById(id).value = val; };
+  // Bookmaker & code
+  set('gd-bookmaker', r.bookmaker);
+  set('gd-code', r.bookingCode);
+  set('gd-totalodds', r.totalOdds ? parseFloat(r.totalOdds).toFixed(2) : '');
+  // First selection game data (if available)
+  const sels = r.selections || [];
+  if(sels.length) {
+    const first = sels[0];
+    set('gd-home', first.homeTeam);
+    set('gd-away', first.awayTeam);
+    set('gd-league', first.league);
+    if(first.kickoffTime) {
+      try {
+        const d = new Date(first.kickoffTime);
+        const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+        set('gd-kickoff', local);
+      } catch {}
+    }
+    // Build description
+    const descLines = sels.map(s =>
+      `${s.homeTeam} vs ${s.awayTeam}${s.league?' ('+s.league+')':''} — ${s.outcome||s.market||'?'} @ ${s.odds ? parseFloat(s.odds).toFixed(2) : '?'}`
+    );
+    document.getElementById('gd-desc').value = descLines.join('\n');
+    // Odds from first selection if numeric markets
+    const outcome = (sels[0].outcome || '').toLowerCase();
+    if(outcome.includes('home') || outcome.includes('1')) set('gd-hw', sels[0].odds);
+    if(outcome.includes('draw') || outcome.includes('x')) set('gd-draw', sels[0].odds);
+    if(outcome.includes('away') || outcome.includes('2')) set('gd-aw', sels[0].odds);
+  }
+  document.getElementById('detail-status-chip').style.display = '';
+  updateLivePreview();
+}
+
+function renderFetchResult(r) {
+  const sels = r.selections || [];
+  document.getElementById('res-bm-name').textContent = r.bookmaker || '—';
+  document.getElementById('res-code').textContent = r.bookingCode || '—';
+  document.getElementById('res-count').textContent = `${sels.length} selection${sels.length!==1?'s':''}`;
+  document.getElementById('res-odds').textContent = r.totalOdds ? `${parseFloat(r.totalOdds).toFixed(2)}×` : '—×';
+
+  const selEl = document.getElementById('res-selections');
+  if(!sels.length) {
+    selEl.innerHTML = '<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No selections returned</div>';
+  } else {
+    selEl.innerHTML = sels.map((s,i) => `
+      <div class="sel-row">
+        <div class="sel-num">${i+1}</div>
+        <div class="sel-info">
+          <div class="sel-match">${s.homeTeam||'?'} <span style="color:var(--muted);font-weight:400">vs</span> ${s.awayTeam||'?'}</div>
+          <div class="sel-meta">${[s.league, s.kickoffTime ? fmtTime(s.kickoffTime) : null].filter(Boolean).join(' · ') || '—'}</div>
+        </div>
+        <div class="sel-right">
+          <span class="sel-pick">${s.outcome || s.market || '—'}</span>
+          <span class="sel-odds">${s.odds ? parseFloat(s.odds).toFixed(2) : '—'}</span>
+        </div>
+      </div>`).join('');
+  }
+  document.getElementById('fetch-result').style.display = '';
+}
+
+function clearFetchResult() {
+  document.getElementById('fetch-result').style.display = 'none';
+  currentFetchResult = null;
+}
+
+// ── LIVE PREVIEW ──────────────────────────────────────────
+
+function updateLivePreview() {
+  const home = val('gd-home'), away = val('gd-away');
+  if(!home && !away) { document.getElementById('live-preview-card').style.display = 'none'; return; }
+  document.getElementById('live-preview-card').style.display = '';
+  document.getElementById('lp-match').textContent = `${home||'?'} vs ${away||'?'}`;
+  const league = val('gd-league'), kickoff = document.getElementById('gd-kickoff').value;
+  document.getElementById('lp-meta').textContent = [league, kickoff?fmtTime(kickoff):null].filter(Boolean).join(' · ') || '—';
+  document.getElementById('lp-code').textContent = val('gd-code') || 'CODE';
+  const hw = val('gd-hw'), dr = val('gd-draw'), aw = val('gd-aw');
+  const oddPills = [hw?`<span class="chip chip-gold">1: ${hw}</span>`:'',dr?`<span class="chip chip-gold">X: ${dr}</span>`:'',aw?`<span class="chip chip-gold">2: ${aw}</span>`:''].filter(Boolean).join('');
+  document.getElementById('lp-odds').innerHTML = oddPills || '<span style="font-size:12px;color:var(--muted)">No odds entered</span>';
+  const total = val('gd-totalodds');
+  document.getElementById('lp-total').textContent = total ? `${parseFloat(total).toFixed(2)}×` : '—';
+  const type = document.getElementById('gd-sliptype').value;
+  const typeChip = document.getElementById('lp-type-chip');
+  typeChip.textContent = type;
+  typeChip.className = `chip ${type==='VIP'?'chip-gold':'chip-blue'}`;
+  const pub = document.getElementById('gd-pub').checked;
+  document.getElementById('lp-pub-chip').textContent = pub ? 'Published' : 'Draft';
+  document.getElementById('lp-pub-chip').className = `chip ${pub?'chip-green':'chip-gray'}`;
+}
+
+// Live preview updates
+['gd-home','gd-away','gd-league','gd-code','gd-totalodds','gd-hw','gd-draw','gd-aw'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', updateLivePreview);
+});
+['gd-sliptype','gd-pub'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('change', updateLivePreview);
+});
+
+// ── IMAGE UPLOAD ─────────────────────────────────────────
+
+function handleImageSelect(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  showImagePreview(file);
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if(!file || !file.type.startsWith('image/')) return showToast('Only image files supported','red');
+  document.getElementById('slip-image').files = e.dataTransfer.files;
+  showImagePreview(file);
+}
+function showImagePreview(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('preview-img').src = e.target.result;
+    document.getElementById('preview-filename').textContent = file.name;
+    document.getElementById('upload-placeholder').style.display = 'none';
+    const prev = document.getElementById('upload-preview');
+    prev.style.display = '';
+  };
+  reader.readAsDataURL(file);
+}
+function clearImage() {
+  document.getElementById('slip-image').value = '';
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-placeholder').style.display = '';
+  document.getElementById('preview-img').src = '';
+}
+
+// ── SAVE ─────────────────────────────────────────────────
+
+async function saveGameCode() {
+  const home = val('gd-home'), away = val('gd-away');
+  const bookmaker = val('gd-bookmaker'), code = val('gd-code');
+  if(!home || !away) return showToast('Home and away team required','red');
+  if(!bookmaker || !code) return showToast('Bookmaker and booking code required','red');
+
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Saving…';
+
+  try {
+    const fd = new FormData();
+    fd.append('bookmaker', bookmaker);
+    fd.append('bookingCode', code);
+    fd.append('type', document.getElementById('gd-sliptype').value);
+    fd.append('published', document.getElementById('gd-pub').checked ? 'true' : 'false');
+    fd.append('description', val('gd-desc') || '');
+    const totalOdds = val('gd-totalodds');
+    fd.append('totalOdds', totalOdds || '1.0');
+    const valid = document.getElementById('gd-valid').value;
+    if(valid) fd.append('validUntil', valid);
+    const img = document.getElementById('slip-image').files[0];
+    if(img) fd.append('image', img);
+
+    const res = await apiCall('POST', '/api/v1/admin/games/slips', fd, true);
+    if(!res.success) throw new Error(res.message || 'Save failed');
+
+    savedCodes.unshift({
+      id: res.data?.id || Date.now(),
+      home, away,
+      bookmaker,
+      code,
+      totalOdds: totalOdds || '—',
+      type: document.getElementById('gd-sliptype').value,
+      published: document.getElementById('gd-pub').checked,
+      savedAt: new Date()
+    });
+    renderSavedCodes();
+    showToast(`${home} vs ${away} saved successfully!`, 'green');
+    resetForm();
+  } catch(e) {
+    showToast(e.message || 'Save failed', 'red');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa fa-check"></i> Save & Publish Game Code';
+  }
+}
+
+function resetForm() {
+  ['gd-home','gd-away','gd-league','gd-code','gd-bookmaker','gd-desc','gd-totalodds','gd-hw','gd-draw','gd-aw','gd-o15','gd-o25'].forEach(id=>{
+    const e=document.getElementById(id); if(e) e.value='';
+  });
+  document.getElementById('gd-pub').checked = true;
+  document.getElementById('gd-vip').checked = false;
+  document.getElementById('gd-feat').checked = false;
+  document.getElementById('gd-sliptype').value = 'FREE';
+  document.getElementById('detail-status-chip').style.display = 'none';
+  clearImage();
+  clearFetchResult();
+  updateLivePreview();
+}
+
+// ── HISTORY ───────────────────────────────────────────────
+
+function addToHistory(result, code, bm) {
+  fetchHistory.unshift({ result, code, bm, time: new Date() });
+  if(fetchHistory.length > 20) fetchHistory.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if(!fetchHistory.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:20px"><i class="fa fa-clock-rotate-left"></i><p>No fetches yet</p></div>';
+    return;
+  }
+  el.innerHTML = fetchHistory.map((h,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s" onmouseover="this.style.background='var(--panel)'" onmouseout="this.style.background=''" onclick="restoreHistory(${i})">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;font-family:var(--font-mono);color:var(--accent)">${h.code}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${h.result.bookmaker||h.bm} · ${(h.result.selections||[]).length} sel · ${fmtTimeShort(h.time)}</div>
+      </div>
+      <i class="fa fa-arrow-up-right-from-square" style="color:var(--muted);font-size:11px;flex-shrink:0"></i>
+    </div>`).join('');
+}
+
+function restoreHistory(i) {
+  const h = fetchHistory[i];
+  if(!h) return;
+  currentFetchResult = h.result;
+  prefillFromResult(h.result);
+  renderFetchResult(h.result);
+  document.getElementById('fetch-code').value = h.code;
+  document.getElementById('fetch-bm').value = h.bm;
+}
+
+function clearHistory() { fetchHistory = []; renderHistory(); }
+
+// ── SAVED CODES TABLE ─────────────────────────────────────
+
+function renderSavedCodes() {
+  const tbody = document.getElementById('codes-tbody');
+  if(!savedCodes.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div style="text-align:center;padding:24px;color:var(--muted);font-size:13px"><i class="fa fa-ticket" style="opacity:.2;font-size:22px;display:block;margin-bottom:6px"></i>No saved codes yet</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = savedCodes.map(c => `
+    <tr>
+      <td><span style="font-weight:600">${c.home} vs ${c.away}</span></td>
+      <td>${c.bookmaker}</td>
+      <td><span style="font-family:var(--font-mono);color:var(--accent);font-size:12px">${c.code}</span></td>
+      <td><span style="font-family:var(--font-mono);color:var(--gold)">${c.totalOdds}×</span></td>
+      <td><span class="chip ${c.type==='VIP'?'chip-gold':'chip-blue'}" style="font-size:10px">${c.type}</span></td>
+      <td><span class="chip ${c.published?'chip-green':'chip-gray'}" style="font-size:10px">${c.published?'Published':'Draft'}</span></td>
+      <td>
+        <button class="btn btn-danger btn-xs" onclick="removeCode(${c.id})"><i class="fa fa-trash"></i></button>
+      </td>
+    </tr>`).join('');
+}
+
+function removeCode(id) {
+  savedCodes = savedCodes.filter(c => c.id !== id);
+  renderSavedCodes();
+}
+
+async function loadSavedCodes() {
+  try {
+    const res = await apiCall('GET', '/api/v1/admin/games/slips');
+    if(res.success) {
+      savedCodes = (res.data||[]).map(s=>({
+        id: s.id, home: s.homeTeam||'—', away: s.awayTeam||'—',
+        bookmaker: s.bookmaker, code: s.bookingCode,
+        totalOdds: s.totalOdds||'—', type: s.type||'FREE', published: s.published
+      }));
+      renderSavedCodes();
+    }
+  } catch(e) { /* silently fail, local data shown */ }
+}
+
+// ── UTILS ─────────────────────────────────────────────────
+
+function clearAll() {
+  resetForm();
+  document.getElementById('fetch-code').value = '';
+  document.getElementById('fetch-error').style.display = 'none';
+}
+
+function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+function fmtTime(dt) { try{ return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }catch{ return dt||'—'; } }
+function fmtTimeShort(dt) { try{ return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }catch{ return '—'; } }
+
+let toastTimer;
+function showToast(msg, type='green') {
+  document.querySelector('.toast')?.remove();
+  clearTimeout(toastTimer);
+  const icons={green:'fa-circle-check',red:'fa-circle-xmark',blue:'fa-circle-info',gold:'fa-crown'};
+  const colors={green:'var(--accent)',red:'var(--accent2)',blue:'var(--blue)',gold:'var(--gold)'};
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="fa ${icons[type]||'fa-circle-check'}" style="color:${colors[type]||colors.green};font-size:15px"></i> ${msg}`;
+  document.body.appendChild(t);
+  toastTimer = setTimeout(() => t.remove(), 3500);
+}
+
+// Load saved codes on page load
+window.addEventListener('DOMContentLoaded', () => {
+  loadSavedCodes();
+  renderHistory();
+});
+</script>
+</body>
+</html>
