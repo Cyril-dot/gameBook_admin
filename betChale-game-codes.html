@@ -137,17 +137,7 @@ select.form-input option{background:#1a1917;}
 .upload-preview{display:none;margin-top:14px;}
 .upload-preview img{max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;border:1px solid var(--border);}
 
-/* GAME DETAILS */
-.game-detail-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px;}
-.gd-teams{font-size:16px;font-weight:700;margin-bottom:6px;}
-.gd-score{font-family:var(--font-mono);font-size:24px;font-weight:700;color:var(--text);}
-.gd-meta{font-size:12px;color:var(--muted);margin-top:4px;}
-.odds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:12px;}
-.odds-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
-.odds-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;font-family:var(--font-mono);}
-.odds-val{font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--gold);}
-
-/* HISTORY TABLE */
+/* TABLE */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 table{width:100%;border-collapse:collapse;min-width:480px;}
 thead th{padding:10px 14px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--panel);border-bottom:1px solid var(--border);font-family:var(--font-mono);white-space:nowrap;}
@@ -165,28 +155,17 @@ td{padding:11px 14px;font-size:13px;vertical-align:middle;}
 .toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13px;animation:toastIn .25s ease;min-width:240px;max-width:calc(100vw - 40px);}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* METRIC ROW */
-.metric-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
-.metric-row:last-child{border-bottom:none;}
-.m-label{font-size:13px;color:var(--text2);}
-.m-val{font-family:var(--font-mono);font-size:13px;font-weight:600;}
-
 /* EMPTY STATE */
 .empty-state{text-align:center;padding:48px 24px;color:var(--muted);}
 .empty-state i{font-size:36px;opacity:.2;display:block;margin-bottom:12px;}
 .empty-state p{font-size:13px;}
-
-/* SECTION HEADER */
-.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.sec-title{font-size:15px;font-weight:700;}
-.sec-sub{font-size:12px;color:var(--muted);margin-top:2px;}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:var(--panel);}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-/* ─── RESPONSIVE ─── */
+/* RESPONSIVE */
 @media(max-width:768px){
   :root{--page-pad:14px;--topbar-h:52px;}
   html{font-size:13.5px;}
@@ -210,14 +189,12 @@ td{padding:11px 14px;font-size:13px;vertical-align:middle;}
   .topbar-title{display:none;}
   td,thead th{padding:9px 11px;font-size:12px;}
   .upload-zone{padding:20px 14px;}
-  .odds-grid{grid-template-columns:repeat(3,1fr);}
 }
 @media(max-width:480px){
   html{font-size:13px;}
   .page-headline{font-size:20px;}
   .result-bm-row{flex-direction:column;align-items:flex-start;gap:6px;}
   .g2{grid-template-columns:1fr;}
-  .odds-grid{grid-template-columns:1fr 1fr;}
   td:first-child,thead th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);}
   tbody tr:hover td:first-child{background:var(--panel);}
 }
@@ -240,7 +217,8 @@ td{padding:11px 14px;font-size:13px;vertical-align:middle;}
     Game Codes &amp; Booking Fetch
   </div>
   <div class="topbar-actions">
-    <a href="betChale-admin.html" class="btn btn-ghost btn-sm"><i class="fa fa-arrow-left"></i> <span style="display:none" class="show-sm">Back</span></a>
+    <!-- FIX: smart back — goes to previous page, falls back to index.html -->
+    <button class="btn btn-ghost btn-sm" onclick="goBack()" title="Back"><i class="fa fa-arrow-left"></i></button>
     <button class="btn btn-ghost btn-sm" onclick="clearAll()" title="Clear all"><i class="fa fa-rotate"></i></button>
   </div>
 </div>
@@ -354,16 +332,14 @@ td{padding:11px 14px;font-size:13px;vertical-align:middle;}
           </div>
           <div class="form-group">
             <label class="form-label">Description / Tip</label>
-            <textarea class="form-input" id="gd-desc" rows="3" placeholder="e.g. Arsenal are unbeaten in last 5 home games. Expect goals both sides."></textarea>
+            <textarea class="form-input" id="gd-desc" rows="3" placeholder="e.g. Arsenal are unbeaten in last 5 home games…"></textarea>
           </div>
         </div>
       </div>
 
       <!-- ODDS -->
       <div class="card mb16">
-        <div class="card-hd">
-          <div class="card-title">Odds Configuration</div>
-        </div>
+        <div class="card-hd"><div class="card-title">Odds Configuration</div></div>
         <div class="card-pad">
           <div class="g3">
             <div class="form-group">
@@ -538,6 +514,15 @@ async function apiCall(method, path, body=null, isFormData=false) {
   } catch(e) { throw e; }
 }
 
+// ── FIX: smart back navigation ────────────────────────────
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
 let savedCodes = [];
 let fetchHistory = [];
 let currentFetchResult = null;
@@ -578,11 +563,9 @@ async function fetchCode() {
 
 function prefillFromResult(r) {
   const set = (id, val) => { if(val && document.getElementById(id)) document.getElementById(id).value = val; };
-  // Bookmaker & code
   set('gd-bookmaker', r.bookmaker);
   set('gd-code', r.bookingCode);
   set('gd-totalodds', r.totalOdds ? parseFloat(r.totalOdds).toFixed(2) : '');
-  // First selection game data (if available)
   const sels = r.selections || [];
   if(sels.length) {
     const first = sels[0];
@@ -596,12 +579,10 @@ function prefillFromResult(r) {
         set('gd-kickoff', local);
       } catch {}
     }
-    // Build description
     const descLines = sels.map(s =>
       `${s.homeTeam} vs ${s.awayTeam}${s.league?' ('+s.league+')':''} — ${s.outcome||s.market||'?'} @ ${s.odds ? parseFloat(s.odds).toFixed(2) : '?'}`
     );
     document.getElementById('gd-desc').value = descLines.join('\n');
-    // Odds from first selection if numeric markets
     const outcome = (sels[0].outcome || '').toLowerCase();
     if(outcome.includes('home') || outcome.includes('1')) set('gd-hw', sels[0].odds);
     if(outcome.includes('draw') || outcome.includes('x')) set('gd-draw', sels[0].odds);
@@ -667,7 +648,6 @@ function updateLivePreview() {
   document.getElementById('lp-pub-chip').className = `chip ${pub?'chip-green':'chip-gray'}`;
 }
 
-// Live preview updates
 ['gd-home','gd-away','gd-league','gd-code','gd-totalodds','gd-hw','gd-draw','gd-aw'].forEach(id => {
   const el = document.getElementById(id);
   if(el) el.addEventListener('input', updateLivePreview);
@@ -698,8 +678,7 @@ function showImagePreview(file) {
     document.getElementById('preview-img').src = e.target.result;
     document.getElementById('preview-filename').textContent = file.name;
     document.getElementById('upload-placeholder').style.display = 'none';
-    const prev = document.getElementById('upload-preview');
-    prev.style.display = '';
+    document.getElementById('upload-preview').style.display = '';
   };
   reader.readAsDataURL(file);
 }
@@ -729,8 +708,7 @@ async function saveGameCode() {
     fd.append('type', document.getElementById('gd-sliptype').value);
     fd.append('published', document.getElementById('gd-pub').checked ? 'true' : 'false');
     fd.append('description', val('gd-desc') || '');
-    const totalOdds = val('gd-totalodds');
-    fd.append('totalOdds', totalOdds || '1.0');
+    fd.append('totalOdds', val('gd-totalodds') || '1.0');
     const valid = document.getElementById('gd-valid').value;
     if(valid) fd.append('validUntil', valid);
     const img = document.getElementById('slip-image').files[0];
@@ -741,10 +719,8 @@ async function saveGameCode() {
 
     savedCodes.unshift({
       id: res.data?.id || Date.now(),
-      home, away,
-      bookmaker,
-      code,
-      totalOdds: totalOdds || '—',
+      home, away, bookmaker, code,
+      totalOdds: val('gd-totalodds') || '—',
       type: document.getElementById('gd-sliptype').value,
       published: document.getElementById('gd-pub').checked,
       savedAt: new Date()
@@ -756,7 +732,7 @@ async function saveGameCode() {
     showToast(e.message || 'Save failed', 'red');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<i class="fa fa-check"></i> Save & Publish Game Code';
+    btn.innerHTML = '<i class="fa fa-check"></i> Save &amp; Publish Game Code';
   }
 }
 
@@ -877,7 +853,6 @@ function showToast(msg, type='green') {
   toastTimer = setTimeout(() => t.remove(), 3500);
 }
 
-// Load saved codes on page load
 window.addEventListener('DOMContentLoaded', () => {
   loadSavedCodes();
   renderHistory();
