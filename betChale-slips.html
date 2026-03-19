@@ -72,26 +72,71 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .search-input-wrap input:focus{border-color:var(--accent);}
 .search-input-wrap input::placeholder{color:var(--muted);}
 
-/* SLIP CARDS GRID */
+/* ── SLIP CARDS — user-facing style ── */
 .slips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;}
-.slip-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;cursor:pointer;}
+
+.slip-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;cursor:pointer;display:flex;flex-direction:column;}
 .slip-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border2);}
-.slip-top{padding:16px;}
-.slip-bm-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;}
-.slip-bookmaker{font-size:16px;font-weight:700;}
-.slip-code-tag{font-family:var(--font-mono);font-size:12px;color:var(--accent);background:var(--accent-lt);border:1px solid #1a4d32;padding:2px 8px;border-radius:5px;display:inline-block;margin-top:3px;}
-.slip-match-box{padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;}
-.slip-teams{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.slip-team-name{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.slip-score-badge{font-family:var(--font-mono);font-size:14px;font-weight:700;padding:3px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;flex-shrink:0;}
+
+/* slip image */
+.slip-img-wrap{position:relative;overflow:hidden;height:160px;cursor:zoom-in;}
+.slip-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.slip-card:hover .slip-img-wrap img{transform:scale(1.04);}
+.slip-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);}
+
+/* slip body */
+.slip-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:10px;}
+
+/* bookmaker + badges row */
+.slip-bm-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.slip-bm-name{font-size:15px;font-weight:700;}
+.slip-code-tag{font-family:var(--font-mono);font-size:11.5px;color:var(--accent);background:var(--accent-lt);border:1px solid #1a4d32;padding:2px 8px;border-radius:5px;display:inline-block;margin-top:3px;letter-spacing:.5px;}
+.slip-badges{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0;}
+
+/* multi-game accumulator preview */
+.slip-accum-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+.slip-accum-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.slip-accum-title{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;}
+.slip-accum-wins{display:flex;gap:4px;}
+.slip-accum-game{display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 0;}
+.slip-accum-game+.slip-accum-game{border-top:1px solid var(--border);}
+.slip-accum-num{width:18px;height:18px;border-radius:50%;background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);}
+.slip-accum-teams{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.slip-accum-odd{font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.slip-accum-more{font-size:11px;color:var(--muted);padding-top:5px;padding-left:24px;}
+
+/* single-game match box */
+.slip-match-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+.slip-teams-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.slip-team{flex:1;font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.slip-team.right{text-align:right;}
+.slip-score{font-family:var(--font-mono);font-size:14px;font-weight:700;padding:3px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;flex-shrink:0;white-space:nowrap;}
 .slip-match-meta{font-size:11px;color:var(--muted);text-align:center;}
-.slip-odds-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+
+/* odds pills */
+.slip-odds-pills{display:flex;gap:5px;flex-wrap:wrap;}
 .odd-pill{background:var(--gold-lt);border:1px solid #3a2810;color:var(--gold);font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;}
-.slip-total-odds{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px;}
-.slip-bottom{padding:12px 16px;background:var(--panel);border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.odd-pill.blue{background:var(--blue-lt);border-color:#0d2040;color:var(--blue);}
+
+/* total odds */
+.slip-total-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;}
+.slip-total-odds{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--gold);line-height:1;}
+.slip-total-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
+.slip-deadline{text-align:right;}
+.slip-deadline-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
+.slip-deadline-val{font-size:12px;font-weight:600;}
+
+/* booking code copy bar */
+.slip-code-bar{display:flex;align-items:center;gap:8px;background:var(--panel);border-radius:8px;padding:8px 12px;}
+.slip-code-bar code{flex:1;font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--accent);letter-spacing:.2em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.slip-code-copy{width:32px;height:32px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;transition:all .12s;}
+.slip-code-copy:hover{background:var(--surface);color:var(--text);}
+
+/* slip footer */
+.slip-footer{padding:10px 14px;background:var(--panel);border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .slip-actions{display:flex;gap:5px;margin-left:auto;flex-shrink:0;}
 
-/* STATUS RESULT DISPLAY */
+/* result indicators */
 .result-indicators{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
 .result-ind{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:600;}
 .result-ind.hit{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;}
@@ -175,7 +220,7 @@ select.form-input option{background:#1a1917;}
 .pg-btn.active{background:var(--accent-lt);color:var(--accent);border-color:#1a4d32;}
 .pg-btn:disabled{opacity:.4;cursor:not-allowed;}
 
-/* ─── RESPONSIVE ─── */
+/* RESPONSIVE */
 @media(max-width:768px){
   :root{--page-pad:14px;--topbar-h:52px;}
   html{font-size:13.5px;}
@@ -200,15 +245,11 @@ select.form-input option{background:#1a1917;}
   .modal-ft .btn{width:100%;justify-content:center;min-height:48px;}
   .g2{grid-template-columns:1fr!important;}
   .slip-actions{width:100%;justify-content:flex-end;margin-top:4px;margin-left:0;}
-  .slip-bottom{flex-direction:row;}
 }
 @media(max-width:480px){
   html{font-size:13px;}
   .stats-row{grid-template-columns:1fr 1fr;}
   .stat-val{font-size:20px;}
-  .slips-grid{grid-template-columns:1fr;}
-  td,thead th{padding:9px 10px;font-size:11.5px;}
-  .filters-bar{padding:10px 12px;}
 }
 @media(min-width:1200px){
   .page-wrap{padding:32px 36px;}
@@ -230,18 +271,19 @@ select.form-input option{background:#1a1917;}
   <div class="topbar-divider"></div>
   <div class="topbar-title">Betting Slips</div>
   <div class="topbar-actions">
-    <a href="betChale-admin.html" class="btn btn-ghost btn-sm"><i class="fa fa-arrow-left"></i></a>
-    <button class="btn btn-ghost btn-sm" onclick="loadSlips()"><i class="fa fa-rotate"></i></button>
+    <!-- FIX: back button uses history.back(), falls back to index.html -->
+    <button class="btn btn-ghost btn-sm" onclick="goBack()" title="Back"><i class="fa fa-arrow-left"></i></button>
+    <button class="btn btn-ghost btn-sm" onclick="loadSlips()" title="Refresh"><i class="fa fa-rotate"></i></button>
     <button class="btn btn-primary btn-sm" onclick="openCreateModal()"><i class="fa fa-plus"></i> <span class="hide-xs">Create Slip</span></button>
   </div>
 </div>
 
 <div class="page-wrap">
   <div class="page-headline">Betting Slips</div>
-  <p class="page-sub">POST /api/v1/admin/games/slips · All published prediction slips</p>
+  <p class="page-sub">Manage all published prediction slips</p>
 
   <!-- STATS -->
-  <div class="stats-row" id="slips-stats">
+  <div class="stats-row">
     <div class="stat-card"><div class="stat-icon ic-blue"><i class="fa fa-ticket"></i></div><div class="stat-label">Total Slips</div><div class="stat-val" id="st-total">—</div></div>
     <div class="stat-card"><div class="stat-icon ic-green"><i class="fa fa-trophy"></i></div><div class="stat-label">Won</div><div class="stat-val" id="st-won" style="color:var(--accent)">—</div></div>
     <div class="stat-card"><div class="stat-icon ic-red"><i class="fa fa-xmark"></i></div><div class="stat-label">Lost</div><div class="stat-val" id="st-lost" style="color:var(--accent2)">—</div></div>
@@ -256,21 +298,21 @@ select.form-input option{background:#1a1917;}
       <input id="slip-search" placeholder="Search bookmaker, code, teams…" oninput="filterAndRender()" autocomplete="off"/>
     </div>
     <div class="filter-group" id="status-filters">
-      <button class="flt-btn active" data-status="all" onclick="setFilter('status','all',this)">All</button>
-      <button class="flt-btn" data-status="ACTIVE" onclick="setFilter('status','ACTIVE',this)">Active</button>
-      <button class="flt-btn" data-status="WON" onclick="setFilter('status','WON',this)">Won</button>
-      <button class="flt-btn" data-status="LOST" onclick="setFilter('status','LOST',this)">Lost</button>
-      <button class="flt-btn" data-status="VOID" onclick="setFilter('status','VOID',this)">Void</button>
+      <button class="flt-btn active" onclick="setFilter('status','all',this)">All</button>
+      <button class="flt-btn" onclick="setFilter('status','ACTIVE',this)">Active</button>
+      <button class="flt-btn" onclick="setFilter('status','WON',this)">Won</button>
+      <button class="flt-btn" onclick="setFilter('status','LOST',this)">Lost</button>
+      <button class="flt-btn" onclick="setFilter('status','VOID',this)">Void</button>
     </div>
     <div class="filter-group" id="type-filters">
-      <button class="flt-btn active" data-type="all" onclick="setFilter('type','all',this)">All Types</button>
-      <button class="flt-btn" data-type="FREE" onclick="setFilter('type','FREE',this)">Free</button>
-      <button class="flt-btn" data-type="VIP" onclick="setFilter('type','VIP',this)"><i class="fa fa-crown" style="font-size:9px"></i> VIP</button>
+      <button class="flt-btn active" onclick="setFilter('type','all',this)">All Types</button>
+      <button class="flt-btn" onclick="setFilter('type','FREE',this)">Free</button>
+      <button class="flt-btn" onclick="setFilter('type','VIP',this)"><i class="fa fa-crown" style="font-size:9px"></i> VIP</button>
     </div>
-    <div class="filter-group">
-      <button class="flt-btn active" data-pub="all" onclick="setFilter('pub','all',this)">All</button>
-      <button class="flt-btn" data-pub="true" onclick="setFilter('pub','true',this)">Published</button>
-      <button class="flt-btn" data-pub="false" onclick="setFilter('pub','false',this)">Draft</button>
+    <div class="filter-group" id="pub-filters">
+      <button class="flt-btn active" onclick="setFilter('pub','all',this)">All</button>
+      <button class="flt-btn" onclick="setFilter('pub','true',this)">Published</button>
+      <button class="flt-btn" onclick="setFilter('pub','false',this)">Draft</button>
     </div>
   </div>
 
@@ -383,6 +425,15 @@ async function apiCall(method, path, body=null, isFormData=false) {
   return json;
 }
 
+// ── FIX: smart back navigation ────────────────────────────
+function goBack() {
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
 let ALL_SLIPS = [];
 let FILTERS = { status:'all', type:'all', pub:'all' };
 const PAGE_SIZE = 12;
@@ -400,38 +451,38 @@ async function loadSlips() {
     buildCharts();
     filterAndRender();
   } catch(e) {
-    document.getElementById('slips-grid').innerHTML = `<div style="grid-column:1/-1" class="loading-state" style="color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;
+    document.getElementById('slips-grid').innerHTML = `<div style="grid-column:1/-1" class="loading-state"><i class="fa fa-circle-xmark" style="color:var(--accent2)"></i> ${e.message}</div>`;
   }
 }
 
 function updateStats() {
-  const total = ALL_SLIPS.length;
-  const won = ALL_SLIPS.filter(s=>s.status==='WON').length;
-  const lost = ALL_SLIPS.filter(s=>s.status==='LOST').length;
-  const vip = ALL_SLIPS.filter(s=>s.type==='VIP').length;
+  const total   = ALL_SLIPS.length;
+  const won     = ALL_SLIPS.filter(s=>s.status==='WON').length;
+  const lost    = ALL_SLIPS.filter(s=>s.status==='LOST').length;
+  const vip     = ALL_SLIPS.filter(s=>s.type==='VIP').length;
   const pending = ALL_SLIPS.filter(s=>!s.status||s.status==='ACTIVE').length;
-  ['total','won','lost','vip','pending'].forEach((k,i)=>{
-    const el = document.getElementById('st-'+k);
-    if(el) el.textContent = [total,won,lost,vip,pending][i];
-  });
+  document.getElementById('st-total').textContent   = total;
+  document.getElementById('st-won').textContent     = won;
+  document.getElementById('st-lost').textContent    = lost;
+  document.getElementById('st-vip').textContent     = vip;
+  document.getElementById('st-pending').textContent = pending;
 }
 
 function buildCharts() {
-  const won = ALL_SLIPS.filter(s=>s.status==='WON').length;
-  const lost = ALL_SLIPS.filter(s=>s.status==='LOST').length;
+  const won    = ALL_SLIPS.filter(s=>s.status==='WON').length;
+  const lost   = ALL_SLIPS.filter(s=>s.status==='LOST').length;
   const active = ALL_SLIPS.filter(s=>!s.status||s.status==='ACTIVE').length;
   const voided = ALL_SLIPS.filter(s=>s.status==='VOID').length;
-  const free = ALL_SLIPS.filter(s=>s.type!=='VIP').length;
-  const vip = ALL_SLIPS.filter(s=>s.type==='VIP').length;
-  const CDm = {font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
+  const free   = ALL_SLIPS.filter(s=>s.type!=='VIP').length;
+  const vip    = ALL_SLIPS.filter(s=>s.type==='VIP').length;
 
   const sc = document.getElementById('statusChart');
-  if(sc) { try{Chart.getChart(sc)?.destroy();}catch{}
-    new Chart(sc, {type:'doughnut',data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
+  if(sc){try{Chart.getChart(sc)?.destroy();}catch{}
+    new Chart(sc,{type:'doughnut',data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
   }
   const tc = document.getElementById('typeChart');
-  if(tc) { try{Chart.getChart(tc)?.destroy();}catch{}
-    new Chart(tc, {type:'doughnut',data:{labels:[`Free (${free})`,`VIP (${vip})`],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
+  if(tc){try{Chart.getChart(tc)?.destroy();}catch{}
+    new Chart(tc,{type:'doughnut',data:{labels:[`Free (${free})`,`VIP (${vip})`],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
   }
 }
 
@@ -465,13 +516,19 @@ function filterAndRender() {
   renderSlips(list);
 }
 
-// ── RENDER ────────────────────────────────────────────────
+// ── HELPERS ───────────────────────────────────────────────
 
 const fmtOdd = v => v && parseFloat(v) > 0 ? parseFloat(v).toFixed(2) : null;
-function fmtTime(dt) { try{ return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }catch{return dt||'—';} }
-function fmtDate(dt) { try{ return new Date(dt).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'}); }catch{return dt||'—';} }
+function fmtTime(dt){try{return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}catch{return dt||'—';}}
+function fmtDate(dt){try{return new Date(dt).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'});}catch{return dt||'—';}}
+function fmtDeadline(dt){try{return new Date(dt).toLocaleDateString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt||'—';}}
 
 const STATUS_CHIP = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
+
+function parseSelections(raw) {
+  if(!raw) return [];
+  try { const p = JSON.parse(raw); return Array.isArray(p) ? p : []; } catch { return []; }
+}
 
 function determineResults(s) {
   if(s.homeScore==null||s.awayScore==null) return [];
@@ -481,93 +538,196 @@ function determineResults(s) {
   return Object.keys(tests).filter(k=>raw.includes(k)).map(k=>({k,hit:tests[k]}));
 }
 
+// ── RENDER CARDS (user-facing style) ──────────────────────
+
 function renderSlips(list) {
   const start = (currentPage-1)*PAGE_SIZE;
-  const page = list.slice(start, start+PAGE_SIZE);
-  const grid = document.getElementById('slips-grid');
+  const page  = list.slice(start, start+PAGE_SIZE);
+  const grid  = document.getElementById('slips-grid');
 
   if(!list.length) {
     grid.innerHTML = `<div style="grid-column:1/-1"><div class="empty-state"><i class="fa fa-ticket"></i><p>No slips found</p><span>Try adjusting your filters or create a new slip</span></div></div>`;
     document.getElementById('pagination').innerHTML = '';
     return;
   }
-
   if(!page.length && currentPage > 1) { currentPage = 1; renderSlips(list); return; }
 
-  grid.innerHTML = page.map(s => {
-    const statusClass = STATUS_CHIP[s.status] || 'chip-gray';
-    const statusLabel = s.status || 'ACTIVE';
-    const isPred = s.bookingCode === 'PREDICTION' || s.bookingCode === 'ACCUMULATOR';
-    const showOdds = !isPred && s.totalOdds && parseFloat(s.totalOdds) > 1;
-    const isActive = !s.status || s.status === 'ACTIVE';
-    const isFinished = s.gameStatus === 'FINISHED';
-    const oddPills = [
-      s.homeWinOdds ? `<span class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</span>` : '',
-      s.drawOdds    ? `<span class="odd-pill">X: ${fmtOdd(s.drawOdds)}</span>`    : '',
-      s.awayWinOdds ? `<span class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</span>` : '',
-      s.over25Odds  ? `<span class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</span>` : '',
-    ].filter(Boolean).join('');
-    const results = determineResults(s);
-    const resultHTML = results.length && isFinished ? `
-      <div class="result-indicators">
-        ${results.map(r=>`<span class="result-ind ${r.hit?'hit':'miss'}"><i class="fa ${r.hit?'fa-check':'fa-xmark'}" style="font-size:8px"></i> ${r.k.replace(/_/g,' ')}</span>`).join('')}
-      </div>` : '';
-
-    return `
-      <div class="slip-card" onclick="openDetail('${s.id}')">
-        <div class="slip-top">
-          <div class="slip-bm-row">
-            <div>
-              <div class="slip-bookmaker">${s.bookmaker}</div>
-              <div class="slip-code-tag">${s.bookingCode}</div>
-            </div>
-            <span class="chip ${statusClass}">${statusLabel}</span>
-          </div>
-          ${s.homeTeam ? `
-          <div class="slip-match-box">
-            <div class="slip-teams">
-              ${s.homeLogo ? `<img src="${s.homeLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-              <span class="slip-team-name" style="text-align:right">${s.homeTeam}</span>
-              <span class="slip-score-badge">${s.homeScore!=null?`${s.homeScore}–${s.awayScore}`:'vs'}</span>
-              <span class="slip-team-name">${s.awayTeam}</span>
-              ${s.awayLogo ? `<img src="${s.awayLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-            </div>
-            <div class="slip-match-meta">
-              ${s.gameStatus==='LIVE'?`<span class="live-dot" style="width:5px;height:5px;margin-right:4px"></span>Live · `:''}
-              ${[s.league, fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')||'—'}
-            </div>
-            ${resultHTML}
-          </div>` : ''}
-          ${oddPills ? `<div class="slip-odds-row">${oddPills}</div>` : ''}
-          ${showOdds ? `<div class="slip-total-odds">${parseFloat(s.totalOdds).toFixed(2)}×</div>` : ''}
-        </div>
-        <div class="slip-bottom">
-          <span class="chip ${s.type==='VIP'?'chip-gold':'chip-blue'}" style="font-size:10px">${s.type==='VIP'?'<i class="fa fa-crown" style="font-size:8px"></i> ':''} ${s.type||'FREE'}</span>
-          <span class="chip ${s.published?'chip-green':'chip-gray'}" style="font-size:10px">${s.published?'Published':'Draft'}</span>
-          <div class="slip-actions">
-            ${isActive && isFinished ? `<button class="btn btn-success btn-xs" title="Auto-settle" onclick="event.stopPropagation();autoSettle('${s.id}')"><i class="fa fa-wand-magic-sparkles"></i></button>` : ''}
-            <button class="btn btn-ghost btn-xs" title="Edit status" onclick="event.stopPropagation();openDetail('${s.id}')"><i class="fa fa-pen"></i></button>
-            <button class="btn btn-ghost btn-xs" title="${s.published?'Unpublish':'Publish'}" onclick="event.stopPropagation();togglePublish('${s.id}')"><i class="fa ${s.published?'fa-eye-slash':'fa-eye'}"></i></button>
-            <button class="btn btn-danger btn-xs" title="Delete" onclick="event.stopPropagation();deleteSlip('${s.id}')"><i class="fa fa-trash"></i></button>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
+  grid.innerHTML = page.map(s => buildSlipCard(s)).join('');
 
   // Pagination
   const totalPages = Math.ceil(list.length / PAGE_SIZE);
   const pgEl = document.getElementById('pagination');
-  if(totalPages <= 1) { pgEl.innerHTML = ''; return; }
+  if(totalPages <= 1){ pgEl.innerHTML=''; return; }
   let pgHTML = `<button class="pg-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
-  for(let i=1;i<=totalPages;i++) {
-    if(i===1||i===totalPages||Math.abs(i-currentPage)<=1) pgHTML += `<button class="pg-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
-    else if(Math.abs(i-currentPage)===2) pgHTML += `<span style="color:var(--muted);padding:0 4px">…</span>`;
+  for(let i=1;i<=totalPages;i++){
+    if(i===1||i===totalPages||Math.abs(i-currentPage)<=1) pgHTML+=`<button class="pg-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if(Math.abs(i-currentPage)===2) pgHTML+=`<span style="color:var(--muted);padding:0 4px">…</span>`;
   }
-  pgHTML += `<button class="pg-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  pgHTML+=`<button class="pg-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
   pgEl.innerHTML = pgHTML;
 }
 
+function buildSlipCard(s) {
+  const statusClass  = STATUS_CHIP[s.status] || 'chip-gray';
+  const statusLabel  = s.status || 'ACTIVE';
+  const typeClass    = s.type === 'VIP' ? 'chip-gold' : 'chip-blue';
+  const isActive     = !s.status || s.status === 'ACTIVE';
+  const isFinished   = s.gameStatus === 'FINISHED';
+  const isLive       = s.gameStatus === 'LIVE';
+  const hasScore     = s.homeScore != null && s.awayScore != null;
+  const selections   = parseSelections(s.selections);
+  const hasMulti     = selections.length > 0;
+  const winning      = selections.filter(x => x.isWinning === true).length;
+  const losing       = selections.filter(x => x.isWinning === false).length;
+  const results      = !hasMulti ? determineResults(s) : [];
+  const showOdds     = s.totalOdds && parseFloat(s.totalOdds) > 1;
+  const hasCode      = s.bookingCode && s.bookingCode !== 'N/A';
+
+  // Odds pills for single-game slips
+  const oddPills = [
+    s.homeWinOdds ? `<span class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</span>` : '',
+    s.drawOdds    ? `<span class="odd-pill">X: ${fmtOdd(s.drawOdds)}</span>`    : '',
+    s.awayWinOdds ? `<span class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</span>` : '',
+    s.over25Odds  ? `<span class="odd-pill blue">O2.5: ${fmtOdd(s.over25Odds)}</span>` : '',
+  ].filter(Boolean).join('');
+
+  // Multi-game accumulator preview
+  const accumBox = hasMulti ? `
+    <div class="slip-accum-box">
+      <div class="slip-accum-hd">
+        <div class="slip-accum-title">
+          <i class="fa fa-layer-group" style="color:var(--accent);font-size:11px"></i>
+          ${(s.totalSelections || selections.length)} Game Accumulator
+        </div>
+        <div class="slip-accum-wins">
+          ${winning > 0 ? `<span class="chip chip-green" style="font-size:10px;padding:1px 7px">${winning}✓</span>` : ''}
+          ${losing  > 0 ? `<span class="chip chip-red" style="font-size:10px;padding:1px 7px">${losing}✗</span>`   : ''}
+        </div>
+      </div>
+      ${selections.slice(0,3).map((sel,i) => `
+        <div class="slip-accum-game">
+          <span class="slip-accum-num">${i+1}</span>
+          <span class="slip-accum-teams">${sel.homeTeam||'?'} <span style="color:var(--muted);font-weight:400">vs</span> ${sel.awayTeam||'?'}</span>
+          <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+            ${sel.isWinning === true  ? `<i class="fa fa-trophy" style="color:var(--accent);font-size:9px"></i>`    : ''}
+            ${sel.isWinning === false ? `<i class="fa fa-circle-xmark" style="color:var(--accent2);font-size:9px"></i>` : ''}
+            ${sel.odds != null ? `<span class="slip-accum-odd">${parseFloat(sel.odds).toFixed(2)}</span>` : ''}
+          </div>
+        </div>`).join('')}
+      ${selections.length > 3 ? `<div class="slip-accum-more">+${selections.length - 3} more games…</div>` : ''}
+    </div>` : '';
+
+  // Single-game match box
+  const matchBox = !hasMulti && (s.homeTeam || s.awayTeam) ? `
+    <div class="slip-match-box">
+      <div class="slip-teams-row">
+        ${s.homeLogo ? `<img src="${s.homeLogo}" style="width:18px;height:18px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
+        <span class="slip-team right">${s.homeTeam||'?'}</span>
+        <span class="slip-score">${hasScore ? `${s.homeScore}–${s.awayScore}` : 'vs'}</span>
+        <span class="slip-team">${s.awayTeam||'?'}</span>
+        ${s.awayLogo ? `<img src="${s.awayLogo}" style="width:18px;height:18px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
+      </div>
+      <div class="slip-match-meta">
+        ${isLive ? `<span class="live-dot" style="width:5px;height:5px;margin-right:4px"></span>Live · ` : ''}
+        ${[s.league, s.kickoffTime ? fmtTime(s.kickoffTime) : null].filter(Boolean).join(' · ') || '—'}
+      </div>
+      ${results.length && isFinished ? `
+        <div class="result-indicators" style="justify-content:center;margin-top:6px">
+          ${results.map(r=>`<span class="result-ind ${r.hit?'hit':'miss'}"><i class="fa ${r.hit?'fa-check':'fa-xmark'}" style="font-size:8px"></i> ${r.k.replace(/_/g,' ')}</span>`).join('')}
+        </div>` : ''}
+    </div>` : '';
+
+  const deadline = s.deadline || s.validUntil;
+
+  return `
+    <div class="slip-card" onclick="openDetail('${s.id}')">
+      ${s.imageUrl ? `
+        <div class="slip-img-wrap" onclick="event.stopPropagation();openLightbox('${s.imageUrl}')">
+          <img src="${s.imageUrl}" alt="Slip" loading="lazy"/>
+          <div class="slip-img-overlay"></div>
+        </div>` : ''}
+
+      <div class="slip-body">
+        <!-- Bookmaker + status -->
+        <div class="slip-bm-row">
+          <div>
+            <div class="slip-bm-name">${s.bookmaker}${hasMulti ? `<span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;font-family:var(--font-mono)">${s.totalSelections||selections.length} games</span>` : ''}</div>
+            ${hasCode ? `<div class="slip-code-tag">${s.bookingCode}</div>` : ''}
+          </div>
+          <div class="slip-badges">
+            <span class="chip ${statusClass}">${statusLabel}</span>
+            <span class="chip ${typeClass}">${s.type==='VIP'?'<i class="fa fa-crown" style="font-size:8px"></i> ':''}${s.type||'FREE'}</span>
+          </div>
+        </div>
+
+        <!-- Match display -->
+        ${accumBox}
+        ${matchBox}
+
+        <!-- Odds pills (single game) -->
+        ${!hasMulti && oddPills ? `<div class="slip-odds-pills">${oddPills}</div>` : ''}
+
+        <!-- Total odds + deadline -->
+        ${showOdds ? `
+          <div class="slip-total-row">
+            <div>
+              <div class="slip-total-label">Total odds</div>
+              <div class="slip-total-odds">${parseFloat(s.totalOdds).toFixed(2)}×</div>
+            </div>
+            ${deadline ? `
+              <div class="slip-deadline">
+                <div class="slip-deadline-label">${s.deadline ? 'Deadline' : 'Valid until'}</div>
+                <div class="slip-deadline-val">${fmtDeadline(deadline)}</div>
+              </div>` : ''}
+          </div>` : ''}
+
+        <!-- Booking code copy bar -->
+        ${hasCode ? `
+          <div class="slip-code-bar" onclick="event.stopPropagation()">
+            <code>${s.bookingCode}</code>
+            <button class="slip-code-copy" onclick="copyCode('${s.bookingCode}',this)" title="Copy code"><i class="fa fa-copy"></i></button>
+          </div>` : `
+          <div style="display:flex;align-items:center;justify-content:center;padding:8px;border:1.5px dashed var(--border2);border-radius:8px">
+            <span style="font-size:12px;color:var(--muted);font-style:italic">No booking code</span>
+          </div>`}
+      </div>
+
+      <!-- Footer actions -->
+      <div class="slip-footer">
+        <span class="chip ${s.published?'chip-green':'chip-gray'}" style="font-size:10px">${s.published?'Published':'Draft'}</span>
+        ${hasMulti ? `<span style="font-size:11px;color:var(--muted)"><i class="fa fa-bolt" style="color:var(--accent);margin-right:3px"></i>${s.totalSelections||selections.length} games · tap for details</span>` : ''}
+        <div class="slip-actions">
+          ${isActive && isFinished ? `<button class="btn btn-success btn-xs" title="Auto-settle" onclick="event.stopPropagation();autoSettle('${s.id}')"><i class="fa fa-wand-magic-sparkles"></i></button>` : ''}
+          <button class="btn btn-ghost btn-xs" title="Edit" onclick="event.stopPropagation();openDetail('${s.id}')"><i class="fa fa-pen"></i></button>
+          <button class="btn btn-ghost btn-xs" title="${s.published?'Unpublish':'Publish'}" onclick="event.stopPropagation();togglePublish('${s.id}')"><i class="fa ${s.published?'fa-eye-slash':'fa-eye'}"></i></button>
+          <button class="btn btn-danger btn-xs" title="Delete" onclick="event.stopPropagation();deleteSlip('${s.id}')"><i class="fa fa-trash"></i></button>
+        </div>
+      </div>
+    </div>`;
+}
+
 function goPage(p) { currentPage = p; filterAndRender(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+// ── COPY CODE ─────────────────────────────────────────────
+
+function copyCode(code, btn) {
+  if(!code || code === 'N/A') return;
+  navigator.clipboard.writeText(code).catch(()=>{});
+  btn.innerHTML = '<i class="fa fa-check" style="color:var(--accent)"></i>';
+  showToast('Booking code copied!', 'green');
+  setTimeout(() => { btn.innerHTML = '<i class="fa fa-copy"></i>'; }, 2000);
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────
+
+function openLightbox(src) {
+  const lb = document.createElement('div');
+  lb.style.cssText = 'position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out';
+  lb.onclick = () => lb.remove();
+  lb.innerHTML = `<img src="${src}" style="max-width:92vw;max-height:88vh;object-fit:contain;border-radius:10px"/>
+    <button style="position:absolute;top:16px;right:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="this.parentElement.remove()"><i class="fa fa-xmark"></i></button>`;
+  document.body.appendChild(lb);
+}
 
 // ── DETAIL MODAL ─────────────────────────────────────────
 
@@ -575,11 +735,36 @@ function openDetail(id) {
   const s = ALL_SLIPS.find(x=>x.id===id);
   if(!s) return;
   detailSlipId = id;
+  const selections = parseSelections(s.selections);
+  const hasMulti   = selections.length > 0;
+  const results    = !hasMulti ? determineResults(s) : [];
+  const isFinished = s.gameStatus === 'FINISHED';
+  const isActive   = !s.status || s.status === 'ACTIVE';
+
   document.getElementById('dm-title').textContent = `${s.bookmaker} · ${s.bookingCode}`;
 
-  const results = determineResults(s);
-  const isFinished = s.gameStatus === 'FINISHED';
-  const isActive = !s.status || s.status === 'ACTIVE';
+  let selectionsHTML = '';
+  if(hasMulti) {
+    selectionsHTML = `
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:var(--font-mono)">Selections (${selections.length})</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${selections.map((sel,i) => `
+            <div style="padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-radius:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px">
+                <span style="font-size:12px;font-weight:700">${sel.homeTeam||'?'} <span style="color:var(--muted);font-weight:400">vs</span> ${sel.awayTeam||'?'}</span>
+                <span style="font-family:var(--font-mono);font-size:13px;font-weight:700;color:var(--gold)">${sel.odds ? parseFloat(sel.odds).toFixed(2) : '—'}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                ${sel.league ? `<span style="font-size:10.5px;color:var(--muted)">${sel.league}</span>` : ''}
+                ${sel.outcome ? `<span class="chip chip-blue" style="font-size:10px;padding:1px 7px">${sel.outcome}</span>` : ''}
+                ${sel.isWinning === true  ? `<span class="chip chip-green" style="font-size:10px;padding:1px 7px"><i class="fa fa-check" style="font-size:8px"></i> Won</span>`  : ''}
+                ${sel.isWinning === false ? `<span class="chip chip-red"   style="font-size:10px;padding:1px 7px"><i class="fa fa-xmark" style="font-size:8px"></i> Lost</span>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
 
   document.getElementById('dm-body').innerHTML = `
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
@@ -589,7 +774,6 @@ function openDetail(id) {
     </div>
     ${s.homeTeam ? `
     <div style="padding:14px;background:var(--panel);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:var(--font-mono)">Linked Match${isFinished?`<span style="color:var(--accent);margin-left:8px">● Finished</span>`:s.gameStatus==='LIVE'?`<span style="color:var(--accent2);margin-left:8px"><span class="live-dot" style="width:5px;height:5px;margin-right:3px"></span>Live</span>`:''}</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
         <div style="flex:1;font-size:15px;font-weight:700;text-align:right">${s.homeTeam}</div>
         <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;padding:5px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;white-space:nowrap">${s.homeScore!=null?`${s.homeScore} – ${s.awayScore}`:'vs'}</div>
@@ -598,23 +782,24 @@ function openDetail(id) {
       <div style="font-size:11.5px;color:var(--muted);text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')||'—'}</div>
       ${results.length && isFinished ? `<div class="result-indicators" style="justify-content:center;margin-top:8px">${results.map(r=>`<span class="result-ind ${r.hit?'hit':'miss'}"><i class="fa ${r.hit?'fa-check':'fa-xmark'}" style="font-size:8px"></i> ${r.k.replace(/_/g,' ')}</span>`).join('')}</div>` : ''}
     </div>` : ''}
+    ${selectionsHTML}
     ${s.totalOdds && parseFloat(s.totalOdds)>1 ? `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gold-lt);border:1px solid #3a2810;border-radius:8px;margin-bottom:16px">
       <span style="font-size:13px;color:var(--gold);font-weight:600">Total Odds</span>
       <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--gold)">${parseFloat(s.totalOdds).toFixed(2)}</span>
     </div>` : ''}
     ${s.description ? `<div style="font-size:13px;color:var(--text2);margin-bottom:14px;padding:10px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">${s.description}</div>` : ''}
-    ${s.imageUrl ? `<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;max-height:200px;object-fit:cover">` : ''}
+    ${s.imageUrl ? `<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;max-height:200px;object-fit:cover;cursor:zoom-in" onclick="openLightbox('${s.imageUrl}')">` : ''}
     <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Created: ${fmtDate(s.createdAt)}${s.validUntil?` · Expires: ${fmtDate(s.validUntil)}`:''}</div>
     <hr style="border:none;border-top:1px solid var(--border);margin-bottom:16px"/>
     <div class="form-group">
       <label class="form-label">Update Status</label>
       <select class="form-input" id="dm-status">
-        <option value="ACTIVE" ${(s.status||'ACTIVE')==='ACTIVE'?'selected':''}>ACTIVE</option>
-        <option value="WON" ${s.status==='WON'?'selected':''}>WON</option>
-        <option value="LOST" ${s.status==='LOST'?'selected':''}>LOST</option>
+        <option value="ACTIVE"  ${(s.status||'ACTIVE')==='ACTIVE' ?'selected':''}>ACTIVE</option>
+        <option value="WON"     ${s.status==='WON'    ?'selected':''}>WON</option>
+        <option value="LOST"    ${s.status==='LOST'   ?'selected':''}>LOST</option>
         <option value="EXPIRED" ${s.status==='EXPIRED'?'selected':''}>EXPIRED</option>
-        <option value="VOID" ${s.status==='VOID'?'selected':''}>VOID</option>
+        <option value="VOID"    ${s.status==='VOID'   ?'selected':''}>VOID</option>
       </select>
     </div>
     ${isActive && isFinished ? `
@@ -633,11 +818,11 @@ async function saveSlipStatus() {
   const status = document.getElementById('dm-status')?.value;
   if(!status) return;
   const btn = document.getElementById('dm-save-btn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div>';
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div>';
   try {
     const res = await apiCall('PATCH', `/api/v1/admin/games/slips/${detailSlipId}/status`, {status});
     if(!res.success) throw new Error(res.message);
-    ALL_SLIPS = ALL_SLIPS.map(s => s.id===detailSlipId ? {...s, status} : s);
+    ALL_SLIPS = ALL_SLIPS.map(s => s.id===detailSlipId ? {...s,status} : s);
     updateStats(); buildCharts(); filterAndRender();
     closeModal('detail-modal');
     showToast(`Status → ${status}`, status==='WON'?'green':status==='LOST'?'red':'blue');
@@ -651,7 +836,7 @@ async function togglePublish(id) {
   try {
     const res = await apiCall('PATCH', `/api/v1/admin/games/slips/${id}/toggle-publish`);
     if(!res.success) throw new Error(res.message);
-    ALL_SLIPS = ALL_SLIPS.map(s => s.id===id ? {...s, published:res.data?.published} : s);
+    ALL_SLIPS = ALL_SLIPS.map(s => s.id===id ? {...s,published:res.data?.published} : s);
     filterAndRender();
     showToast(res.data?.published?'Published':'Unpublished','green');
   } catch(e) { showToast(e.message,'red'); }
@@ -661,7 +846,7 @@ async function autoSettle(id) {
   try {
     const res = await apiCall('PATCH', `/api/v1/admin/games/slips/${id}/auto-settle`);
     if(!res.success) throw new Error(res.message);
-    ALL_SLIPS = ALL_SLIPS.map(s => s.id===id ? {...s, status:res.data.status} : s);
+    ALL_SLIPS = ALL_SLIPS.map(s => s.id===id ? {...s,status:res.data.status} : s);
     updateStats(); buildCharts(); filterAndRender();
     showToast(`Auto-settled → ${res.data.status}`, res.data.status==='WON'?'green':'red');
   } catch(e) { showToast(e.message,'red'); }
@@ -689,53 +874,51 @@ function openCreateModal() {
 }
 
 async function submitCreateSlip() {
-  const bm = (document.getElementById('cm-bm')?.value||'').trim();
+  const bm   = (document.getElementById('cm-bm')?.value||'').trim();
   const code = (document.getElementById('cm-code')?.value||'').trim();
   if(!bm||!code) return showToast('Bookmaker and code required','red');
   const btn = document.getElementById('cm-submit-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Creating…';
   try {
     const fd = new FormData();
-    fd.append('bookmaker',bm);
-    fd.append('bookingCode',code);
-    fd.append('description',document.getElementById('cm-desc').value||'');
-    fd.append('totalOdds',document.getElementById('cm-odds').value||'1.0');
-    fd.append('type',document.getElementById('cm-type').value);
-    fd.append('published',document.getElementById('cm-pub').checked?'true':'false');
-    const valid=document.getElementById('cm-valid').value;
-    if(valid) fd.append('validUntil',valid);
-    const img=document.getElementById('cm-img').files[0];
-    if(img) fd.append('image',img);
-    const res = await apiCall('POST','/api/v1/admin/games/slips',fd,true);
+    fd.append('bookmaker', bm);
+    fd.append('bookingCode', code);
+    fd.append('description', document.getElementById('cm-desc').value||'');
+    fd.append('totalOdds', document.getElementById('cm-odds').value||'1.0');
+    fd.append('type', document.getElementById('cm-type').value);
+    fd.append('published', document.getElementById('cm-pub').checked?'true':'false');
+    const valid = document.getElementById('cm-valid').value;
+    if(valid) fd.append('validUntil', valid);
+    const img = document.getElementById('cm-img').files[0];
+    if(img) fd.append('image', img);
+    const res = await apiCall('POST', '/api/v1/admin/games/slips', fd, true);
     if(!res.success) throw new Error(res.message);
     ALL_SLIPS = [res.data, ...ALL_SLIPS];
     updateStats(); buildCharts(); filterAndRender();
     closeModal('create-modal');
-    showToast(`Slip created: ${bm} · ${code}`,'green');
+    showToast(`Slip created: ${bm} · ${code}`, 'green');
   } catch(e) { showToast(e.message,'red'); }
   finally { btn.disabled=false; btn.innerHTML='<i class="fa fa-check"></i> Create Slip'; }
 }
 
-// ── MODAL ─────────────────────────────────────────────────
+// ── MODAL UTILS ───────────────────────────────────────────
 
-function openModal(id) { document.getElementById(id).classList.add('open'); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.addEventListener('click', e => { if(e.target.classList.contains('overlay')) e.target.classList.remove('open'); });
 
 // ── TOAST ─────────────────────────────────────────────────
 
 let toastTimer;
-function showToast(msg,type='green') {
+function showToast(msg, type='green') {
   document.querySelector('.toast')?.remove(); clearTimeout(toastTimer);
   const icons={green:'fa-circle-check',red:'fa-circle-xmark',blue:'fa-circle-info',gold:'fa-crown'};
   const colors={green:'var(--accent)',red:'var(--accent2)',blue:'var(--blue)',gold:'var(--gold)'};
   const t=document.createElement('div'); t.className='toast';
-  t.innerHTML=`<i class="fa ${icons[type]}" style="color:${colors[type]};font-size:15px"></i> ${msg}`;
+  t.innerHTML=`<i class="fa ${icons[type]||icons.green}" style="color:${colors[type]||colors.green};font-size:15px"></i> ${msg}`;
   document.body.appendChild(t);
   toastTimer=setTimeout(()=>t.remove(),3500);
 }
-
-// ── INIT ─────────────────────────────────────────────────
 
 window.addEventListener('DOMContentLoaded', loadSlips);
 </script>
