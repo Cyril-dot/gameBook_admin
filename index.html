@@ -10,15 +10,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>BetChale — Admin</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-/* ═══════════════════════════════════════════════════
-   BETCHALE ADMIN — FIXED RESPONSIVE CSS
-   Replace the entire <style> block with this.
-   Fixes: mobile layout, sidebar drawer, topbar,
-   create-slip page, modals as bottom sheets,
-   game list overflow, form elements, tablet grids.
-═══════════════════════════════════════════════════ */
-
 /* ═══════════════════════════════════════════════════
    TOKENS
 ═══════════════════════════════════════════════════ */
@@ -39,6 +43,7 @@
   --font-serif:'Crimson Pro',serif;
   --font-mono:'JetBrains Mono',monospace;
   --page-pad:28px;
+  --mobile-nav-h:60px;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -122,6 +127,9 @@ body{
   border-radius:8px;padding:11px 14px;
   font-family:var(--font);font-size:14px;color:var(--text);
   outline:none;transition:border-color .15s,box-shadow .15s;
+  /* prevent zoom on mobile — must be >=16px or override per platform */
+  -webkit-appearance:none;
+  appearance:none;
 }
 .form-input:focus{
   border-color:var(--accent);
@@ -130,20 +138,21 @@ body{
 }
 .form-input::placeholder{color:var(--muted);}
 select.form-input option{background:#1a1917;color:var(--text);}
-select.form-input{color-scheme:dark;}
+select.form-input{color-scheme:dark;cursor:pointer;}
 textarea.form-input{resize:vertical;min-height:80px;}
 .input-wrap{position:relative;}
-.input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none;}
 .input-wrap .form-input{padding-left:38px;}
 .input-eye{
   position:absolute;right:13px;top:50%;transform:translateY(-50%);
   color:var(--muted);cursor:pointer;font-size:13px;transition:color .15s;
+  padding:4px;/* larger touch target */
 }
 .input-eye:hover{color:var(--text);}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .checkbox-row{display:flex;align-items:center;gap:8px;padding:4px 0;}
-.checkbox-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;flex-shrink:0;}
+.checkbox-row input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;flex-shrink:0;cursor:pointer;}
 .checkbox-row label{font-size:13.5px;color:var(--text);cursor:pointer;}
 
 /* ═══════════════════════════════════════════════════
@@ -155,7 +164,9 @@ textarea.form-input{resize:vertical;min-height:80px;}
   font-family:var(--font);font-size:13.5px;font-weight:600;
   cursor:pointer;border:none;
   transition:all .15s;white-space:nowrap;text-decoration:none;
-  min-height:42px;
+  min-height:44px;/* mobile touch target */
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
 }
 .btn-full{width:100%;}
 .btn-primary{background:var(--text);color:#0f0e0d;}
@@ -172,9 +183,10 @@ textarea.form-input{resize:vertical;min-height:80px;}
 .btn-gold:hover{background:#342310;}
 .btn-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040;}
 .btn-blue:hover{background:#101a2e;}
-.btn-sm{padding:7px 13px;font-size:12.5px;border-radius:7px;min-height:36px;}
-.btn-xs{padding:5px 10px;font-size:11.5px;border-radius:6px;min-height:32px;}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:7px;min-height:40px;}
+.btn-xs{padding:6px 11px;font-size:12px;border-radius:6px;min-height:36px;}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;}
+.btn:active:not(:disabled){transform:scale(.97)!important;}
 
 /* ═══════════════════════════════════════════════════
    SLIP TYPE CARDS
@@ -209,7 +221,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 #app{display:none;min-height:100vh;}
 #app.active{display:flex;}
 #sidebar-backdrop{
-  display:none;position:fixed;inset:0;z-index:99;
+  display:none;position:fixed;inset:0;z-index:150;
   background:rgba(0,0,0,.65);backdrop-filter:blur(2px);
 }
 #sidebar-backdrop.show{display:block;}
@@ -222,9 +234,9 @@ textarea.form-input{resize:vertical;min-height:80px;}
   background:var(--surface);border-right:1px solid var(--border);
   display:flex;flex-direction:column;
   position:fixed;top:0;left:0;height:100vh;
-  overflow-y:auto;z-index:100;
-  transition:transform .25s cubic-bezier(.4,0,.2,1);
-  /* ensure sidebar is always on top when open */
+  overflow-y:auto;overflow-x:hidden;
+  z-index:200;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
   will-change:transform;
 }
 .sidebar-brand{
@@ -242,9 +254,11 @@ textarea.form-input{resize:vertical;min-height:80px;}
 .nav-section-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);padding:0 8px 8px;font-family:var(--font-mono);}
 .nav-item{
   display:flex;align-items:center;gap:10px;
-  padding:9px 10px;border-radius:8px;cursor:pointer;
+  padding:10px 10px;border-radius:8px;cursor:pointer;
   color:var(--text2);font-size:13.5px;font-weight:500;
   transition:all .12s;margin-bottom:1px;user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  min-height:44px;
 }
 .nav-item i{width:17px;text-align:center;font-size:13px;flex-shrink:0;}
 .nav-item:hover{background:var(--panel);color:var(--text);}
@@ -255,7 +269,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
   padding:1px 6px;border-radius:20px;
 }
 .sidebar-footer{margin-top:auto;padding:14px;border-top:1px solid var(--border);flex-shrink:0;}
-.admin-chip{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;cursor:pointer;transition:background .12s;}
+.admin-chip{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;cursor:pointer;transition:background .12s;min-height:44px;}
 .admin-chip:hover{background:var(--panel);}
 .admin-avatar{
   width:32px;height:32px;border-radius:50%;background:var(--text);
@@ -270,15 +284,24 @@ textarea.form-input{resize:vertical;min-height:80px;}
 ═══════════════════════════════════════════════════ */
 .topbar{
   position:sticky;top:0;z-index:50;
-  background:rgba(15,14,13,.92);backdrop-filter:blur(12px);
+  background:rgba(15,14,13,.95);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;
+  display:flex;align-items:center;gap:10px;
   padding:0 20px;height:var(--topbar-h);flex-shrink:0;
 }
-.topbar-title{font-size:16px;font-weight:700;flex:1;letter-spacing:-.2px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
-/* hamburger hidden by default on desktop */
-.hamburger{display:none;}
+.topbar-title{
+  font-size:16px;font-weight:700;flex:1;letter-spacing:-.2px;
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.topbar-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.hamburger{
+  display:none;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:8px;
+  background:transparent;border:1.5px solid var(--border);
+  color:var(--text2);cursor:pointer;flex-shrink:0;font-size:15px;
+  transition:all .12s;-webkit-tap-highlight-color:transparent;
+}
+.hamburger:hover{background:var(--panel);color:var(--text);}
 
 /* ═══════════════════════════════════════════════════
    MAIN / PAGES
@@ -286,7 +309,7 @@ textarea.form-input{resize:vertical;min-height:80px;}
 .main{
   margin-left:var(--sidebar-w);flex:1;
   min-height:100vh;display:flex;flex-direction:column;
-  min-width:0;/* critical — prevents flex child overflow */
+  min-width:0;
 }
 .page{display:none;padding:var(--page-pad);animation:pageIn .2s ease;flex:1;}
 .page.active{display:block;}
@@ -428,7 +451,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
    MODAL
 ═══════════════════════════════════════════════════ */
 .overlay{
-  display:none;position:fixed;inset:0;z-index:200;
+  display:none;position:fixed;inset:0;z-index:300;
   background:rgba(0,0,0,.72);backdrop-filter:blur(4px);
   align-items:center;justify-content:center;padding:20px;
   overflow-y:auto;
@@ -449,9 +472,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 }
 .modal-title{font-size:16px;font-weight:700;}
 .modal-close{
-  width:28px;height:28px;border-radius:7px;
+  width:36px;height:36px;border-radius:7px;
   display:flex;align-items:center;justify-content:center;
   color:var(--muted);cursor:pointer;transition:all .12s;font-size:14px;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
 }
 .modal-close:hover{background:var(--panel);color:var(--text);}
 .modal-body{padding:24px;}
@@ -535,9 +559,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 .preview-odds{font-family:var(--font-mono);font-size:36px;font-weight:700;color:var(--gold);margin-bottom:4px;}
 .preview-meta{font-size:12px;color:var(--muted);}
 .outcome-btn{
-  padding:9px 8px;border:1.5px solid var(--border);border-radius:8px;
+  padding:10px 8px;border:1.5px solid var(--border);border-radius:8px;
   background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;
   text-align:center;transition:all .15s;font-family:var(--font);color:var(--text2);
+  min-height:44px;
 }
 .outcome-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt);}
 .outcome-btn.selected{border-color:var(--accent);background:var(--accent-lt);color:var(--accent);}
@@ -548,7 +573,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
    BOOK GAME MODAL — GAME PICKER
 ═══════════════════════════════════════════════════ */
 .game-picker-list{border:1.5px solid var(--border2);border-radius:8px;max-height:240px;overflow-y:auto;background:var(--bg);}
-.game-picker-item{padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.game-picker-item{padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;min-height:44px;}
 .game-picker-item:last-child{border-bottom:none;}
 .game-picker-item:hover{background:var(--panel);}
 .game-picker-item.selected{background:var(--accent-lt);}
@@ -573,10 +598,11 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
   border:1px solid var(--border);
 }
 .bulk-tab{
-  flex:1;padding:8px 12px;border-radius:7px;
+  flex:1;padding:9px 12px;border-radius:7px;
   font-size:12.5px;font-weight:600;text-align:center;
   cursor:pointer;color:var(--text2);transition:all .15s;
   border:none;background:transparent;font-family:var(--font);white-space:nowrap;
+  min-height:40px;
 }
 .bulk-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3);}
 .bulk-tab-panel{display:none;}
@@ -593,14 +619,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 .bgor-expand-btn.open{background:var(--accent-lt);color:var(--accent);transform:rotate(180deg);}
 .bgor-teams{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bgor-meta{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
-.bgor-remove{width:22px;height:22px;border-radius:6px;background:var(--accent2-lt);color:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .12s;}
+.bgor-remove{width:28px;height:28px;border-radius:6px;background:var(--accent2-lt);color:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .12s;}
 .bgor-remove:hover{background:#3d1a0d;}
 .bgor-body{display:none;padding:12px 14px 14px;animation:pageIn .15s ease;}
 .bgor-body.open{display:block;}
 .bgor-odds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
 .bgor-odds-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
 .bgor-input-wrap .form-label{font-size:10px;margin-bottom:4px;letter-spacing:.4px;}
-.bgor-input-wrap .form-input{padding:7px 10px;font-size:12.5px;font-family:var(--font-mono);}
+.bgor-input-wrap .form-input{padding:8px 10px;font-size:12.5px;font-family:var(--font-mono);}
 .bgor-flags{display:flex;gap:16px;flex-wrap:wrap;padding-top:4px;}
 .bgor-flags .checkbox-row label{font-size:12px;}
 
@@ -661,14 +687,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
 /* ═══════════════════════════════════════════════════
-   MOBILE NAV (hidden until ≤768px)
+   MOBILE NAV (hidden on desktop)
 ═══════════════════════════════════════════════════ */
 .mobile-nav{display:none;}
 .mobile-more-menu{display:none;}
 .mobile-nav-item{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;
-  letter-spacing:.3px;text-transform:uppercase;padding:6px 2px;
+  letter-spacing:.3px;text-transform:uppercase;padding:6px 4px;
   border:none;background:none;font-family:var(--font);
   transition:color .12s;-webkit-tap-highlight-color:transparent;position:relative;
 }
@@ -676,21 +702,21 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 .mobile-nav-item.active{color:var(--accent);}
 .mobile-nav-item.active i{transform:translateY(-2px);}
 .mobile-nav-item.active::after{
-  content:'';position:absolute;bottom:0;left:25%;right:25%;
+  content:'';position:absolute;bottom:0;left:20%;right:20%;
   height:2px;background:var(--accent);border-radius:2px 2px 0 0;
 }
 .mobile-more-item{
   display:flex;align-items:center;gap:14px;padding:16px 20px;
   font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;
   border-bottom:1px solid var(--border);transition:background .1s;
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:transparent;min-height:54px;
 }
 .mobile-more-item:last-child{border-bottom:none;}
 .mobile-more-item:active{background:var(--panel);}
-.mobile-more-item i{width:20px;text-align:center;font-size:15px;flex-shrink:0;}
+.mobile-more-item i{width:22px;text-align:center;font-size:15px;flex-shrink:0;}
 
 /* ═══════════════════════════════════════════════════
-   ██ LARGE DESKTOP 1400px+
+   DESKTOP LARGE 1400px+
 ═══════════════════════════════════════════════════ */
 @media(min-width:1400px){
   :root{--sidebar-w:270px;--page-pad:36px;}
@@ -699,7 +725,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ MEDIUM LAPTOP 1025px–1280px
+   LAPTOP 1025px – 1280px
 ═══════════════════════════════════════════════════ */
 @media(max-width:1280px){
   :root{--sidebar-w:230px;--page-pad:22px;}
@@ -713,11 +739,11 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ SMALL LAPTOP / LARGE TABLET 900px–1024px
+   SMALL LAPTOP / LARGE TABLET 901px – 1024px
 ═══════════════════════════════════════════════════ */
 @media(max-width:1024px){
   :root{--sidebar-w:210px;--page-pad:18px;}
-  .topbar{padding:0 18px;}
+  .topbar{padding:0 16px;}
   .stat-value{font-size:26px;}
   .g3{grid-template-columns:1fr 1fr;}
   .form-row-3{grid-template-columns:1fr 1fr;}
@@ -725,115 +751,138 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ TABLET 769px–899px
+   TABLET 769px – 900px (sidebar still visible)
 ═══════════════════════════════════════════════════ */
-@media(max-width:899px){
-  :root{--sidebar-w:200px;--page-pad:16px;}
-  html{font-size:13.5px;}
-  .g2{grid-template-columns:1fr;}
+@media(max-width:900px){
+  :root{--sidebar-w:64px;--page-pad:16px;}
+  /* Collapsed icon-only sidebar */
+  .sidebar{width:var(--sidebar-w);overflow:visible;}
+  .sidebar .brand-name,
+  .sidebar .brand-sub,
+  .sidebar .nav-section-label,
+  .sidebar .nav-item span:not(.nav-badge),
+  .sidebar .admin-name,
+  .sidebar .admin-role{display:none;}
+  .sidebar-brand{padding:16px;justify-content:center;}
+  .brand-mark{margin:0;}
+  .nav-section{padding:12px 8px 4px;}
+  .nav-item{justify-content:center;padding:10px;gap:0;border-radius:10px;}
+  .nav-item i{width:auto;font-size:16px;}
+  .admin-chip{justify-content:center;padding:8px;}
+  .admin-chip i{display:none;}
+  .main{margin-left:var(--sidebar-w);}
+  .g2{grid-template-columns:1fr 1fr;}
   .g3{grid-template-columns:1fr 1fr;}
-  .stats-row{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+  .g2-3{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
   .slip-type-grid{grid-template-columns:1fr 1fr;}
   .vip-currency-grid{grid-template-columns:1fr 1fr;}
+  .hamburger{display:none!important;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ MOBILE ≤768px  — SIDEBAR BECOMES DRAWER
+   MOBILE ≤ 768px — SIDEBAR DRAWER, MOBILE NAV
 ═══════════════════════════════════════════════════ */
 @media(max-width:768px){
   html{font-size:13.5px;}
+  :root{--page-pad:14px;}
 
-  /* ── Sidebar drawer ── */
+  /* Sidebar becomes full drawer */
   .sidebar{
-    transform:translateX(-100%);
-    width:min(300px,85vw);
+    width:min(300px,85vw)!important;
+    transform:translateX(-110%);
     box-shadow:none;
-    z-index:200;
+    overflow-y:auto;overflow-x:hidden;
+    /* restore hidden text */
   }
+  /* unhide text inside drawer on mobile */
+  .sidebar .brand-name,
+  .sidebar .brand-sub,
+  .sidebar .nav-section-label,
+  .sidebar .nav-item,
+  .sidebar .admin-name,
+  .sidebar .admin-role{display:revert;}
+  .sidebar-brand{padding:22px 20px 18px;justify-content:flex-start;}
+  .nav-section{padding:18px 14px 6px;}
+  .nav-item{justify-content:flex-start;padding:11px 10px;gap:10px;}
+  .nav-item i{width:17px;font-size:13px;}
+  .admin-chip{justify-content:flex-start;padding:10px;}
+  .admin-chip i{display:block;}
+
   .sidebar.open{
-    transform:translateX(0);
+    transform:translateX(0)!important;
     box-shadow:var(--shadow-lg);
   }
-  #sidebar-backdrop.show{display:block;}
 
-  /* ── Main fills full width ── */
-  .main{margin-left:0;padding-bottom:68px;}
+  /* Main fills full width */
+  .main{
+    margin-left:0!important;
+    padding-bottom:var(--mobile-nav-h);
+  }
   #app.active{display:block;}
 
-  /* ── Topbar ── */
-  .topbar{
-    padding:0 14px;
-    gap:10px;
-    height:54px;
-  }
-  .topbar-title{
-    font-size:15px;
-    /* allow title to shrink so actions don't overflow */
-    flex:1;min-width:0;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  }
-  /* show hamburger */
-  .hamburger{
-    display:inline-flex!important;
-    flex-shrink:0;
-  }
-  /* hide secondary topbar actions on small screens */
-  .topbar-actions .btn-ghost:not(#topbar-cta):not(.hamburger){
-    display:none;
-  }
-  #topbar-cta{padding:7px 12px;font-size:12.5px;min-height:36px;}
+  /* Topbar */
+  .topbar{padding:0 14px;gap:8px;height:52px;}
+  .topbar-title{font-size:15px;}
+  .hamburger{display:inline-flex!important;}
+  /* hide secondary ghost btns except logout */
+  .topbar-actions .btn-ghost:not(#topbar-logout-btn){display:none;}
+  #topbar-cta{padding:8px 12px;font-size:12.5px;min-height:38px;}
 
-  /* ── Pages ── */
-  .page{padding:14px 14px 80px;}
+  /* Pages */
+  .page{padding:14px 14px calc(var(--mobile-nav-h) + 14px);}
   .page-headline{font-size:22px;}
-  .page-sub{font-size:12px;margin-bottom:16px;}
+  .page-sub{font-size:12px;margin-bottom:14px;}
 
-  /* ── Stats ── */
-  .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  /* Stats */
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
   .stat-card{padding:14px 12px 12px;}
-  .stat-card-icon{width:32px;height:32px;font-size:13px;margin-bottom:10px;border-radius:8px;}
-  .stat-value{font-size:22px;}
+  .stat-card-icon{width:30px;height:30px;font-size:13px;margin-bottom:10px;border-radius:8px;}
+  .stat-value{font-size:20px;}
   .stat-label{font-size:11px;}
-  .stat-delta{font-size:11px;}
+  .stat-delta{font-size:10.5px;}
 
-  /* ── Grids collapse ── */
-  .g2,.g3,.g2-3{grid-template-columns:1fr;}
+  /* Grid collapses */
+  .g2,.g3,.g2-3{grid-template-columns:1fr!important;}
   .chart-box{height:180px!important;}
 
-  /* ── Form rows collapse ── */
+  /* Form collapses */
   .form-row,.form-row-3{grid-template-columns:1fr;gap:0;}
   .form-group{margin-bottom:14px;}
   .form-label{font-size:11px;margin-bottom:5px;}
-  /* prevent zoom on iOS — must be ≥16px */
+  /* iOS zoom prevention: inputs must be >= 16px */
   .form-input{font-size:16px!important;padding:13px 14px;}
-  .input-wrap .form-input{padding-left:40px;}
+  .input-wrap .form-input{padding-left:40px!important;}
   select.form-input{font-size:16px!important;}
-  textarea.form-input{font-size:15px!important;}
+  textarea.form-input{font-size:15px!important;min-height:80px;}
 
-  /* ── Game cards ── */
+  /* Game cards */
   .game-card{gap:8px;padding:12px 14px;}
-  .game-card .team-badge{width:28px;height:28px;font-size:9px;}
+  .game-card .team-badge{width:26px;height:26px;font-size:9px;}
   .game-teams{font-size:13px;}
   .game-meta{font-size:11px;}
-  .game-score{font-size:14px;padding:0 8px;}
-  .game-actions{width:100%;justify-content:flex-end;margin-top:4px;}
-  .game-actions .btn-xs{min-height:40px;min-width:40px;}
+  .game-score{font-size:14px;padding:0 6px;}
+  .game-actions{width:100%;justify-content:flex-end;margin-top:6px;}
 
-  /* ── Table ── */
-  td,thead th{padding:10px 12px;font-size:12.5px;}
-  td:first-child,thead th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);}
+  /* Table */
+  td,thead th{padding:10px 12px;font-size:12px;}
+  td:first-child,thead th:first-child{
+    position:sticky;left:0;z-index:1;
+    background:var(--surface);
+  }
   tbody tr:hover td:first-child{background:var(--panel);}
 
-  /* ── Slips / promos grid ── */
+  /* Slips / promos */
   #slips-grid,#promos-grid{grid-template-columns:1fr!important;}
 
-  /* ── Modals become bottom sheets ── */
+  /* Modals → bottom sheets */
   .overlay{padding:0;align-items:flex-end;}
   .modal{
-    width:100%;max-width:100%;
+    width:100%!important;max-width:100%!important;
     border-radius:var(--radius-lg) var(--radius-lg) 0 0;
     max-height:92vh;
     animation:sheetIn .28s cubic-bezier(.4,0,.2,1);
+    margin:0;
   }
   .modal::before{
     content:'';display:block;
@@ -843,153 +892,159 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
   }
   @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
   .modal-hd{padding:14px 18px;}
-  .modal-body{padding:16px 18px;}
+  .modal-body{padding:16px 18px 20px;}
   .modal-ft{
     padding:12px 18px 28px;
     flex-direction:column-reverse;gap:8px;
   }
-  .modal-ft .btn{width:100%;justify-content:center;padding:14px 20px;font-size:14px;}
+  .modal-ft .btn{width:100%;justify-content:center;padding:14px 20px;font-size:14px;min-height:50px;}
 
-  /* ── Auth ── */
+  /* Auth */
   .auth-screen{flex-direction:column;}
   .auth-left{
-    width:100%;padding:32px 20px 36px;
+    width:100%;padding:28px 20px 32px;
     border-right:none;border-bottom:1px solid var(--border);
     flex:none;min-height:auto;
   }
-  .auth-brand{margin-bottom:28px;}
+  .auth-brand{margin-bottom:24px;}
   .auth-heading{font-size:26px;}
-  .auth-sub{margin-bottom:24px;}
+  .auth-sub{margin-bottom:20px;}
   .auth-right{display:none;}
-  .btn-full{padding:15px 20px;font-size:14px;}
+  .btn-full{padding:15px 20px;font-size:14px;min-height:52px;}
 
-  /* ── Create slip ── */
+  /* Create slip */
   .slip-type-grid{grid-template-columns:1fr 1fr;gap:10px;}
   .slip-type-card{padding:14px 12px;}
   .slip-type-card .stc-name{font-size:13px;}
   .slip-type-card .stc-desc{font-size:11px;}
   .slip-create-layout{grid-template-columns:1fr;}
-  /* hide right preview panel on mobile — takes too much space */
   .slip-preview-card{display:none;}
   .slip-section-card-hd{padding:14px 16px;}
   .slip-section-card-body{padding:14px 16px;}
 
-  /* ── Fetch bar stacks vertically on mobile ── */
-  #cs-section-booking .slip-section-card-body>div:first-child{
-    flex-direction:column;
-  }
+  /* Fetch bar stacks on mobile */
+  #cs-section-booking .slip-section-card-body>div:first-child{flex-direction:column;}
 
-  /* ── Bulk modal odds rows ── */
+  /* Bulk modal */
   .bgor-odds-grid,.bgor-odds-grid2{grid-template-columns:1fr 1fr;}
   .bgor-meta{display:none;}
 
-  /* ── Toast moves up above mobile nav ── */
-  .toast{left:12px;right:12px;bottom:76px;min-width:unset;font-size:13px;}
+  /* Toast above mobile nav */
+  .toast{left:12px;right:12px;bottom:calc(var(--mobile-nav-h) + 12px);min-width:unset;font-size:13px;}
 
-  /* ── Session banner ── */
+  /* Session banner */
   .session-info-banner{flex-direction:column;gap:8px;padding:12px 14px;}
 
-  /* ── Slip queue header ── */
+  /* Slip queue header */
   .slip-queue-hd{flex-direction:column;align-items:flex-start;gap:8px;}
 
-  /* ── VIP ── */
+  /* VIP */
   .vip-currency-grid{grid-template-columns:1fr 1fr;}
   #vip-price-display>div:first-child{font-size:40px!important;}
 
-  /* ── Bulk tabs ── */
-  .bulk-tab{font-size:11.5px;padding:7px 8px;}
+  /* Bulk tabs */
+  .bulk-tab{font-size:11.5px;padding:8px 8px;}
 
-  /* ── Touch targets — minimum 44×44px ── */
-  .btn{min-height:44px;}
-  .btn-sm{min-height:40px;}
-  .btn-xs{min-height:40px;min-width:40px;}
-  .chip{padding:4px 10px;font-size:11.5px;}
-  .odd-pill{font-size:11.5px;padding:3px 8px;}
-  .nav-item{padding:12px 10px;}
-
-  /* ── BC selection rows wrap on narrow screens ── */
+  /* BC selection rows */
   .bc-selection-row{flex-wrap:wrap;gap:6px;}
   .bc-sel-teams{width:100%;}
-  .bc-sel-num{flex-shrink:0;}
 
-  /* ── Mobile nav ── */
+  /* Mobile nav SHOW */
   .mobile-nav{
     display:flex!important;
-    position:fixed;bottom:0;left:0;right:0;z-index:120;
+    position:fixed;bottom:0;left:0;right:0;z-index:130;
     background:var(--surface);border-top:1px solid var(--border);
-    height:60px;align-items:stretch;
+    height:var(--mobile-nav-h);align-items:stretch;
     box-shadow:0 -4px 24px rgba(0,0,0,.4);
-    backdrop-filter:blur(12px);
+    /* safe area inset for iPhone notch */
+    padding-bottom:env(safe-area-inset-bottom,0);
   }
-  .mobile-more-menu{
-    position:fixed;bottom:64px;right:0;left:0;z-index:119;
+  .mobile-more-menu.open{
+    display:block;
+    position:fixed;bottom:var(--mobile-nav-h);right:0;left:0;z-index:129;
     background:var(--surface);border-top:1px solid var(--border);
     box-shadow:0 -8px 32px rgba(0,0,0,.5);
     padding:8px 0;max-height:60vh;overflow-y:auto;
+    animation:sheetIn .2s ease;
   }
-  .mobile-more-menu.open{display:block;animation:sheetIn .2s ease;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ SMALL MOBILE ≤480px
+   SMALL MOBILE ≤ 480px
 ═══════════════════════════════════════════════════ */
 @media(max-width:480px){
   html{font-size:13px;}
   :root{--page-pad:12px;}
   .stats-row{gap:8px;}
-  .stat-value{font-size:20px;}
+  .stat-value{font-size:18px;}
+  .stat-label{font-size:10.5px;}
   .topbar-title{font-size:14px;}
-  /* single column type grid on very small screens */
   .slip-type-grid{grid-template-columns:1fr;}
-  .auth-left{padding:24px 16px 32px;}
+  .auth-left{padding:22px 16px 28px;}
   .auth-heading{font-size:23px;}
   .vip-currency-grid{grid-template-columns:1fr;}
-  .bgor-odds-grid,.bgor-odds-grid2{grid-template-columns:1fr;}
-  .bulk-tab-bar{flex-direction:column;gap:4px;}
-  .bulk-tab{text-align:left;padding:10px 14px;}
-  .modal-ft{gap:6px;}
+  .bgor-odds-grid,.bgor-odds-grid2{grid-template-columns:1fr 1fr;}
   .page-headline{font-size:20px;}
   .game-score{font-size:13px;}
   .bc-preview-odds{font-size:14px;}
-  /* stack analytics filters */
+  .card-pad{padding:14px;}
+  .modal-body{padding:14px 16px 16px;}
+  .modal-hd{padding:12px 16px;}
+  /* analytics filter btns */
   #page-analytics .csdf{font-size:10px;padding:5px 7px;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ VERY SMALL ≤380px
+   VERY SMALL ≤ 380px
 ═══════════════════════════════════════════════════ */
 @media(max-width:380px){
   html{font-size:12.5px;}
   :root{--page-pad:10px;}
   .stats-row{grid-template-columns:1fr;}
-  .auth-heading{font-size:22px;}
-  .page{padding:10px 10px 76px;}
+  .auth-heading{font-size:21px;}
+  .page{padding:10px 10px calc(var(--mobile-nav-h) + 12px);}
   .topbar-title{font-size:13px;}
+  .topbar{padding:0 10px;gap:6px;}
   .topbar-actions .btn-primary{padding:6px 10px;font-size:11.5px;}
+  .slip-type-grid{grid-template-columns:1fr;}
+  .bulk-tab-bar{flex-direction:column;gap:4px;}
+  .bulk-tab{text-align:left;padding:10px 14px;}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ TABLET LANDSCAPE 600px–768px — partial auth right
+   TABLET LANDSCAPE 600px – 768px (show partial auth right)
 ═══════════════════════════════════════════════════ */
 @media(min-width:600px) and (max-width:768px){
   .auth-right{display:flex;padding:20px;min-height:220px;}
   .auth-illustration{padding:16px;}
   .auth-tagline{font-size:16px;margin-top:14px;}
   .stats-row{grid-template-columns:repeat(3,1fr);}
-  .g2{grid-template-columns:1fr 1fr;}
+  .g2{grid-template-columns:1fr 1fr!important;}
   .slip-type-grid{grid-template-columns:repeat(3,1fr);}
 }
 
 /* ═══════════════════════════════════════════════════
-   ██ DESKTOP ONLY — enforce hamburger hidden,
-      mobile nav hidden
+   DESKTOP ONLY — ensure mobile elements hidden
 ═══════════════════════════════════════════════════ */
 @media(min-width:769px){
   .mobile-nav,
   .mobile-more-menu,
   .hamburger{display:none!important;}
-  /* ensure topbar refresh button shows on desktop */
   .topbar-actions .btn-ghost{display:inline-flex!important;}
+  /* restore all sidebar text on tablet+ icon mode via media above */
+}
+
+/* ═══════════════════════════════════════════════════
+   SAFE AREA SUPPORT (iPhone X+)
+═══════════════════════════════════════════════════ */
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  .mobile-nav{
+    height:calc(var(--mobile-nav-h) + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  :root{
+    --mobile-nav-h:calc(60px + env(safe-area-inset-bottom,0px));
+  }
 }
 </style>
 </head>
@@ -1007,11 +1062,11 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
     <div class="form-error" id="login-error"><i class="fa fa-circle-exclamation"></i><span id="login-error-msg">Invalid credentials.</span></div>
     <div class="form-group">
       <label class="form-label">Email Address</label>
-      <div class="input-wrap"><i class="fa fa-envelope input-icon"></i><input class="form-input" id="login-email" type="email" placeholder="admin@betcharlie.com"/></div>
+      <div class="input-wrap"><i class="fa fa-envelope input-icon"></i><input class="form-input" id="login-email" type="email" placeholder="admin@betcharlie.com" autocomplete="email"/></div>
     </div>
     <div class="form-group">
       <label class="form-label">Password</label>
-      <div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="login-pass" type="password" placeholder="••••••••"/><i class="fa fa-eye input-eye" onclick="togglePwd('login-pass',this)"></i></div>
+      <div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"/><i class="fa fa-eye input-eye" onclick="togglePwd('login-pass',this)"></i></div>
     </div>
     <button class="btn btn-primary btn-full" id="login-btn" onclick="doLogin()">Sign In <i class="fa fa-arrow-right"></i></button>
     <div class="auth-divider">or</div>
@@ -1043,10 +1098,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
     <h1 class="auth-heading">Create admin<br>account.</h1>
     <p class="auth-sub">POST /api/v1/admin/create</p>
     <div class="form-error" id="reg-error"><i class="fa fa-circle-exclamation"></i><span id="reg-error-msg">Please fill all fields.</span></div>
-    <div class="form-group"><label class="form-label">Full Name</label><div class="input-wrap"><i class="fa fa-user input-icon"></i><input class="form-input" id="reg-name" placeholder="Admin User"/></div></div>
-    <div class="form-group"><label class="form-label">Email Address</label><div class="input-wrap"><i class="fa fa-envelope input-icon"></i><input class="form-input" id="reg-email" type="email" placeholder="admin@betcharlie.com"/></div></div>
-    <div class="form-group"><label class="form-label">Password</label><div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="reg-pass" type="password" placeholder="Min 8 characters"/><i class="fa fa-eye input-eye" onclick="togglePwd('reg-pass',this)"></i></div></div>
-    <div class="form-group"><label class="form-label">Confirm Password</label><div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="reg-confirm" type="password" placeholder="Repeat password"/><i class="fa fa-eye input-eye" onclick="togglePwd('reg-confirm',this)"></i></div></div>
+    <div class="form-group"><label class="form-label">Full Name</label><div class="input-wrap"><i class="fa fa-user input-icon"></i><input class="form-input" id="reg-name" placeholder="Admin User" autocomplete="name"/></div></div>
+    <div class="form-group"><label class="form-label">Email Address</label><div class="input-wrap"><i class="fa fa-envelope input-icon"></i><input class="form-input" id="reg-email" type="email" placeholder="admin@betcharlie.com" autocomplete="email"/></div></div>
+    <div class="form-group"><label class="form-label">Password</label><div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="reg-pass" type="password" placeholder="Min 8 characters" autocomplete="new-password"/><i class="fa fa-eye input-eye" onclick="togglePwd('reg-pass',this)"></i></div></div>
+    <div class="form-group"><label class="form-label">Confirm Password</label><div class="input-wrap"><i class="fa fa-lock input-icon"></i><input class="form-input" id="reg-confirm" type="password" placeholder="Repeat password" autocomplete="new-password"/><i class="fa fa-eye input-eye" onclick="togglePwd('reg-confirm',this)"></i></div></div>
     <button class="btn btn-primary btn-full" id="reg-btn" onclick="doRegister()">Create Account <i class="fa fa-arrow-right"></i></button>
     <div class="auth-divider">or</div>
     <div class="auth-switch">Have an account? <a onclick="showScreen('login-screen')">Sign in</a></div>
@@ -1078,28 +1133,28 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Overview</div>
-      <div class="nav-item active" onclick="nav('dashboard',this)"><i class="fa fa-house"></i> Dashboard</div>
+      <div class="nav-item active" onclick="nav('dashboard',this)"><i class="fa fa-house"></i> <span>Dashboard</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Manage</div>
-      <div class="nav-item" onclick="nav('users',this)"><i class="fa fa-users"></i> Users</div>
-      <div class="nav-item" onclick="nav('games',this)"><i class="fa fa-futbol"></i> Games</div>
-      <div class="nav-item" onclick="nav('slips',this)"><i class="fa fa-ticket"></i> Betting Slips</div>
-      <div class="nav-item" onclick="nav('create-slip',this)"><i class="fa fa-plus-circle"></i> Create Slip</div>
+      <div class="nav-item" onclick="nav('users',this)"><i class="fa fa-users"></i> <span>Users</span></div>
+      <div class="nav-item" onclick="nav('games',this)"><i class="fa fa-futbol"></i> <span>Games</span></div>
+      <div class="nav-item" onclick="nav('slips',this)"><i class="fa fa-ticket"></i> <span>Betting Slips</span></div>
+      <div class="nav-item" onclick="nav('create-slip',this)"><i class="fa fa-plus-circle"></i> <span>Create Slip</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Monetisation</div>
-      <div class="nav-item" onclick="nav('vip',this)"><i class="fa fa-crown"></i> VIP &amp; Pricing</div>
-      <div class="nav-item" onclick="nav('promos',this)"><i class="fa fa-tags"></i> Promotions</div>
+      <div class="nav-item" onclick="nav('vip',this)"><i class="fa fa-crown"></i> <span>VIP &amp; Pricing</span></div>
+      <div class="nav-item" onclick="nav('promos',this)"><i class="fa fa-tags"></i> <span>Promotions</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Insights</div>
-      <div class="nav-item" onclick="nav('analytics',this)"><i class="fa fa-brain"></i> AI Analytics</div>
-      <div class="nav-item" onclick="nav('scheduler',this)"><i class="fa fa-clock"></i> Scheduler</div>
+      <div class="nav-item" onclick="nav('analytics',this)"><i class="fa fa-brain"></i> <span>AI Analytics</span></div>
+      <div class="nav-item" onclick="nav('scheduler',this)"><i class="fa fa-clock"></i> <span>Scheduler</span></div>
     </div>
     <div class="nav-section">
       <div class="nav-section-label">Account</div>
-      <div class="nav-item" onclick="nav('settings',this)"><i class="fa fa-user-gear"></i> My Profile</div>
+      <div class="nav-item" onclick="nav('settings',this)"><i class="fa fa-user-gear"></i> <span>My Profile</span></div>
     </div>
     <div class="sidebar-footer">
       <div class="admin-chip" onclick="openModal('profile-modal')">
@@ -1113,12 +1168,12 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
   <div class="main">
     <!-- TOPBAR -->
     <div class="topbar">
-      <button class="btn btn-ghost btn-sm hamburger" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Open menu"><i class="fa fa-bars"></i></button>
       <div class="topbar-title" id="page-title">Dashboard</div>
       <div class="topbar-actions">
         <button class="btn btn-ghost btn-sm" onclick="refreshCurrentPage()" title="Refresh"><i class="fa fa-rotate"></i></button>
         <button class="btn btn-primary btn-sm" id="topbar-cta" onclick="topCTA()"><i class="fa fa-plus"></i> <span id="topbar-cta-label">Quick Add</span></button>
-        <button class="btn btn-ghost btn-sm" onclick="logout()" title="Logout"><i class="fa fa-arrow-right-from-bracket"></i></button>
+        <button class="btn btn-ghost btn-sm" id="topbar-logout-btn" onclick="logout()" title="Logout"><i class="fa fa-arrow-right-from-bracket"></i></button>
       </div>
     </div>
 
@@ -1155,8 +1210,8 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
       <p class="page-sub">GET /api/v1/admin/users</p>
       <div class="card mb24">
         <div class="card-pad" style="border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <div class="search-group" style="flex:1;min-width:180px"><i class="fa fa-search"></i><input class="form-input" placeholder="Search by name or email…" id="user-search" oninput="filterUsers()" style="padding-left:36px"/></div>
-          <select class="form-input" style="width:140px" onchange="filterUserRole(this.value)"><option value="">All Roles</option><option value="VIP">VIP</option><option value="USER">Free</option></select>
+          <div class="search-group" style="flex:1;min-width:160px"><i class="fa fa-search"></i><input class="form-input" placeholder="Search by name or email…" id="user-search" oninput="filterUsers()" style="padding-left:36px"/></div>
+          <select class="form-input" style="width:130px" onchange="filterUserRole(this.value)"><option value="">All Roles</option><option value="VIP">VIP</option><option value="USER">Free</option></select>
           <button class="btn btn-ghost btn-sm" onclick="loadUsers()"><i class="fa fa-rotate"></i> Refresh</button>
         </div>
         <div class="tbl-wrap">
@@ -1215,7 +1270,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
       <div class="slip-create-layout">
         <!-- LEFT COLUMN -->
         <div>
-          <!-- Step 1: Type -->
           <div class="card mb24" style="overflow:visible">
             <div class="card-pad" style="border-bottom:1px solid var(--border)">
               <div class="card-title">Step 1 — Choose Slip Type</div>
@@ -1266,7 +1320,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
                 <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setCreateSlipDateFilter('day-after',this)">Day After</button>
                 <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setCreateSlipDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7</button>
                 <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
-                  <input type="date" id="cs-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setCreateSlipDateFilter('custom',null)"/>
+                  <input type="date" id="cs-custom-date" class="form-input" style="padding:4px 8px;font-size:12px;height:32px;width:130px;min-height:unset" onchange="setCreateSlipDateFilter('custom',null)"/>
                 </div>
               </div>
               <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -1298,8 +1352,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
                 </div>
               </div>
               <div class="slip-section-card-body">
-
-                <!-- ══ AUTO-FETCH BAR (NEW) ══ -->
                 <div style="margin-bottom:18px;padding:14px 16px;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px">
                   <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px">
                     <i class="fa fa-wand-magic-sparkles" style="color:var(--accent)"></i>
@@ -1327,7 +1379,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
                   </div>
                 </div>
 
-                <!-- ══ FETCH RESULT PREVIEW (shown after fetch) ══ -->
                 <div id="cs-fetch-result" style="display:none;margin-bottom:16px">
                   <div class="bc-preview-panel">
                     <div class="bc-preview-header">
@@ -1352,7 +1403,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
                   </div>
                 </div>
 
-                <!-- ══ MANUAL FIELDS (always shown, pre-filled after fetch) ══ -->
                 <div class="form-row">
                   <div class="form-group"><label class="form-label">Bookmaker <span style="color:var(--accent2)">*</span></label><input class="form-input" id="cs-bm" placeholder="e.g. Betway, Sportybet" oninput="updateSlipPreview()"/></div>
                   <div class="form-group"><label class="form-label">Booking Code <span style="color:var(--accent2)">*</span></label><input class="form-input" id="cs-code" placeholder="e.g. A1B2C3" oninput="updateSlipPreview()"/></div>
@@ -1569,7 +1619,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
             <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setAnalyticsDateFilter('day-after',this)">Day After</button>
             <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setAnalyticsDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7</button>
             <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
-              <input type="date" id="an-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setAnalyticsDateFilter('custom',null)"/>
+              <input type="date" id="an-custom-date" class="form-input" style="padding:4px 8px;font-size:12px;height:32px;width:130px;min-height:unset" onchange="setAnalyticsDateFilter('custom',null)"/>
             </div>
           </div>
           <div id="an-game-list" style="border:1.5px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;background:var(--bg);margin-bottom:14px"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div></div>
@@ -1671,7 +1721,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
           <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBookModalDateFilter('tomorrow',this)">Tomorrow</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBookModalDateFilter('day-after',this)">Day After</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBookModalDateFilter('next-week',this)">Next 7 Days</button>
-          <div style="margin-left:auto"><input type="date" id="bm-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setBookModalDateFilter('custom',null)"/></div>
+          <div style="margin-left:auto"><input type="date" id="bm-custom-date" class="form-input" style="padding:4px 8px;font-size:12px;height:32px;width:130px;min-height:unset" onchange="setBookModalDateFilter('custom',null)"/></div>
         </div>
         <div id="bm-game-list" class="game-picker-list"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div></div>
       </div>
@@ -1733,7 +1783,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
           <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBulkDateFilter('tomorrow',this)">Tomorrow</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBulkDateFilter('day-after',this)">Day After</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBulkDateFilter('next-week',this)">Next 7 Days</button>
-          <div style="margin-left:auto"><input type="date" id="bb-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:120px;min-height:unset" onchange="setBulkDateFilter('custom',null)"/></div>
+          <div style="margin-left:auto"><input type="date" id="bb-custom-date" class="form-input" style="padding:4px 8px;font-size:12px;height:32px;width:120px;min-height:unset" onchange="setBulkDateFilter('custom',null)"/></div>
         </div>
         <div id="bb-game-list" class="game-picker-list" style="max-height:280px"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div></div>
         <div id="bb-selected-wrap" style="display:none;margin-top:12px">
@@ -1754,14 +1804,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
         <div id="bulk-apply-defaults" style="display:none;margin-bottom:14px;padding:14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
           <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px"><i class="fa fa-wand-magic-sparkles" style="color:var(--gold);margin-right:5px"></i>Apply Same Settings to All</div>
           <div class="form-row-3" style="margin-bottom:8px">
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Home Win</label><input class="form-input" id="bbd-hw" placeholder="2.10" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Draw</label><input class="form-input" id="bbd-draw" placeholder="3.40" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Away Win</label><input class="form-input" id="bbd-aw" placeholder="3.20" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Home Win</label><input class="form-input" id="bbd-hw" placeholder="2.10" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Draw</label><input class="form-input" id="bbd-draw" placeholder="3.40" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Away Win</label><input class="form-input" id="bbd-aw" placeholder="3.20" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
           </div>
           <div class="form-row-3" style="margin-bottom:10px">
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 1.5</label><input class="form-input" id="bbd-o15" placeholder="1.30" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 2.5</label><input class="form-input" id="bbd-o25" placeholder="1.90" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
-            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 3.5</label><input class="form-input" id="bbd-o35" placeholder="3.50" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 1.5</label><input class="form-input" id="bbd-o15" placeholder="1.30" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 2.5</label><input class="form-input" id="bbd-o25" placeholder="1.90" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 3.5</label><input class="form-input" id="bbd-o35" placeholder="3.50" type="number" step="0.01" style="padding:8px 10px;font-size:12.5px"/></div>
           </div>
           <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
             <div class="checkbox-row"><input type="checkbox" id="bbd-pub" checked><label for="bbd-pub" style="font-size:12px">Published</label></div>
@@ -1900,6 +1950,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0;}
   <div class="mobile-more-item" onclick="openModal('profile-modal');document.getElementById('mobile-more-menu').classList.remove('open')"><i class="fa fa-circle-user" style="color:var(--text2)"></i> Quick Profile</div>
   <div class="mobile-more-item" onclick="logout()"><i class="fa fa-arrow-right-from-bracket" style="color:var(--accent2)"></i> Sign Out</div>
 </div>
+
 
   <script>
 // ════════════════════════════════════════════════════════════
