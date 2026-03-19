@@ -306,6 +306,135 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 .vip-equiv-val{font-size:18px;font-weight:700;font-family:var(--font-mono);color:var(--text)}
 .vip-equiv-val.ghs{color:var(--accent)}.vip-equiv-val.ngn{color:var(--gold)}.vip-equiv-val.usd{color:var(--blue)}
 
+/* ══════════════════════════════════════════
+   NEW: BOOK GAME MODAL — GAME PICKER
+   ══════════════════════════════════════════ */
+
+/* Shared game picker list used in both book-modal and bulk-modal */
+.game-picker-list{
+  border:1.5px solid var(--border2);border-radius:8px;
+  max-height:220px;overflow-y:auto;background:var(--bg);
+}
+.game-picker-item{
+  padding:11px 14px;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background .1s;
+}
+.game-picker-item:last-child{border-bottom:none}
+.game-picker-item:hover{background:var(--panel)}
+.game-picker-item.selected{background:var(--accent-lt)}
+.game-picker-item-teams{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
+.game-picker-item-meta{font-size:11px;color:var(--muted);margin-top:2px}
+.game-picker-item-odds{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+
+/* Selected game banner (inside book-modal) */
+.selected-game-banner{
+  display:none;padding:12px 14px;background:var(--accent-lt);
+  border:1px solid #1a4d32;border-radius:8px;margin-bottom:14px;
+  align-items:center;gap:10px;
+}
+.selected-game-banner.show{display:flex}
+
+/* Odds section — shown after game selected */
+.book-odds-section{
+  display:none;animation:pageIn .18s ease;
+}
+.book-odds-section.show{display:block}
+
+/* ══════════════════════════════════════════
+   NEW: BULK BOOK — PER-GAME ODDS ROWS
+   ══════════════════════════════════════════ */
+
+/* Table-style per-game odds editor inside bulk modal */
+.bulk-game-odds-list{
+  display:flex;flex-direction:column;gap:10px;
+  max-height:360px;overflow-y:auto;
+  padding-right:2px;
+}
+.bulk-game-odds-row{
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:10px;overflow:hidden;
+  transition:border-color .15s;
+}
+.bulk-game-odds-row:hover{border-color:var(--border2)}
+.bgor-header{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-bottom:1px solid var(--border);background:var(--panel);
+  cursor:pointer;user-select:none;
+}
+.bgor-expand-btn{
+  width:22px;height:22px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--border);color:var(--text2);font-size:10px;
+  flex-shrink:0;transition:all .15s;border:none;cursor:pointer;
+}
+.bgor-expand-btn.open{background:var(--accent-lt);color:var(--accent);transform:rotate(180deg)}
+.bgor-teams{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bgor-meta{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.bgor-remove{width:22px;height:22px;border-radius:6px;background:var(--accent2-lt);
+  color:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:10px;flex-shrink:0;transition:all .12s}
+.bgor-remove:hover{background:#3d1a0d}
+.bgor-body{display:none;padding:12px 14px 14px;animation:pageIn .15s ease}
+.bgor-body.open{display:block}
+.bgor-odds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.bgor-odds-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.bgor-input-wrap .form-label{font-size:10px;margin-bottom:4px;letter-spacing:.4px}
+.bgor-input-wrap .form-input{padding:7px 10px;font-size:12.5px;font-family:var(--font-mono)}
+.bgor-flags{display:flex;gap:16px;flex-wrap:wrap;padding-top:4px}
+.bgor-flags .checkbox-row label{font-size:12px}
+
+/* Bulk modal — tabs: pick games / set odds */
+.bulk-tab-bar{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;border:1px solid var(--border)}
+.bulk-tab{flex:1;padding:8px 12px;border-radius:7px;font-size:12.5px;font-weight:600;text-align:center;cursor:pointer;color:var(--text2);transition:all .15s;border:none;background:transparent;font-family:var(--font)}
+.bulk-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.bulk-tab-panel{display:none}
+.bulk-tab-panel.active{display:block;animation:pageIn .15s ease}
+
+/* ══════════════════════════════════════════
+   NEW: MULTI-SLIP QUEUE (Create Slip page)
+   ══════════════════════════════════════════ */
+
+.slip-queue-wrap{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;
+}
+.slip-queue-hd{
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--panel);
+}
+.slip-queue-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.slip-queue-count{
+  background:var(--accent);color:#0f0e0d;
+  font-size:10px;font-family:var(--font-mono);font-weight:700;
+  padding:1px 7px;border-radius:20px;
+}
+.slip-queue-body{padding:12px 16px}
+.slip-queue-empty{
+  padding:20px;text-align:center;color:var(--muted);font-size:12.5px;
+}
+.slip-queue-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  margin-bottom:8px;transition:border-color .15s;
+}
+.slip-queue-item:last-child{margin-bottom:0}
+.slip-queue-item:hover{border-color:var(--border2)}
+.sqi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.sqi-info{flex:1;min-width:0}
+.sqi-bm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sqi-meta{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sqi-actions{display:flex;gap:4px;flex-shrink:0}
+
+/* Progress bar during bulk submit */
+.bulk-progress-bar{
+  height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden;
+}
+.bulk-progress-fill{
+  height:100%;background:var(--accent);border-radius:2px;
+  transition:width .3s ease;
+}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--panel)}
@@ -443,6 +572,8 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   .chip{padding:4px 10px;font-size:11.5px}
   .odd-pill{font-size:11.5px;padding:3px 8px}
   .vip-currency-grid{grid-template-columns:1fr 1fr}
+  .bgor-odds-grid,.bgor-odds-grid2{grid-template-columns:1fr 1fr}
+  .bulk-tab{font-size:11.5px;padding:7px 8px}
 }
 @media(max-width:390px){
   html{font-size:13px}
@@ -649,7 +780,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="page-headline">Game Management</div>
       <p class="page-sub">Book, configure and publish fixtures</p>
       <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-        <button class="btn btn-primary btn-sm" onclick="openModal('book-modal')"><i class="fa fa-plus"></i> Book Game</button>
+        <button class="btn btn-primary btn-sm" onclick="openBookModal()"><i class="fa fa-plus"></i> Book Game</button>
         <button class="btn btn-outline btn-sm" onclick="openBulkModal()"><i class="fa fa-layer-group"></i> Bulk Book</button>
         <div style="flex:1"></div>
         <div id="game-filters" style="display:flex;gap:6px;flex-wrap:wrap">
@@ -684,38 +815,41 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         <button class="btn btn-ghost btn-sm" onclick="nav('slips',null)" style="padding:6px 10px"><i class="fa fa-arrow-left"></i></button>
         <div class="page-headline" style="margin-bottom:0">Create Slip</div>
       </div>
-      <p class="page-sub">POST /api/v1/admin/games/slips (multipart/form-data)</p>
-      <div class="card mb24" style="overflow:visible">
-        <div class="card-pad" style="border-bottom:1px solid var(--border)">
-          <div class="card-title">Step 1 — Choose Slip Type</div>
-          <div class="card-sub">Select the kind of slip you want to create</div>
-        </div>
-        <div class="card-pad">
-          <div class="slip-type-grid">
-            <div class="slip-type-card active" id="stc-booking" onclick="setCreateSlipType('booking')">
-              <div class="stc-check"><i class="fa fa-check"></i></div>
-              <div class="stc-icon"><i class="fa fa-ticket"></i></div>
-              <div class="stc-name">Booking Code</div>
-              <div class="stc-desc">Share a bookmaker code with odds</div>
-            </div>
-            <div class="slip-type-card" id="stc-prediction" onclick="setCreateSlipType('prediction')">
-              <div class="stc-check"><i class="fa fa-check"></i></div>
-              <div class="stc-icon"><i class="fa fa-bullseye"></i></div>
-              <div class="stc-name">Prediction</div>
-              <div class="stc-desc">Pick match outcomes for a game</div>
-            </div>
-            <div class="slip-type-card" id="stc-odds" onclick="setCreateSlipType('odds')">
-              <div class="stc-check"><i class="fa fa-check"></i></div>
-              <div class="stc-icon"><i class="fa fa-percent"></i></div>
-              <div class="stc-name">Odds Slip</div>
-              <div class="stc-desc">Build a multi-leg accumulator</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <p class="page-sub">POST /api/v1/admin/games/slips — build one or queue multiple</p>
 
       <div class="slip-create-layout">
         <div>
+          <!-- STEP 1: Slip Type -->
+          <div class="card mb24" style="overflow:visible">
+            <div class="card-pad" style="border-bottom:1px solid var(--border)">
+              <div class="card-title">Step 1 — Choose Slip Type</div>
+              <div class="card-sub">Select the kind of slip you want to create</div>
+            </div>
+            <div class="card-pad">
+              <div class="slip-type-grid">
+                <div class="slip-type-card active" id="stc-booking" onclick="setCreateSlipType('booking')">
+                  <div class="stc-check"><i class="fa fa-check"></i></div>
+                  <div class="stc-icon"><i class="fa fa-ticket"></i></div>
+                  <div class="stc-name">Booking Code</div>
+                  <div class="stc-desc">Share a bookmaker code with odds</div>
+                </div>
+                <div class="slip-type-card" id="stc-prediction" onclick="setCreateSlipType('prediction')">
+                  <div class="stc-check"><i class="fa fa-check"></i></div>
+                  <div class="stc-icon"><i class="fa fa-bullseye"></i></div>
+                  <div class="stc-name">Prediction</div>
+                  <div class="stc-desc">Pick match outcomes for a game</div>
+                </div>
+                <div class="slip-type-card" id="stc-odds" onclick="setCreateSlipType('odds')">
+                  <div class="stc-check"><i class="fa fa-check"></i></div>
+                  <div class="stc-icon"><i class="fa fa-percent"></i></div>
+                  <div class="stc-name">Odds Slip</div>
+                  <div class="stc-desc">Build a multi-leg accumulator</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Link to Game -->
           <div class="slip-section-card mb16">
             <div class="slip-section-card-hd">
               <div class="sec-icon ic-blue"><i class="fa fa-futbol"></i></div>
@@ -757,6 +891,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
+          <!-- STEP 3: Booking Code -->
           <div class="slip-section active" id="cs-section-booking">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -777,6 +912,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
+          <!-- STEP 3: Prediction -->
           <div class="slip-section" id="cs-section-prediction">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -809,6 +945,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
+          <!-- STEP 3: Odds -->
           <div class="slip-section" id="cs-section-odds">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -839,6 +976,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
+          <!-- STEP 4: Options -->
           <div class="slip-section-card">
             <div class="slip-section-card-hd">
               <div class="sec-icon ic-gray"><i class="fa fa-sliders"></i></div>
@@ -863,12 +1001,50 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
+          <!-- ACTION BUTTONS -->
           <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
-            <button class="btn btn-primary" id="cs-submit-btn" onclick="submitCreateSlipPage()" style="flex:1;min-width:200px"><i class="fa fa-check"></i> Create Slip</button>
+            <!-- Add to Queue button -->
+            <button class="btn btn-outline" onclick="addSlipToQueue()" style="flex:0 0 auto">
+              <i class="fa fa-plus"></i> Add to Queue
+            </button>
+            <!-- Submit current slip only -->
+            <button class="btn btn-primary" id="cs-submit-btn" onclick="submitCreateSlipPage()" style="flex:1;min-width:160px">
+              <i class="fa fa-check"></i> Create Slip
+            </button>
             <button class="btn btn-ghost btn-sm" onclick="nav('slips',null)">Cancel</button>
           </div>
+
+          <!-- ── SLIP QUEUE ── -->
+          <div class="slip-queue-wrap" id="cs-queue-wrap" style="display:none;margin-top:20px">
+            <div class="slip-queue-hd">
+              <div class="slip-queue-title">
+                <i class="fa fa-layer-group" style="color:var(--accent)"></i>
+                Slip Queue
+                <span class="slip-queue-count" id="cs-queue-count">0</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <span style="font-size:12px;color:var(--muted)">All queued slips will be submitted together</span>
+                <button class="btn btn-ghost btn-xs" onclick="clearSlipQueue()"><i class="fa fa-xmark"></i> Clear</button>
+              </div>
+            </div>
+            <div class="slip-queue-body">
+              <div id="cs-queue-list"></div>
+              <!-- Progress bar shown during submit -->
+              <div id="cs-queue-progress" style="display:none;margin-top:12px">
+                <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="cs-queue-progress-label">Submitting 0 / 0…</div>
+                <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="cs-queue-progress-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end">
+              <button class="btn btn-primary btn-sm" id="cs-queue-submit-btn" onclick="submitSlipQueue()">
+                <i class="fa fa-paper-plane"></i> Submit All in Queue
+              </button>
+            </div>
+          </div>
+
         </div>
 
+        <!-- RIGHT: LIVE PREVIEW -->
         <div>
           <div class="slip-preview-card">
             <div class="slip-preview-header">Live Preview</div>
@@ -888,6 +1064,12 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
             <hr/>
             <div style="font-size:11px;color:var(--muted);text-align:center">Preview updates as you type</div>
+
+            <!-- Mini queue summary in preview panel -->
+            <div id="preview-queue-summary" style="display:none;margin-top:14px;padding:10px 12px;background:var(--accent-lt);border:1px solid #1a4d32;border-radius:8px">
+              <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px"><i class="fa fa-layer-group" style="margin-right:4px"></i>Queue Ready</div>
+              <div style="font-size:12px;color:var(--text2)" id="preview-queue-count-text">0 slips in queue</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1042,30 +1224,80 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /.main -->
+</div><!-- /#app -->
 
-<!-- ════ MODALS ════ -->
+<!-- ════════════════════════════════
+     MODALS
+════════════════════════════════ -->
+
+<!-- ══ BOOK GAME MODAL (redesigned — no manual UUID) ══ -->
 <div class="overlay" id="book-modal">
-  <div class="modal">
-    <div class="modal-hd"><div class="modal-title">Book Game</div><div class="modal-close" onclick="closeModal('book-modal')"><i class="fa fa-xmark"></i></div></div>
+  <div class="modal" style="width:600px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">Book Game</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select a fixture, then configure odds &amp; flags</div>
+      </div>
+      <div class="modal-close" onclick="closeModal('book-modal')"><i class="fa fa-xmark"></i></div>
+    </div>
     <div class="modal-body">
-      <div class="form-group"><label class="form-label">Game ID (UUID)</label><input class="form-input" id="bg-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/></div>
-      <div class="form-row-3">
-        <div class="form-group"><label class="form-label">Home Win</label><input class="form-input" id="bg-hw" placeholder="2.10" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Draw</label><input class="form-input" id="bg-draw" placeholder="3.40" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Away Win</label><input class="form-input" id="bg-aw" placeholder="3.20" type="number" step="0.01"/></div>
+
+      <!-- Game search + picker -->
+      <div class="form-group" style="margin-bottom:10px">
+        <label class="form-label">Pick a Fixture <span style="color:var(--accent2)">*</span></label>
+        <div class="search-group" style="margin-bottom:8px">
+          <i class="fa fa-search"></i>
+          <input class="form-input" id="bm-search" placeholder="Search by team or league…" oninput="filterBookModalGames()" style="padding-left:36px" autocomplete="off"/>
+        </div>
+        <!-- Date filter tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setBookModalDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBookModalDateFilter('tomorrow',this)">Tomorrow</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBookModalDateFilter('day-after',this)">Day After</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBookModalDateFilter('next-week',this)">Next 7 Days</button>
+          <div style="margin-left:auto">
+            <input type="date" id="bm-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setBookModalDateFilter('custom',null)"/>
+          </div>
+        </div>
+        <div id="bm-game-list" class="game-picker-list">
+          <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
+        </div>
       </div>
-      <div class="form-row-3">
-        <div class="form-group"><label class="form-label">Over 1.5</label><input class="form-input" id="bg-o15" placeholder="1.30" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Over 2.5</label><input class="form-input" id="bg-o25" placeholder="1.90" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Over 3.5</label><input class="form-input" id="bg-o35" placeholder="3.50" type="number" step="0.01"/></div>
+
+      <!-- Selected game banner -->
+      <div class="selected-game-banner" id="bm-selected-banner">
+        <i class="fa fa-circle-check" style="color:var(--accent);flex-shrink:0"></i>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600" id="bm-selected-label">—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)" id="bm-selected-meta">—</div>
+        </div>
+        <button class="btn btn-ghost btn-xs" onclick="clearBookModalGame()"><i class="fa fa-xmark"></i> Clear</button>
       </div>
-      <div style="display:flex;gap:20px;margin-top:4px">
-        <div class="checkbox-row"><input type="checkbox" id="bg-pub" checked><label for="bg-pub">Published</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="bg-vip"><label for="bg-vip">VIP Only</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="bg-feat"><label for="bg-feat">Featured</label></div>
+
+      <!-- Odds + flags — shown once a game is selected -->
+      <div class="book-odds-section" id="bm-odds-section">
+        <hr style="margin:14px 0"/>
+        <div style="font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px">
+          Configure Odds <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — leave blank to skip)</span>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Home Win</label><input class="form-input" id="bg-hw" placeholder="2.10" type="number" step="0.01"/></div>
+          <div class="form-group"><label class="form-label">Draw</label><input class="form-input" id="bg-draw" placeholder="3.40" type="number" step="0.01"/></div>
+          <div class="form-group"><label class="form-label">Away Win</label><input class="form-input" id="bg-aw" placeholder="3.20" type="number" step="0.01"/></div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">Over 1.5</label><input class="form-input" id="bg-o15" placeholder="1.30" type="number" step="0.01"/></div>
+          <div class="form-group"><label class="form-label">Over 2.5</label><input class="form-input" id="bg-o25" placeholder="1.90" type="number" step="0.01"/></div>
+          <div class="form-group"><label class="form-label">Over 3.5</label><input class="form-input" id="bg-o35" placeholder="3.50" type="number" step="0.01"/></div>
+        </div>
+        <div style="display:flex;gap:20px;margin-top:4px;flex-wrap:wrap">
+          <div class="checkbox-row"><input type="checkbox" id="bg-pub" checked><label for="bg-pub">Published</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="bg-vip"><label for="bg-vip">VIP Only</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="bg-feat"><label for="bg-feat">Featured</label></div>
+        </div>
       </div>
+
     </div>
     <div class="modal-ft">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('book-modal')">Cancel</button>
@@ -1074,63 +1306,115 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
+<!-- ══ BULK BOOK MODAL (redesigned — per-game odds via List<BookGameRequest>) ══ -->
 <div class="overlay" id="bulk-modal">
-  <div class="modal" style="width:640px">
+  <div class="modal" style="width:700px">
     <div class="modal-hd">
       <div>
         <div class="modal-title">Bulk Book Games</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select games, then apply odds &amp; flags to all at once</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select games, configure per-game odds, then submit all at once</div>
       </div>
       <div class="modal-close" onclick="closeModal('bulk-modal')"><i class="fa fa-xmark"></i></div>
     </div>
     <div class="modal-body" style="padding-top:18px">
-      <div class="form-group" style="margin-bottom:10px">
-        <label class="form-label">Pick Games <span style="color:var(--accent2)">*</span></label>
+
+      <!-- Tab bar -->
+      <div class="bulk-tab-bar">
+        <button class="bulk-tab active" id="bulk-tab-pick" onclick="switchBulkTab('pick')">
+          <i class="fa fa-futbol" style="margin-right:5px"></i>Pick Games
+          <span id="bulk-pick-count" style="background:var(--accent);color:#0f0e0d;font-size:10px;font-family:var(--font-mono);font-weight:700;padding:1px 6px;border-radius:20px;margin-left:5px;display:none">0</span>
+        </button>
+        <button class="bulk-tab" id="bulk-tab-odds" onclick="switchBulkTab('odds')">
+          <i class="fa fa-sliders" style="margin-right:5px"></i>Set Odds &amp; Flags
+          <span id="bulk-odds-count" style="background:var(--gold);color:#0f0e0d;font-size:10px;font-family:var(--font-mono);font-weight:700;padding:1px 6px;border-radius:20px;margin-left:5px;display:none">0</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Pick Games -->
+      <div class="bulk-tab-panel active" id="bulk-panel-pick">
         <div class="search-group" style="margin-bottom:8px">
           <i class="fa fa-search"></i>
           <input class="form-input" id="bb-search" placeholder="Search by team or league…" oninput="filterBulkGames()" style="padding-left:36px" autocomplete="off"/>
         </div>
-        <div id="bb-game-list" style="border:1.5px solid var(--border2);border-radius:8px;max-height:200px;overflow-y:auto;background:var(--bg)">
+        <!-- Date filter tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setBulkDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBulkDateFilter('tomorrow',this)">Tomorrow</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBulkDateFilter('day-after',this)">Day After</button>
+          <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBulkDateFilter('next-week',this)">Next 7 Days</button>
+          <div style="margin-left:auto">
+            <input type="date" id="bb-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:120px;min-height:unset" onchange="setBulkDateFilter('custom',null)"/>
+          </div>
+        </div>
+        <div id="bb-game-list" class="game-picker-list" style="max-height:280px">
           <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
         </div>
-      </div>
-      <div id="bb-selected-wrap" style="display:none;margin-bottom:14px">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:7px">
-          Selected <span id="bb-count" style="color:var(--accent)">0</span> game(s)
-          <button class="btn btn-ghost btn-xs" style="margin-left:8px;padding:2px 8px;font-size:10px" onclick="BB_SELECTED={};renderBulkSelectedChips()">Clear all</button>
+        <div id="bb-selected-wrap" style="display:none;margin-top:12px">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:7px">
+            Selected <span id="bb-count" style="color:var(--accent)">0</span> game(s)
+            <button class="btn btn-ghost btn-xs" style="margin-left:8px;padding:2px 8px;font-size:10px" onclick="clearAllBulkGames()">Clear all</button>
+          </div>
+          <div id="bb-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
         </div>
-        <div id="bb-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
-      <hr style="margin:14px 0"/>
-      <div style="font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px">
-        Apply Odds to All Selected <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span>
+
+      <!-- TAB 2: Set Odds & Flags (per-game) -->
+      <div class="bulk-tab-panel" id="bulk-panel-odds">
+        <div id="bulk-odds-empty" style="padding:32px;text-align:center;color:var(--muted)">
+          <i class="fa fa-futbol" style="font-size:28px;opacity:.2;display:block;margin-bottom:10px"></i>
+          <div style="font-size:13px">No games selected yet.</div>
+          <div style="font-size:12px;margin-top:4px">Go to the <strong style="color:var(--text)">Pick Games</strong> tab first.</div>
+        </div>
+
+        <!-- Apply defaults to all -->
+        <div id="bulk-apply-defaults" style="display:none;margin-bottom:14px;padding:14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
+          <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">
+            <i class="fa fa-wand-magic-sparkles" style="color:var(--gold);margin-right:5px"></i>Apply Same Settings to All Selected Games
+          </div>
+          <div class="form-row-3" style="margin-bottom:8px">
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Home Win</label><input class="form-input" id="bbd-hw" placeholder="2.10" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Draw</label><input class="form-input" id="bbd-draw" placeholder="3.40" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Away Win</label><input class="form-input" id="bbd-aw" placeholder="3.20" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+          </div>
+          <div class="form-row-3" style="margin-bottom:10px">
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 1.5</label><input class="form-input" id="bbd-o15" placeholder="1.30" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 2.5</label><input class="form-input" id="bbd-o25" placeholder="1.90" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+            <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Over 3.5</label><input class="form-input" id="bbd-o35" placeholder="3.50" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <div class="checkbox-row"><input type="checkbox" id="bbd-pub" checked><label for="bbd-pub" style="font-size:12px">Published</label></div>
+            <div class="checkbox-row"><input type="checkbox" id="bbd-vip"><label for="bbd-vip" style="font-size:12px">VIP Only</label></div>
+            <div class="checkbox-row"><input type="checkbox" id="bbd-feat"><label for="bbd-feat" style="font-size:12px">Featured</label></div>
+            <button class="btn btn-gold btn-xs" style="margin-left:auto" onclick="applyDefaultsToAll()">
+              <i class="fa fa-wand-magic-sparkles"></i> Apply to All
+            </button>
+          </div>
+        </div>
+
+        <!-- Per-game rows -->
+        <div id="bulk-odds-list" class="bulk-game-odds-list" style="display:none"></div>
       </div>
-      <div class="form-row-3">
-        <div class="form-group"><label class="form-label">Home Win</label><input class="form-input" id="bb-hw" placeholder="2.10" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Draw</label><input class="form-input" id="bb-draw" placeholder="3.40" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Away Win</label><input class="form-input" id="bb-aw" placeholder="3.20" type="number" step="0.01"/></div>
+
+      <!-- Progress bar -->
+      <div id="bulk-progress" style="display:none;margin-top:14px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="bulk-progress-label">Submitting 0 / 0…</div>
+        <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="bulk-progress-fill" style="width:0%"></div></div>
       </div>
-      <div class="form-row-3">
-        <div class="form-group"><label class="form-label">Over 1.5</label><input class="form-input" id="bb-o15" placeholder="1.30" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Over 2.5</label><input class="form-input" id="bb-o25" placeholder="1.90" type="number" step="0.01"/></div>
-        <div class="form-group"><label class="form-label">Over 3.5</label><input class="form-input" id="bb-o35" placeholder="3.50" type="number" step="0.01"/></div>
-      </div>
-      <div style="display:flex;gap:20px;margin-top:4px">
-        <div class="checkbox-row"><input type="checkbox" id="bb-pub" checked><label for="bb-pub">Published</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="bb-vip"><label for="bb-vip">VIP Only</label></div>
-        <div class="checkbox-row"><input type="checkbox" id="bb-feat"><label for="bb-feat">Featured</label></div>
-      </div>
+
     </div>
     <div class="modal-ft">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('bulk-modal')">Cancel</button>
-      <button class="btn btn-primary btn-sm" id="bulk-submit-btn" onclick="submitBulkBook()"><i class="fa fa-layer-group"></i> Book Selected</button>
+      <button class="btn btn-primary btn-sm" id="bulk-submit-btn" onclick="submitBulkBook()">
+        <i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span>
+      </button>
     </div>
   </div>
 </div>
 
+<!-- ══ SLIP STATUS MODAL ══ -->
 <div class="overlay" id="slip-status-modal">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title">Update Slip Status</div><div class="modal-close" onclick="closeModal('slip-status-modal')"><i class="fa fa-xmark"></i></div></div>
+    <div class="modal-hd"><div class="modal-title">Slip Detail</div><div class="modal-close" onclick="closeModal('slip-status-modal')"><i class="fa fa-xmark"></i></div></div>
     <div class="modal-body">
       <input type="hidden" id="slip-status-id"/>
       <div class="form-group"><label class="form-label">Status</label>
@@ -1149,6 +1433,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
+<!-- ══ VIP MODAL ══ -->
 <div class="overlay" id="vip-modal">
   <div class="modal">
     <div class="modal-hd">
@@ -1195,6 +1480,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
+<!-- ══ PROMO MODAL ══ -->
 <div class="overlay" id="promo-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Create Promotion</div><div class="modal-close" onclick="closeModal('promo-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1202,10 +1488,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="pm-title" placeholder="e.g. Weekend Special"/></div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="pm-desc" rows="2" placeholder="Promo details…"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type"><!-- FIXED — matches your PromoType enum exactly -->
-<option value="DISCOUNT">DISCOUNT — % off VIP price</option>
-<option value="FREE_VIP">FREE_VIP — Free VIP access</option>
-<option value="ANNOUNCEMENT">ANNOUNCEMENT — Banner / notice</option></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type">
+          <option value="DISCOUNT">DISCOUNT — % off VIP price</option>
+          <option value="FREE_VIP">FREE_VIP — Free VIP access</option>
+          <option value="ANNOUNCEMENT">ANNOUNCEMENT — Banner / notice</option></select></div>
         <div class="form-group"><label class="form-label">Discount %</label><input class="form-input" id="pm-disc" placeholder="25" type="number"/></div>
       </div>
       <div class="form-row">
@@ -1221,6 +1507,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
+<!-- ══ PROFILE MODAL ══ -->
 <div class="overlay" id="profile-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Admin Profile</div><div class="modal-close" onclick="closeModal('profile-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1270,446 +1557,249 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   <div class="mobile-more-item" onclick="logout()"><i class="fa fa-arrow-right-from-bracket" style="color:var(--accent2)"></i> Sign Out</div>
 </div>
 
+<!-- JS PLACEHOLDER — paste your existing script block here, then add the new functions shown below -->
 <script>
-  const API_BASE = 'https://bettingbackend-y3ck.onrender.com';
+/*
+  ══════════════════════════════════════════════════════════
+  PASTE YOUR ENTIRE EXISTING <script> BLOCK HERE, THEN ADD
+  THE NEW FUNCTIONS BELOW (they override/extend the old ones)
+  ══════════════════════════════════════════════════════════
 
-const TokenStore = {
-  set(t)  { localStorage.setItem('bc_jwt', t); },
-  get()   { return localStorage.getItem('bc_jwt') || ''; },
-  clear() { localStorage.removeItem('bc_jwt'); }
-};
-const AdminStore = {
-  set(a)  { localStorage.setItem('bc_admin', JSON.stringify(a)); },
-  get()   { try { return JSON.parse(localStorage.getItem('bc_admin')); } catch { return null; } },
-  clear() { localStorage.removeItem('bc_admin'); }
-};
+  NEW / CHANGED FUNCTIONS TO ADD / REPLACE:
 
-let ADMIN       = AdminStore.get();
-let ALL_GAMES   = [];
-let ALL_USERS   = [];
-let CHARTS_INIT = {};
-let anProbRef, anGoalsRef;
-let currentPage = 'dashboard';
-let _vipModalRates = null;
+  1. openBookModal()            — replaces old openModal('book-modal') call
+  2. loadBookModalGames()       — fetches games for the picker
+  3. filterBookModalGames()     — filters the picker list
+  4. setBookModalDateFilter()   — date tab handler for book modal
+  5. renderBookModalGameList()  — renders clickable game rows
+  6. selectBookModalGame()      — selects a game, shows odds section
+  7. clearBookModalGame()       — clears selection
+  8. submitBookGame()           — uses selected game id (no manual UUID)
 
-async function api(method, path, body = null, isFormData = false) {
-  const token = TokenStore.get();
-  const headers = { 'ngrok-skip-browser-warning': 'true' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-  if (!isFormData && body) headers['Content-Type'] = 'application/json';
-  const opts = { method, headers };
-  if (body) opts.body = isFormData ? body : JSON.stringify(body);
-  let res;
-  try { res = await fetch(API_BASE + path, opts); }
-  catch (e) { throw new Error(`Network error — is the server running at ${API_BASE}?`); }
-  const json = await res.json().catch(() => ({}));
-  if (res.status === 401 && !path.includes('/login') && !path.includes('/create')) { logout(); throw new Error('Session expired'); }
-  if (res.status === 403) throw new Error('Access denied (403). Try logging out and back in.');
-  if (res.status === 405) throw new Error(`405 — check your Spring CORS config allows ${method} requests from this origin.`);
-  if (!res.ok) throw new Error(json.message || json.error || `HTTP ${res.status}`);
-  return json;
-}
-const GET   = p        => api('GET',   p);
-const POST  = (p,b,fd) => api('POST',  p, b, fd);
-const PATCH = (p,b)    => api('PATCH', p, b);
-const DEL   = p        => api('DELETE',p);
+  9. openBulkModal()            — enhanced version with tab UI
+  10. loadBulkGames()           — loads games, respects date filter
+  11. filterBulkGames()         — searches within bulk list
+  12. setBulkDateFilter()        — date tab for bulk modal
+  13. renderBulkGameList()       — renders bulk game picker
+  14. toggleBulkGame()          — add/remove from selection, sync odds tab
+  15. switchBulkTab()           — switches between pick/odds tabs
+  16. renderBulkOddsRows()      — builds per-game odds editor rows
+  17. toggleBulkOddsRow()       — expand/collapse individual game row
+  18. applyDefaultsToAll()      — writes default odds into all game inputs
+  19. submitBulkBook()          — builds List<BookGameRequest> and POSTs
 
-/**
- * toISOWithSeconds
- * ─────────────────
- * Converts a datetime-local string ("2024-01-15T14:30") to an ISO-8601
- * string WITH seconds ("2024-01-15T14:30:00") so Spring's
- * @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) / LocalDateTime
- * deserialization works correctly.
- *
- * datetime-local inputs always yield "YYYY-MM-DDTHH:MM" (16 chars).
- * Spring expects at minimum "YYYY-MM-DDTHH:MM:SS".
- */
-function toISOWithSeconds(dtLocal) {
-  if (!dtLocal) return null;
-  return dtLocal.length === 16 ? dtLocal + ':00' : dtLocal;
-}
+  20. addSlipToQueue()          — snapshots current form state → queue
+  21. renderSlipQueue()         — renders queued slip items
+  22. removeSlipFromQueue()     — removes one item
+  23. clearSlipQueue()          — empties queue
+  24. submitSlipQueue()         — submits each queued slip in sequence
 
-function showScreen(id) {
-  document.querySelectorAll('.auth-screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-}
-function togglePwd(id, el) {
-  const i = document.getElementById(id);
-  i.type = i.type === 'password' ? 'text' : 'password';
-  el.classList.toggle('fa-eye'); el.classList.toggle('fa-eye-slash');
-}
+  ── BOOK GAME MODAL ──────────────────────────────────────
+*/
 
-async function doLogin() {
-  const email = v('login-email'), pass = v('login-pass');
-  if (!email || !pass) return showErr('login-error','login-error-msg','Please enter email and password.');
-  const btn = document.getElementById('login-btn');
-  btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> Signing in…';
-  try {
-    const res = await POST('/api/v1/admin/login', { email, password: pass });
-    if (!res.success) throw new Error(res.message || 'Login failed');
-    const token = res.data?.accessToken || res.data?.token || res.accessToken || res.token;
-    if (!token) throw new Error('No access token in response.');
-    TokenStore.set(token);
-    ADMIN = { ...res.data }; delete ADMIN.token; delete ADMIN.accessToken;
-    AdminStore.set(ADMIN);
-    launchApp();
-  } catch(e) {
-    showErr('login-error','login-error-msg', e.message || 'Login failed.');
-  } finally { btn.disabled=false; btn.innerHTML='Sign In <i class="fa fa-arrow-right"></i>'; }
-}
+let BM_GAMES_ALL = [], BM_SELECTED_GAME = null, BM_DATE_FILTER = 'today';
 
-async function doRegister() {
-  const name=v('reg-name'),email=v('reg-email'),pass=v('reg-pass'),conf=v('reg-confirm');
-  if (!name||!email||!pass) return showErr('reg-error','reg-error-msg','Fill all fields.');
-  if (pass.length<8) return showErr('reg-error','reg-error-msg','Password min 8 characters.');
-  if (pass!==conf)   return showErr('reg-error','reg-error-msg','Passwords do not match.');
-  const btn = document.getElementById('reg-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Creating…';
-  try {
-    const res = await POST('/api/v1/admin/create',{fullName:name,email,password:pass,confirmPassword:conf});
-    if (!res.success) throw new Error(res.message||'Registration failed');
-    const token = res.data?.accessToken||res.data?.token||res.accessToken||res.token;
-    if (!token) throw new Error('No access token in response.');
-    TokenStore.set(token);
-    ADMIN = {...res.data}; delete ADMIN.token; delete ADMIN.accessToken;
-    AdminStore.set(ADMIN);
-    launchApp();
-  } catch(e) {
-    showErr('reg-error','reg-error-msg', e.message||'Registration failed.');
-  } finally { btn.disabled=false; btn.innerHTML='Create Account <i class="fa fa-arrow-right"></i>'; }
-}
-
-function showErr(errId, msgId, msg) {
-  document.getElementById(msgId).textContent = msg;
-  document.getElementById(errId).classList.add('show');
-}
-
-function launchApp() {
-  document.querySelectorAll('.auth-screen').forEach(s => s.classList.add('hidden'));
-  document.getElementById('app').classList.add('active');
-  const name = ADMIN?.fullName || 'Admin';
-  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('sidebar-name').textContent   = name;
-  document.getElementById('sidebar-avatar').textContent = initials;
-  document.getElementById('prof-name').value   = name;
-  document.getElementById('prof-email').value  = ADMIN?.email||'';
-  document.getElementById('modal-prof-name').value  = name;
-  document.getElementById('modal-prof-email').value = ADMIN?.email||'';
-  document.getElementById('settings-api-url').textContent = API_BASE;
-  const hr = new Date().getHours();
-  document.getElementById('dash-greeting').textContent =
-    `${hr<12?'Good morning':hr<17?'Good afternoon':'Good evening'}, ${name.split(' ')[0]} 👋`;
-  initDashStats();
-  loadDashboard();
-}
-
-function logout() {
-  TokenStore.clear(); AdminStore.clear(); ADMIN=null;
-  document.getElementById('app').classList.remove('active');
-  CHARTS_INIT={};
-  showScreen('login-screen');
-  document.getElementById('login-email').value='';
-  document.getElementById('login-pass').value='';
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  const token = TokenStore.get(); ADMIN = AdminStore.get();
-  if (token && ADMIN) { launchApp(); return; }
-  AdminStore.clear(); ADMIN=null;
-  showScreen('login-screen');
-  document.getElementById('login-pass').addEventListener('keydown',  e=>{if(e.key==='Enter')doLogin();});
-  document.getElementById('reg-confirm').addEventListener('keydown', e=>{if(e.key==='Enter')doRegister();});
-});
-
-const PAGE_META = {
-  dashboard:    { title:'Dashboard',      cta:'Book Game',    ctaFn:()=>openModal('book-modal') },
-  users:        { title:'Users',          cta:'Refresh',      ctaFn:loadUsers },
-  games:        { title:'Games',          cta:'Book Game',    ctaFn:()=>openModal('book-modal') },
-  slips:        { title:'Betting Slips',  cta:'Create Slip',  ctaFn:()=>nav('create-slip',null) },
-  'create-slip':{ title:'Create Slip',    cta:'View Slips',   ctaFn:()=>nav('slips',null) },
-  vip:          { title:'VIP & Pricing',  cta:'Update Price', ctaFn:()=>openModal('vip-modal') },
-  promos:       { title:'Promotions',     cta:'New Promo',    ctaFn:()=>openModal('promo-modal') },
-  analytics:    { title:'AI Analytics',   cta:'Run Analysis', ctaFn:runAnalytics },
-  scheduler:    { title:'Scheduler',      cta:'Run All',      ctaFn:()=>triggerJob('all') },
-  settings:     { title:'My Profile',     cta:'Save',         ctaFn:submitProfile },
-};
-
-function nav(page, el) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+page)?.classList.add('active');
-  if (el) el.classList.add('active');
-  else document.querySelectorAll('.nav-item').forEach(n=>{
-    if(n.getAttribute('onclick')?.includes(`'${page}'`)) n.classList.add('active');
+function openBookModal() {
+  BM_SELECTED_GAME = null;
+  BM_DATE_FILTER = 'today';
+  BM_GAMES_ALL = [];
+  document.getElementById('bm-search').value = '';
+  document.getElementById('bm-selected-banner').classList.remove('show');
+  document.getElementById('bm-odds-section').classList.remove('show');
+  document.getElementById('bm-custom-date').value = '';
+  ['bg-hw','bg-draw','bg-aw','bg-o15','bg-o25','bg-o35'].forEach(id => {
+    const e = document.getElementById(id); if(e) e.value = '';
   });
-  const m = PAGE_META[page]||{};
-  document.getElementById('page-title').textContent       = m.title||page;
-  document.getElementById('topbar-cta-label').textContent = m.cta||'Quick Add';
-  currentPage = page;
-  if(window.innerWidth<=768) closeSidebar();
-
-  if(page==='users'      && !CHARTS_INIT.users)  { loadUsers();  CHARTS_INIT.users=true;  }
-  if(page==='games'      && !CHARTS_INIT.games)  { loadGames();  CHARTS_INIT.games=true;  }
-  if(page==='slips'      && !CHARTS_INIT.slips)  { loadSlips();  CHARTS_INIT.slips=true;  }
-  if(page==='create-slip') { initCreateSlipPage(); }
-  if(page==='vip'        && !CHARTS_INIT.vip)    { loadVip();    CHARTS_INIT.vip=true;    }
-  if(page==='promos'     && !CHARTS_INIT.promos) { loadPromos(); CHARTS_INIT.promos=true; }
-  if(page==='scheduler') loadSchedulerStatus();
-  if(page==='analytics') initAnalyticsPage();
-}
-function topCTA() { (PAGE_META[currentPage]?.ctaFn||(()=>{}))(); }
-function refreshCurrentPage() { CHARTS_INIT[currentPage]=false; nav(currentPage,null); }
-function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); document.getElementById('sidebar-backdrop').classList.toggle('show'); }
-function closeSidebar()  { document.querySelector('.sidebar').classList.remove('open'); document.getElementById('sidebar-backdrop').classList.remove('show'); }
-
-// ══════════════════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════════════════
-
-function initDashStats() {
-  document.getElementById('dash-stats').innerHTML = [
-    {label:'Total Users',       val:'—',icon:'fa-users',      ic:'ic-blue', key:'TotalUsers'},
-    {label:'VIP Subscribers',   val:'—',icon:'fa-crown',      ic:'ic-gold', key:'VIPSubs'},
-    {label:'Win Rate',          val:'—',icon:'fa-trophy',     ic:'ic-green',key:'WinRate'},
-    {label:'Total Predictions', val:'—',icon:'fa-chart-bar',  ic:'ic-blue', key:'TotalPred'},
-    {label:'Games Posted',      val:'—',icon:'fa-futbol',     ic:'ic-gray', key:'GamesPosted'},
-    {label:'Published Games',   val:'—',icon:'fa-circle-dot', ic:'ic-green',key:'Published'},
-  ].map(s=>`
-    <div class="stat-card">
-      <div class="stat-card-icon ${s.ic}"><i class="fa ${s.icon}"></i></div>
-      <div class="stat-label">${s.label}</div>
-      <div class="stat-value" id="sv-${s.key}">${s.val}</div>
-      <div class="stat-delta" id="sd-${s.key}" style="color:var(--muted)">Loading…</div>
-    </div>`).join('');
+  document.getElementById('bg-pub').checked  = true;
+  document.getElementById('bg-vip').checked  = false;
+  document.getElementById('bg-feat').checked = false;
+  // Reset date tabs
+  document.querySelectorAll('#book-modal .csdf').forEach(b => b.classList.remove('active'));
+  document.querySelector('#book-modal .csdf[data-d="today"]')?.classList.add('active');
+  openModal('book-modal');
+  loadBookModalGames();
 }
 
-async function loadDashboard() {
+async function loadBookModalGames() {
+  const el = document.getElementById('bm-game-list'); if(!el) return;
+  el.innerHTML = '<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
   try {
-    const [statsRes, gamesRes] = await Promise.allSettled([
-      GET('/api/v1/admin/stats'),
-      GET('/api/v1/admin/games/today')
-    ]);
-    if (statsRes.status==='fulfilled' && statsRes.value.success) {
-      const d = statsRes.value.data;
-      setStat('TotalUsers',  d.totalUsers??'—',  '');
-      setStat('VIPSubs',     d.activeVipUsers??'—', '');
-      setStat('WinRate',     d.winRate!=null ? d.winRate.toFixed(1)+'%':'—', 'All-time');
-      setStat('TotalPred',   d.totalPredictions??'—', '');
-      setStat('GamesPosted', d.totalGamesPosted??d.totalGames??'—', '');
-      setStat('Published',   d.publishedGames??'—', '');
-      renderDashMetrics(d);
-      buildDashCharts(d);
+    let endpoint = '/api/v1/admin/games/today';
+    if      (BM_DATE_FILTER === 'tomorrow')  endpoint = '/api/v1/admin/games/tomorrow';
+    else if (BM_DATE_FILTER === 'day-after') endpoint = '/api/v1/admin/games/day-after-tomorrow';
+    else if (BM_DATE_FILTER === 'next-week') endpoint = '/api/v1/admin/games/next-week';
+    else if (BM_DATE_FILTER === 'custom') {
+      const d = document.getElementById('bm-custom-date')?.value;
+      if(d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
     }
-    if (gamesRes.status==='fulfilled' && gamesRes.value.success) {
-      ALL_GAMES = gamesRes.value.data||[];
-      renderDashGames(ALL_GAMES.slice(0,5));
-    } else {
-      document.getElementById('dash-games').innerHTML='<div class="loading-state" style="color:var(--muted)">No fixtures available</div>';
-    }
+    const res = await GET(endpoint);
+    BM_GAMES_ALL = res.data || [];
+    renderBookModalGameList(BM_GAMES_ALL);
   } catch(e) {
-    document.getElementById('dash-games').innerHTML=`<div class="loading-state" style="color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;
-    document.getElementById('dash-metrics').innerHTML=`<div class="loading-state" style="color:var(--accent2)">${e.message}</div>`;
+    el.innerHTML = `<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
   }
 }
 
-function setStat(key,val,delta) {
-  const el=document.getElementById('sv-'+key); if(el)el.textContent=val;
-  const dl=document.getElementById('sd-'+key); if(dl&&delta!==undefined)dl.textContent=delta;
+function setBookModalDateFilter(d, el) {
+  BM_DATE_FILTER = d;
+  document.querySelectorAll('#book-modal .csdf').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(d !== 'custom') { const c = document.getElementById('bm-custom-date'); if(c) c.value = ''; }
+  clearBookModalGame();
+  loadBookModalGames();
 }
 
-function renderDashMetrics(d) {
-  document.getElementById('dash-metrics').innerHTML=`
-    <div class="metric-row"><span class="m-label"><span class="live-dot"></span> Live Games</span><span class="m-val" style="color:var(--accent)">${d.liveGames??0}</span></div>
-    <div class="metric-row"><span class="m-label">Published Games</span><span class="m-val">${d.publishedGames??0}</span></div>
-    <div class="metric-row"><span class="m-label">VIP-Only Games</span><span class="m-val" style="color:var(--gold)">${d.vipOnlyGames??0}</span></div>
-    <div class="metric-row"><span class="m-label">Active Free Slips</span><span class="m-val" style="color:var(--blue)">${d.activeFreeSlips??0}</span></div>
-    <div class="metric-row"><span class="m-label">Active VIP Slips</span><span class="m-val" style="color:var(--gold)">${d.activeVipSlips??0}</span></div>
-    <div class="metric-row"><span class="m-label">Won Predictions</span><span class="m-val" style="color:var(--accent)">${d.wonPredictions??0}</span></div>
-    <div class="metric-row"><span class="m-label">Win Rate</span><span class="m-val">${d.winRate!=null?d.winRate.toFixed(1)+'%':'—'}</span></div>`;
+function filterBookModalGames() {
+  const q = (document.getElementById('bm-search')?.value || '').toLowerCase();
+  const list = q ? BM_GAMES_ALL.filter(g =>
+    (g.homeTeam||'').toLowerCase().includes(q) ||
+    (g.awayTeam||'').toLowerCase().includes(q) ||
+    (g.league||'').toLowerCase().includes(q)
+  ) : BM_GAMES_ALL;
+  renderBookModalGameList(list);
 }
 
-let dashCharts={};
-function buildDashCharts(d) {
-  Object.values(dashCharts).forEach(c=>{try{c.destroy()}catch{}});
-  dashCharts={};
-  const totalUsers = d.totalUsers||0;
-  const vipUsers   = d.activeVipUsers||0;
-  const freeUsers  = Math.max(0, totalUsers - vipUsers);
-  const wonPred    = d.wonPredictions||0;
-  const totalPred  = d.totalPredictions||0;
-  const lostPred   = Math.max(0, totalPred - wonPred);
-  const winRate    = d.winRate||0;
-  const CDm = { font:{family:"'JetBrains Mono',monospace",size:10}, color:'#5c5a56' };
-  const scl = { x:{grid:{display:false},ticks:CDm}, y:{grid:{color:'#2e2c29'},ticks:CDm} };
-
-  const rc = document.getElementById('revenueChart');
-  if(rc) {
-    dashCharts.rev = new Chart(rc, {
-      type:'line',
-      data:{ labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-        datasets:[{label:'Est. Revenue',data:[vipUsers*0.9,vipUsers*0.92,vipUsers*0.95,vipUsers*0.97,vipUsers*0.98,vipUsers*0.99,vipUsers].map(v=>Math.round(v)),fill:true,backgroundColor:'rgba(45,158,110,.1)',borderColor:'#2d9e6e',borderWidth:2,tension:.4,pointRadius:3,pointBackgroundColor:'#2d9e6e'}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:scl}
-    });
+function renderBookModalGameList(games) {
+  const el = document.getElementById('bm-game-list'); if(!el) return;
+  if(!games.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';
+    return;
   }
-  const ud = document.getElementById('userDonut');
-  if(ud) {
-    dashCharts.udonut = new Chart(ud, {
-      type:'doughnut',
-      data:{ labels:['Free',`VIP (${vipUsers})`], datasets:[{data:[freeUsers,vipUsers],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},
-      options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}
-    });
-  }
-  const pc = document.getElementById('predChart');
-  if(pc) {
-    dashCharts.pred = new Chart(pc, {
-      type:'bar',
-      data:{ labels:['Won','Lost','Pending'],
-        datasets:[{data:[wonPred,lostPred,Math.max(0,totalPred-wonPred-lostPred)],backgroundColor:['#2d9e6e','#e05a2b','#2e2c29'],borderRadius:6,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}
-    });
-  }
-  const wr = document.getElementById('winRateChart');
-  if(wr) {
-    dashCharts.winrate = new Chart(wr, {
-      type:'bar',
-      data:{ labels:['Win Rate','Loss Rate'],
-        datasets:[{data:[winRate,100-winRate],backgroundColor:['#2d9e6e','#2e2c29'],borderRadius:6,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{max:100,grid:{color:'#2e2c29'},ticks:{...CDm,callback:v=>v+'%'}},y:{grid:{display:false},ticks:CDm}}}
-    });
-  }
-}
-
-function renderDashGames(games) {
-  if(!games.length){document.getElementById('dash-games').innerHTML='<div class="loading-state" style="color:var(--muted)">No fixtures today</div>';return;}
-  document.getElementById('dash-games').innerHTML=games.map(g=>`
-    <div class="game-card">
-      <div class="team-badge">${(g.homeTeam||'?').slice(0,2).toUpperCase()}</div>
-      <div style="flex:1"><div class="game-teams">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div><div class="game-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div></div>
-      ${g.homeScore!=null?`<div class="game-score">${g.homeScore}–${g.awayScore}</div>`:''}
-      <div>${statusChip(g)}</div>
-    </div>`).join('');
-}
-
-// ══════════════════════════════════════════════════════
-// GAMES
-// ══════════════════════════════════════════════════════
-
-async function loadGames() {
-  document.getElementById('games-list').innerHTML='<div class="loading-state"><div class="spinner"></div> Loading games…</div>';
-  try {
-    const res = await GET('/api/v1/admin/games/today');
-    ALL_GAMES = res.data||[];
-    renderGamesList(ALL_GAMES);
-    buildGamesCharts(ALL_GAMES);
-  } catch(e) {
-    document.getElementById('games-list').innerHTML=`<div class="loading-state" style="color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;
-  }
-}
-
-function buildGamesCharts(games) {
-  const live=games.filter(g=>g.status==='LIVE').length;
-  const upcoming=games.filter(g=>g.status==='UPCOMING').length;
-  const finished=games.filter(g=>g.status==='FINISHED').length;
-  const published=games.filter(g=>g.published).length;
-  const draft=games.filter(g=>!g.published).length;
-  const vipOnly=games.filter(g=>g.vipOnly).length;
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const gsc=document.getElementById('gamesStatusChart');
-  if(gsc){try{Chart.getChart(gsc)?.destroy();}catch{}
-    new Chart(gsc,{type:'doughnut',data:{labels:['Live','Upcoming','Finished'],datasets:[{data:[live,upcoming,finished],backgroundColor:['#2d9e6e','#3a72c8','#2e2c29'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
-  }
-  const glc=document.getElementById('gamesLineChart');
-  if(glc){try{Chart.getChart(glc)?.destroy();}catch{}
-    new Chart(glc,{type:'bar',data:{labels:['Published','Draft','VIP-Only'],datasets:[{data:[published,draft,vipOnly],backgroundColor:['#2d9e6e','#2e2c29','#c8943a'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-  }
-}
-
-function renderGamesList(games) {
-  if(!games.length){document.getElementById('games-list').innerHTML='<div class="loading-state" style="color:var(--muted)">No games found</div>';return;}
-  document.getElementById('games-list').innerHTML=games.map(g=>`
-    <div class="game-card">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:52px">
-        <div class="team-badge">${(g.homeTeam||'?').slice(0,2).toUpperCase()}</div>
-        <div style="font-size:9px;color:var(--muted)">vs</div>
-        <div class="team-badge">${(g.awayTeam||'?').slice(0,2).toUpperCase()}</div>
-      </div>
-      <div style="flex:1">
-        <div class="game-teams">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-        <div class="game-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-        <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
-          ${statusChip(g)}
-          ${g.vipOnly?`<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>`:''}
-          ${g.published?`<span class="chip chip-green">Published</span>`:`<span class="chip chip-gray">Draft</span>`}
+  const selId = BM_SELECTED_GAME?.id;
+  el.innerHTML = games.map(g => {
+    const isSel = g.id === selId;
+    const hasOdds = g.homeWinOdds || g.drawOdds || g.awayWinOdds;
+    return `
+      <div class="game-picker-item ${isSel ? 'selected' : ''}"
+        onclick="selectBookModalGame(${JSON.stringify(g).replace(/"/g,'&quot;')})">
+        <div class="game-picker-item-teams">
+          ${g.status==='LIVE' ? `<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>` : ''}
+          <span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span>
+          ${isSel ? `<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>` : ''}
         </div>
-      </div>
-      ${g.homeScore!=null?`<div class="game-score">${g.homeScore}–${g.awayScore}</div>`:''}
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        ${g.homeWinOdds?`<div class="odd-pill">1: ${g.homeWinOdds}</div>`:''}
-        ${g.drawOdds?`<div class="odd-pill">X: ${g.drawOdds}</div>`:''}
-        ${g.awayWinOdds?`<div class="odd-pill">2: ${g.awayWinOdds}</div>`:''}
-      </div>
-      <div class="game-actions">
-        <button class="btn btn-ghost btn-xs" onclick="toggleFeatured('${g.id}')"><i class="fa fa-star"></i></button>
-        <button class="btn btn-gold  btn-xs" onclick="toggleVip('${g.id}')"><i class="fa fa-crown"></i></button>
-        <button class="btn btn-danger btn-xs" onclick="unpublish('${g.id}')"><i class="fa fa-eye-slash"></i></button>
-      </div>
-    </div>`).join('');
+        <div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}${g.country?' · '+g.country:''}</div>
+        ${hasOdds ? `<div class="game-picker-item-odds">
+          ${g.homeWinOdds ? `<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>` : ''}
+          ${g.drawOdds    ? `<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>` : ''}
+          ${g.awayWinOdds ? `<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>` : ''}
+          ${g.over25Odds  ? `<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>` : ''}
+        </div>` : ''}
+      </div>`;
+  }).join('');
 }
 
-function filterGames(f,el) {
-  document.querySelectorAll('.gf').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  const m={all:ALL_GAMES,live:ALL_GAMES.filter(g=>g.status==='LIVE'),published:ALL_GAMES.filter(g=>g.published),vip:ALL_GAMES.filter(g=>g.vipOnly),upcoming:ALL_GAMES.filter(g=>g.status==='UPCOMING')};
-  renderGamesList(m[f]||ALL_GAMES);
+function selectBookModalGame(g) {
+  BM_SELECTED_GAME = g;
+  // Pre-fill odds from game if available
+  if(g.homeWinOdds) document.getElementById('bg-hw').value   = g.homeWinOdds;
+  if(g.drawOdds)    document.getElementById('bg-draw').value  = g.drawOdds;
+  if(g.awayWinOdds) document.getElementById('bg-aw').value    = g.awayWinOdds;
+  if(g.over15Odds)  document.getElementById('bg-o15').value   = g.over15Odds;
+  if(g.over25Odds)  document.getElementById('bg-o25').value   = g.over25Odds;
+  if(g.over35Odds)  document.getElementById('bg-o35').value   = g.over35Odds;
+  // Show banner + odds section
+  document.getElementById('bm-selected-label').textContent = `${g.homeTeam} vs ${g.awayTeam}`;
+  document.getElementById('bm-selected-meta').textContent  = `${g.league||''} · ${fmtTime(g.kickoffTime)}`;
+  document.getElementById('bm-selected-banner').classList.add('show');
+  document.getElementById('bm-odds-section').classList.add('show');
+  filterBookModalGames(); // re-render to show checkmark
 }
-async function toggleFeatured(id){try{const r=await PATCH(`/api/v1/admin/games/${id}/toggle-featured`);updateGameLocal(r.data);showToast('Featured toggled','blue');}catch(e){showToast(e.message,'red');}}
-async function toggleVip(id){try{const r=await PATCH(`/api/v1/admin/games/${id}/toggle-vip`);updateGameLocal(r.data);showToast('VIP toggled','gold');}catch(e){showToast(e.message,'red');}}
-async function unpublish(id){try{const r=await PATCH(`/api/v1/admin/games/${id}/unpublish`);updateGameLocal(r.data);showToast('Unpublished','red');}catch(e){showToast(e.message,'red');}}
-function updateGameLocal(updated){ALL_GAMES=ALL_GAMES.map(g=>g.id===updated.id?updated:g);renderGamesList(ALL_GAMES);}
+
+function clearBookModalGame() {
+  BM_SELECTED_GAME = null;
+  document.getElementById('bm-selected-banner').classList.remove('show');
+  document.getElementById('bm-odds-section').classList.remove('show');
+  filterBookModalGames();
+}
 
 async function submitBookGame() {
-  const id=v('bg-id'); if(!id) return showToast('Game ID required','red');
-  const body={gameId:id,published:document.getElementById('bg-pub').checked,featured:document.getElementById('bg-feat').checked,vipOnly:document.getElementById('bg-vip').checked,homeWinOdds:numOrNull('bg-hw'),drawOdds:numOrNull('bg-draw'),awayWinOdds:numOrNull('bg-aw'),over15Odds:numOrNull('bg-o15'),over25Odds:numOrNull('bg-o25'),over35Odds:numOrNull('bg-o35')};
-  await submitBtn('book-submit-btn', async()=>{
-    const res=await POST('/api/v1/admin/games/book',body);
-    if(!res.success)throw new Error(res.message);
-    ALL_GAMES=[...ALL_GAMES.filter(g=>g.id!==res.data.id),res.data];
-    renderGamesList(ALL_GAMES); closeModal('book-modal'); showToast('Game booked','green');
+  if(!BM_SELECTED_GAME) return showToast('Please select a game first', 'red');
+  const body = {
+    gameId:      BM_SELECTED_GAME.id,
+    published:   document.getElementById('bg-pub').checked,
+    featured:    document.getElementById('bg-feat').checked,
+    vipOnly:     document.getElementById('bg-vip').checked,
+    homeWinOdds: numOrNull('bg-hw'),
+    drawOdds:    numOrNull('bg-draw'),
+    awayWinOdds: numOrNull('bg-aw'),
+    over15Odds:  numOrNull('bg-o15'),
+    over25Odds:  numOrNull('bg-o25'),
+    over35Odds:  numOrNull('bg-o35'),
+  };
+  await submitBtn('book-submit-btn', async () => {
+    const res = await POST('/api/v1/admin/games/book', body);
+    if(!res.success) throw new Error(res.message);
+    ALL_GAMES = [...ALL_GAMES.filter(g => g.id !== res.data.id), res.data];
+    renderGamesList(ALL_GAMES);
+    closeModal('book-modal');
+    showToast(`${BM_SELECTED_GAME.homeTeam} vs ${BM_SELECTED_GAME.awayTeam} booked`, 'green');
   });
 }
 
-// ── Bulk Book state ──
-let BB_SELECTED = {};
-let BB_GAMES_ALL = [];
+/* ── BULK BOOK MODAL ─────────────────────────────────── */
+
+let BB_SELECTED   = {};    // { [id]: game }
+let BB_GAMES_ALL  = [];
+let BB_DATE_FILTER= 'today';
+let BB_CURR_TAB   = 'pick';
 
 function openBulkModal() {
-  BB_SELECTED = {};
-  BB_GAMES_ALL = [];
+  BB_SELECTED = {}; BB_GAMES_ALL = []; BB_DATE_FILTER = 'today'; BB_CURR_TAB = 'pick';
   document.getElementById('bb-search').value = '';
   document.getElementById('bb-selected-wrap').style.display = 'none';
   document.getElementById('bb-chips').innerHTML = '';
   document.getElementById('bb-count').textContent = '0';
-  ['bb-hw','bb-draw','bb-aw','bb-o15','bb-o25','bb-o35'].forEach(id => {
+  document.getElementById('bb-custom-date').value = '';
+  // Reset defaults
+  ['bbd-hw','bbd-draw','bbd-aw','bbd-o15','bbd-o25','bbd-o35'].forEach(id => {
     const e = document.getElementById(id); if(e) e.value = '';
   });
-  document.getElementById('bb-pub').checked  = true;
-  document.getElementById('bb-vip').checked  = false;
-  document.getElementById('bb-feat').checked = false;
+  document.getElementById('bbd-pub').checked  = true;
+  document.getElementById('bbd-vip').checked  = false;
+  document.getElementById('bbd-feat').checked = false;
+  // Reset tabs
+  document.querySelectorAll('#bulk-modal .csdf').forEach(b => b.classList.remove('active'));
+  document.querySelector('#bulk-modal .csdf[data-d="today"]')?.classList.add('active');
+  switchBulkTab('pick');
   openModal('bulk-modal');
   loadBulkGames();
+}
+
+function switchBulkTab(tab) {
+  BB_CURR_TAB = tab;
+  document.querySelectorAll('.bulk-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.bulk-tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`bulk-tab-${tab}`)?.classList.add('active');
+  document.getElementById(`bulk-panel-${tab}`)?.classList.add('active');
+  if(tab === 'odds') renderBulkOddsRows();
 }
 
 async function loadBulkGames() {
   const el = document.getElementById('bb-game-list'); if(!el) return;
   el.innerHTML = '<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>';
   try {
-    const res = await GET('/api/v1/admin/games/today');
+    let endpoint = '/api/v1/admin/games/today';
+    if      (BB_DATE_FILTER === 'tomorrow')  endpoint = '/api/v1/admin/games/tomorrow';
+    else if (BB_DATE_FILTER === 'day-after') endpoint = '/api/v1/admin/games/day-after-tomorrow';
+    else if (BB_DATE_FILTER === 'next-week') endpoint = '/api/v1/admin/games/next-week';
+    else if (BB_DATE_FILTER === 'custom') {
+      const d = document.getElementById('bb-custom-date')?.value;
+      if(d) endpoint = `/api/v1/admin/games/by-date?date=${d}`;
+    }
+    const res = await GET(endpoint);
     BB_GAMES_ALL = res.data || [];
     renderBulkGameList(BB_GAMES_ALL);
   } catch(e) {
     el.innerHTML = `<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
   }
+}
+
+function setBulkDateFilter(d, el) {
+  BB_DATE_FILTER = d;
+  document.querySelectorAll('#bulk-modal .csdf').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(d !== 'custom') { const c = document.getElementById('bb-custom-date'); if(c) c.value = ''; }
+  loadBulkGames();
 }
 
 function filterBulkGames() {
@@ -1731,19 +1821,11 @@ function renderBulkGameList(games) {
   el.innerHTML = games.map(g => {
     const isSel = !!BB_SELECTED[g.id];
     return `
-      <div onclick="toggleBulkGame(${JSON.stringify(g).replace(/"/g,'&quot;')})"
-        style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;
-          background:${isSel ? 'var(--accent-lt)' : 'transparent'};transition:background .1s"
-        onmouseover="if(!${isSel})this.style.background='var(--panel)'"
-        onmouseout="this.style.background='${isSel ? 'var(--accent-lt)' : 'transparent'}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${g.status==='LIVE' ? '<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>' : ''}
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              ${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}
-            </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-          </div>
+      <div class="game-picker-item ${isSel ? 'selected' : ''}"
+        onclick="toggleBulkGame(${JSON.stringify(g).replace(/"/g,'&quot;')})">
+        <div class="game-picker-item-teams">
+          ${g.status==='LIVE' ? `<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>` : ''}
+          <span style="flex:1">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</span>
           <div style="width:20px;height:20px;border-radius:50%;
             border:2px solid ${isSel ? 'var(--accent)' : 'var(--border2)'};
             background:${isSel ? 'var(--accent)' : 'transparent'};
@@ -1751,15 +1833,29 @@ function renderBulkGameList(games) {
             ${isSel ? '<i class="fa fa-check" style="color:#0f0e0d;font-size:9px"></i>' : ''}
           </div>
         </div>
+        <div class="game-picker-item-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
       </div>`;
   }).join('');
 }
 
 function toggleBulkGame(g) {
   if(BB_SELECTED[g.id]) delete BB_SELECTED[g.id];
-  else BB_SELECTED[g.id] = g;
+  else BB_SELECTED[g.id] = {
+    game: g,
+    // per-game odds — start pre-filled from fetched game data
+    homeWinOdds: g.homeWinOdds || null,
+    drawOdds:    g.drawOdds    || null,
+    awayWinOdds: g.awayWinOdds || null,
+    over15Odds:  g.over15Odds  || null,
+    over25Odds:  g.over25Odds  || null,
+    over35Odds:  g.over35Odds  || null,
+    published:   true,
+    vipOnly:     false,
+    featured:    false,
+  };
   filterBulkGames();
   renderBulkSelectedChips();
+  updateBulkCounts();
 }
 
 function renderBulkSelectedChips() {
@@ -1769,1194 +1865,360 @@ function renderBulkSelectedChips() {
   const count = document.getElementById('bb-count');
   wrap.style.display = games.length ? '' : 'none';
   count.textContent  = games.length;
-  chips.innerHTML = games.map(g => `
+  chips.innerHTML = games.map(entry => `
     <span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
       background:var(--accent-lt);border:1px solid #1a4d32;border-radius:20px;
       font-size:11.5px;font-weight:600;color:var(--accent)">
-      ${g.homeTeam} vs ${g.awayTeam}
+      ${entry.game.homeTeam} vs ${entry.game.awayTeam}
       <i class="fa fa-xmark" style="cursor:pointer;opacity:.7;font-size:10px"
-        onclick="delete BB_SELECTED['${g.id}'];renderBulkSelectedChips();filterBulkGames()"></i>
+        onclick="delete BB_SELECTED['${entry.game.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts()"></i>
     </span>`).join('');
+}
+
+function clearAllBulkGames() {
+  BB_SELECTED = {};
+  renderBulkSelectedChips();
   filterBulkGames();
+  updateBulkCounts();
+  renderBulkOddsRows();
+}
+
+function updateBulkCounts() {
+  const n = Object.keys(BB_SELECTED).length;
+  const pickBadge = document.getElementById('bulk-pick-count');
+  const oddsBadge = document.getElementById('bulk-odds-count');
+  if(pickBadge) { pickBadge.textContent = n; pickBadge.style.display = n ? '' : 'none'; }
+  if(oddsBadge) { oddsBadge.textContent = n; oddsBadge.style.display = n ? '' : 'none'; }
+  const lbl = document.getElementById('bulk-submit-label');
+  if(lbl) lbl.textContent = n ? `${n} Game${n>1?'s':''}` : 'Selected';
+}
+
+function renderBulkOddsRows() {
+  const entries = Object.values(BB_SELECTED);
+  const empty   = document.getElementById('bulk-odds-empty');
+  const list    = document.getElementById('bulk-odds-list');
+  const defs    = document.getElementById('bulk-apply-defaults');
+  if(!entries.length) {
+    if(empty)  empty.style.display  = '';
+    if(list)   list.style.display   = 'none';
+    if(defs)   defs.style.display   = 'none';
+    return;
+  }
+  if(empty) empty.style.display  = 'none';
+  if(list)  list.style.display   = '';
+  if(defs)  defs.style.display   = '';
+
+  list.innerHTML = entries.map((entry, i) => {
+    const g = entry.game;
+    return `
+    <div class="bulk-game-odds-row" id="bgor-${g.id}">
+      <div class="bgor-header" onclick="toggleBulkOddsRow('${g.id}')">
+        <button class="bgor-expand-btn" id="bgor-btn-${g.id}"><i class="fa fa-chevron-down"></i></button>
+        <div>
+          <div class="bgor-teams">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
+          <div class="bgor-meta">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-left:auto;align-items:center">
+          ${entry.published ? `<span class="chip chip-green" style="font-size:10px">Published</span>` : `<span class="chip chip-gray" style="font-size:10px">Draft</span>`}
+          ${entry.vipOnly   ? `<span class="chip chip-gold"  style="font-size:10px">VIP</span>`       : ''}
+          <button class="bgor-remove" onclick="event.stopPropagation();delete BB_SELECTED['${g.id}'];renderBulkSelectedChips();filterBulkGames();updateBulkCounts();renderBulkOddsRows()">
+            <i class="fa fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="bgor-body" id="bgor-body-${g.id}">
+        <div class="bgor-odds-grid">
+          <div class="bgor-input-wrap"><label class="form-label">Home Win</label><input class="form-input" type="number" step="0.01" placeholder="2.10" value="${entry.homeWinOdds||''}" oninput="BB_SELECTED['${g.id}'].homeWinOdds=parseFloat(this.value)||null"/></div>
+          <div class="bgor-input-wrap"><label class="form-label">Draw</label><input class="form-input" type="number" step="0.01" placeholder="3.40" value="${entry.drawOdds||''}" oninput="BB_SELECTED['${g.id}'].drawOdds=parseFloat(this.value)||null"/></div>
+          <div class="bgor-input-wrap"><label class="form-label">Away Win</label><input class="form-input" type="number" step="0.01" placeholder="3.20" value="${entry.awayWinOdds||''}" oninput="BB_SELECTED['${g.id}'].awayWinOdds=parseFloat(this.value)||null"/></div>
+        </div>
+        <div class="bgor-odds-grid2">
+          <div class="bgor-input-wrap"><label class="form-label">Over 1.5</label><input class="form-input" type="number" step="0.01" placeholder="1.30" value="${entry.over15Odds||''}" oninput="BB_SELECTED['${g.id}'].over15Odds=parseFloat(this.value)||null"/></div>
+          <div class="bgor-input-wrap"><label class="form-label">Over 2.5</label><input class="form-input" type="number" step="0.01" placeholder="1.90" value="${entry.over25Odds||''}" oninput="BB_SELECTED['${g.id}'].over25Odds=parseFloat(this.value)||null"/></div>
+          <div class="bgor-input-wrap"><label class="form-label">Over 3.5</label><input class="form-input" type="number" step="0.01" placeholder="3.50" value="${entry.over35Odds||''}" oninput="BB_SELECTED['${g.id}'].over35Odds=parseFloat(this.value)||null"/></div>
+        </div>
+        <div class="bgor-flags">
+          <div class="checkbox-row">
+            <input type="checkbox" id="bgor-pub-${g.id}" ${entry.published?'checked':''} onchange="BB_SELECTED['${g.id}'].published=this.checked;renderBulkOddsRows()">
+            <label for="bgor-pub-${g.id}">Published</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="bgor-vip-${g.id}" ${entry.vipOnly?'checked':''}  onchange="BB_SELECTED['${g.id}'].vipOnly=this.checked;renderBulkOddsRows()">
+            <label for="bgor-vip-${g.id}">VIP Only</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="bgor-feat-${g.id}" ${entry.featured?'checked':''} onchange="BB_SELECTED['${g.id}'].featured=this.checked">
+            <label for="bgor-feat-${g.id}">Featured</label>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleBulkOddsRow(id) {
+  const body = document.getElementById(`bgor-body-${id}`);
+  const btn  = document.getElementById(`bgor-btn-${id}`);
+  if(!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn?.classList.toggle('open', !isOpen);
+}
+
+function applyDefaultsToAll() {
+  const hw   = parseFloat(document.getElementById('bbd-hw')?.value)   || null;
+  const draw = parseFloat(document.getElementById('bbd-draw')?.value) || null;
+  const aw   = parseFloat(document.getElementById('bbd-aw')?.value)   || null;
+  const o15  = parseFloat(document.getElementById('bbd-o15')?.value)  || null;
+  const o25  = parseFloat(document.getElementById('bbd-o25')?.value)  || null;
+  const o35  = parseFloat(document.getElementById('bbd-o35')?.value)  || null;
+  const pub  = document.getElementById('bbd-pub').checked;
+  const vip  = document.getElementById('bbd-vip').checked;
+  const feat = document.getElementById('bbd-feat').checked;
+  Object.keys(BB_SELECTED).forEach(id => {
+    if(hw   !== null) BB_SELECTED[id].homeWinOdds = hw;
+    if(draw !== null) BB_SELECTED[id].drawOdds    = draw;
+    if(aw   !== null) BB_SELECTED[id].awayWinOdds = aw;
+    if(o15  !== null) BB_SELECTED[id].over15Odds  = o15;
+    if(o25  !== null) BB_SELECTED[id].over25Odds  = o25;
+    if(o35  !== null) BB_SELECTED[id].over35Odds  = o35;
+    BB_SELECTED[id].published = pub;
+    BB_SELECTED[id].vipOnly   = vip;
+    BB_SELECTED[id].featured  = feat;
+  });
+  renderBulkOddsRows();
+  showToast('Defaults applied to all games', 'blue');
 }
 
 async function submitBulkBook() {
-  const ids = Object.keys(BB_SELECTED);
-  if(!ids.length) return showToast('Select at least one game', 'red');
-  const body = {
-    gameIds:     ids,
-    published:   document.getElementById('bb-pub').checked,
-    vipOnly:     document.getElementById('bb-vip').checked,
-    featured:    document.getElementById('bb-feat').checked,
-    homeWinOdds: numOrNull('bb-hw'),
-    drawOdds:    numOrNull('bb-draw'),
-    awayWinOdds: numOrNull('bb-aw'),
-    over15Odds:  numOrNull('bb-o15'),
-    over25Odds:  numOrNull('bb-o25'),
-    over35Odds:  numOrNull('bb-o35'),
-  };
-  await submitBtn('bulk-submit-btn', async() => {
-    const res = await POST('/api/v1/admin/games/book/bulk', body);
+  const entries = Object.values(BB_SELECTED);
+  if(!entries.length) return showToast('Select at least one game', 'red');
+
+  // Build List<BookGameRequest> — one per game, each with its own odds/flags
+  const requests = entries.map(entry => ({
+    gameId:      entry.game.id,
+    published:   entry.published,
+    vipOnly:     entry.vipOnly,
+    featured:    entry.featured,
+    homeWinOdds: entry.homeWinOdds,
+    drawOdds:    entry.drawOdds,
+    awayWinOdds: entry.awayWinOdds,
+    over15Odds:  entry.over15Odds,
+    over25Odds:  entry.over25Odds,
+    over35Odds:  entry.over35Odds,
+  }));
+
+  const btn   = document.getElementById('bulk-submit-btn');
+  const prog  = document.getElementById('bulk-progress');
+  const progL = document.getElementById('bulk-progress-label');
+  const progF = document.getElementById('bulk-progress-fill');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Booking…';
+  prog.style.display = '';
+
+  try {
+    progL.textContent = `Submitting ${requests.length} game${requests.length>1?'s':''}…`;
+    progF.style.width = '20%';
+
+    const res = await POST('/api/v1/admin/games/book/bulk', requests);
+    progF.style.width = '100%';
+
     if(!res.success) throw new Error(res.message);
-    (res.data||[]).forEach(g => { ALL_GAMES = [...ALL_GAMES.filter(x => x.id !== g.id), g]; });
+    (res.data || []).forEach(g => {
+      ALL_GAMES = [...ALL_GAMES.filter(x => x.id !== g.id), g];
+    });
     renderGamesList(ALL_GAMES);
     closeModal('bulk-modal');
     BB_SELECTED = {};
-    showToast(`${(res.data||[]).length} games booked`, 'green');
-  });
-}
-
-// ══════════════════════════════════════════════════════
-// USERS
-// ══════════════════════════════════════════════════════
-
-let userRoleFilter='';
-async function loadUsers() {
-  document.getElementById('users-tbody').innerHTML='<tr><td colspan="7"><div class="loading-state"><div class="spinner"></div> Loading…</div></td></tr>';
-  try {
-    const res=await GET('/api/v1/admin/users');
-    ALL_USERS=res.data||[];
-    renderUsers(ALL_USERS);
-    buildUsersCharts(ALL_USERS);
+    showToast(`${(res.data||[]).length} game${(res.data||[]).length!==1?'s':''} booked`, 'green');
   } catch(e) {
-    document.getElementById('users-tbody').innerHTML=`<tr><td colspan="7"><div class="loading-state" style="color:var(--accent2)">${e.message}</div></td></tr>`;
+    showToast(e.message, 'red');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span>`;
+    setTimeout(() => { prog.style.display = 'none'; progF.style.width = '0%'; }, 1200);
   }
 }
 
-function buildUsersCharts(users) {
-  const vip=users.filter(u=>u.role==='VIP').length;
-  const free=users.filter(u=>u.role!=='VIP').length;
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const weeks={};
-  users.forEach(u=>{
-    if(!u.createdAt)return;
-    const d=new Date(u.createdAt);
-    const weekStart=new Date(d); weekStart.setDate(d.getDate()-d.getDay());
-    const wk=weekStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-    weeks[wk]=(weeks[wk]||0)+1;
-  });
-  const wkLabels=Object.keys(weeks).slice(-8);
-  const wkData=wkLabels.map(k=>weeks[k]);
-  const rc=document.getElementById('regChart');
-  if(rc){try{Chart.getChart(rc)?.destroy();}catch{}
-    new Chart(rc,{type:'bar',data:{labels:wkLabels.length?wkLabels:['No data'],datasets:[{label:'New Users',data:wkData.length?wkData:[0],backgroundColor:'#3a72c8',borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
+/* ── SLIP QUEUE ────────────────────────────────────────
+   Queue stores snapshots of slip form state
+   Each item = { type, bookmaker, code, desc, odds,
+                 slipType, published, validUntil,
+                 gameId, gameName, image (File|null),
+                 predKeys[], oddsLegs[] }
+*/
+
+let CS_SLIP_QUEUE = [];
+
+function _snapshotSlipForm() {
+  const type = window.CS_TYPE || 'booking';
+  const slipType   = document.getElementById('cs-type')?.value  || 'FREE';
+  const published  = document.getElementById('cs-pub')?.checked ?? true;
+  const validUntil = document.getElementById('cs-valid')?.value || null;
+  const gameId     = document.getElementById('cs-gid')?.value   || null;
+  const gameName   = document.getElementById('cs-game-label')?.textContent || null;
+
+  let bookmaker, code, desc, odds, image = null, predKeys = [], oddsLegs = [];
+
+  if(type === 'booking') {
+    bookmaker = document.getElementById('cs-bm')?.value?.trim()   || '';
+    code      = document.getElementById('cs-code')?.value?.trim() || '';
+    desc      = document.getElementById('cs-desc')?.value?.trim() || '';
+    odds      = parseFloat(document.getElementById('cs-odds-bk')?.value) || null;
+    const f   = document.getElementById('cs-img')?.files?.[0]; if(f) image = f;
+    if(!bookmaker || !code) return null;
+  } else if(type === 'prediction') {
+    bookmaker = 'Prediction';
+    code      = 'PREDICTION';
+    const conf  = document.getElementById('cs-pred-conf')?.value || '';
+    const notes = document.getElementById('cs-pred-notes')?.value?.trim() || '';
+    predKeys  = [...(window.CS_PREDICTIONS || [])];
+    desc      = `${predKeys.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`;
+    odds      = null;
+    const f   = document.getElementById('cs-img-pred')?.files?.[0]; if(f) image = f;
+    if(!predKeys.length) return null;
+  } else if(type === 'odds') {
+    bookmaker = 'Odds Slip';
+    code      = 'ACCUMULATOR';
+    oddsLegs  = [...(window.CS_ODDS_LEGS || [])];
+    const legsStr = oddsLegs.map(l=>`${l.label} @ ${l.odds}`).join(' | ');
+    const userDesc= document.getElementById('cs-odds-desc')?.value?.trim() || '';
+    desc      = `${legsStr}${userDesc?' — '+userDesc:''}`;
+    const combined = document.getElementById('cs-combined-odds')?.textContent;
+    odds      = combined && combined !== '—' ? parseFloat(combined) : null;
+    const f   = document.getElementById('cs-img-odds')?.files?.[0]; if(f) image = f;
+    if(!oddsLegs.length) return null;
   }
-  const cc=document.getElementById('convChart');
-  if(cc){try{Chart.getChart(cc)?.destroy();}catch{}
-    new Chart(cc,{type:'doughnut',data:{labels:[`Free (${free})`,`VIP (${vip})`],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
-  }
+
+  return { type, bookmaker, code, desc, odds, slipType, published, validUntil,
+           gameId, gameName, image, predKeys, oddsLegs };
 }
 
-function renderUsers(list) {
-  if(!list.length){document.getElementById('users-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">No users found</td></tr>';return;}
-  document.getElementById('users-tbody').innerHTML=list.map(u=>`
-    <tr>
-      <td><div style="display:flex;align-items:center;gap:10px">
-        <div style="width:30px;height:30px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text2)">${(u.fullName||'?').slice(0,2).toUpperCase()}</div>
-        <span style="font-weight:500">${u.fullName||'—'}</span>
-      </div></td>
-      <td class="mono" style="color:var(--text2)">${u.email||'—'}</td>
-      <td class="mono" style="color:var(--text2)">${u.phoneNumber||'—'}</td>
-      <td>${u.role==='VIP'?`<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>`:`<span class="chip chip-gray">Free</span>`}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.createdAt)}</td>
-      <td class="mono" style="color:var(--muted);font-size:12px">${fmtDate(u.lastLogin)}</td>
-      <td><button class="btn btn-ghost btn-xs" onclick="viewUser('${u.id}')"><i class="fa fa-eye"></i></button></td>
-    </tr>`).join('');
-}
-function filterUsers(){const q=v('user-search').toLowerCase();let list=ALL_USERS.filter(u=>(u.fullName||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q));if(userRoleFilter)list=list.filter(u=>u.role===userRoleFilter);renderUsers(list);}
-function filterUserRole(val){userRoleFilter=val;filterUsers();}
-async function viewUser(id){try{const res=await GET(`/api/v1/admin/users/${id}`);if(res.success)showToast(`${res.data.fullName} · ${res.data.role}`,'blue');}catch(e){showToast(e.message,'red');}}
-
-// ══════════════════════════════════════════════════════
-// SLIPS
-// ══════════════════════════════════════════════════════
-
-async function loadSlips() {
-  document.getElementById('slips-grid').innerHTML =
-    '<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading slips…</div>';
-  try {
-    const res = await GET('/api/v1/admin/games/slips');
-    const slips = res.data || [];
-    window._ALL_SLIPS = slips;
-    renderSlips(slips);
-    buildSlipsChart(slips);
-  } catch(e) {
-    document.getElementById('slips-grid').innerHTML =
-      `<div class="loading-state" style="grid-column:1/-1;color:var(--accent2)"><i class="fa fa-circle-xmark"></i> ${e.message}</div>`;
-  }
-}
-
-function buildSlipsChart(slips) {
-  const won    = slips.filter(s => s.status === 'WON').length;
-  const lost   = slips.filter(s => s.status === 'LOST').length;
-  const active = slips.filter(s => !s.status || s.status === 'ACTIVE').length;
-  const voided = slips.filter(s => s.status === 'VOID').length;
-  const CDm = {font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const sc = document.getElementById('slipChart');
-  if(sc) {
-    try{Chart.getChart(sc)?.destroy();}catch{}
-    new Chart(sc, {
-      type:'bar',
-      data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderRadius:6,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}
-    });
-  }
-}
-
-const fmtOdd = v => v && parseFloat(v) > 0 ? parseFloat(v).toFixed(2) : null;
-
-function determineSlipResult(s) {
-  if (s.homeScore == null || s.awayScore == null) return '';
-  const h = parseInt(s.homeScore), a = parseInt(s.awayScore);
-  const results = {
-    HOME_WIN:h>a, AWAY_WIN:a>h, DRAW:h===a, BTTS:h>0&&a>0,
-    OVER_0_5:(h+a)>0, OVER_1_5:(h+a)>1, OVER_2_5:(h+a)>2, OVER_3_5:(h+a)>3,
-    UNDER_1_5:(h+a)<2, UNDER_2_5:(h+a)<3,
-  };
-  const raw = ((s.bookingCode||'') + ' ' + (s.description||'')).toUpperCase();
-  const found = Object.keys(results).filter(k => raw.includes(k));
-  if (!found.length) return '';
-  return `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;justify-content:center">` +
-    found.map(k => {
-      const hit = results[k];
-      return `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:600;
-        background:${hit?'var(--accent-lt)':'var(--accent2-lt)'};color:${hit?'var(--accent)':'var(--accent2)'};
-        border:1px solid ${hit?'#1a4d32':'#5a2518'}">
-        <i class="fa ${hit?'fa-check':'fa-xmark'}" style="font-size:9px"></i> ${k.replace(/_/g,' ')}
-      </span>`;
-    }).join('') + `</div>`;
-}
-
-function renderSlips(slips) {
-  const sc = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
-  if(!slips.length) {
-    document.getElementById('slips-grid').innerHTML=`
-      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">
-        <i class="fa fa-ticket" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>
-        No slips yet — <a style="color:var(--accent);cursor:pointer;font-weight:600" onclick="nav('create-slip',null)">Create one</a>
-      </div>`;
+function addSlipToQueue() {
+  const snap = _snapshotSlipForm();
+  if(!snap) {
+    if((window.CS_TYPE||'booking') === 'booking') return showToast('Bookmaker and booking code required', 'red');
+    if((window.CS_TYPE||'booking') === 'prediction') return showToast('Select at least one outcome', 'red');
+    if((window.CS_TYPE||'booking') === 'odds') return showToast('Add at least one odds leg', 'red');
     return;
   }
-  document.getElementById('slips-grid').innerHTML = slips.map(s => {
-    const isPred      = s.bookingCode==='PREDICTION' || s.bookingCode==='ACCUMULATOR';
-    const showBigOdds = !isPred && s.totalOdds && parseFloat(s.totalOdds) > 1;
-    const isActive    = !s.status || s.status === 'ACTIVE';
-    const isFinished  = s.gameStatus === 'FINISHED';
-    const oddPills = [
-      s.homeWinOdds ? `<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>` : '',
-      s.drawOdds    ? `<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`    : '',
-      s.awayWinOdds ? `<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>` : '',
-      s.over25Odds  ? `<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>` : '',
-      s.over15Odds  ? `<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>` : '',
-    ].filter(Boolean).join('');
-    return `
-    <div class="slip-card" onclick="openSlipDetail('${s.id}')" style="cursor:pointer">
-      <div class="slip-top">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px">
-          <div><div class="slip-bookmaker">${s.bookmaker}</div><div class="slip-code">${s.bookingCode}</div></div>
-          <span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span>
-        </div>
-        ${s.homeTeam ? `
-        <div style="padding:10px 12px;background:var(--panel);border-radius:8px;border:1px solid var(--border);margin-bottom:8px">
-          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-family:var(--font-mono)">
-            Match ${isFinished ? `<span style="color:var(--accent);margin-left:6px">● Finished</span>` : (s.gameStatus==='LIVE' ? `<span style="color:var(--accent2);margin-left:6px"><span class="live-dot" style="width:5px;height:5px;margin-right:2px"></span>Live</span>` : '')}
-          </div>
-          <div style="display:flex;align-items:center;gap:6px">
-            ${s.homeLogo ? `<img src="${s.homeLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-            <div style="flex:1;font-size:13px;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.homeTeam}</div>
-            <div style="font-family:var(--font-mono);font-size:14px;font-weight:700;padding:3px 10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;white-space:nowrap;flex-shrink:0">
-              ${s.homeScore != null ? `${s.homeScore} – ${s.awayScore}` : 'vs'}
-            </div>
-            <div style="flex:1;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.awayTeam}</div>
-            ${s.awayLogo ? `<img src="${s.awayLogo}" style="width:20px;height:20px;object-fit:contain;flex-shrink:0" onerror="this.style.display='none'">` : ''}
-          </div>
-          ${s.league||s.kickoffTime ? `<div style="font-size:11px;color:var(--muted);margin-top:5px;text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>` : ''}
-          ${isFinished ? determineSlipResult(s) : ''}
-        </div>
-        ${oddPills ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">${oddPills}</div>` : ''}` : ''}
-        ${showBigOdds ? `<div style="font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--gold);margin:4px 0 2px">${parseFloat(s.totalOdds).toFixed(2)}</div>` : ''}
-        ${s.imageUrl ? `<img src="${s.imageUrl}" style="width:100%;border-radius:6px;margin-top:6px;object-fit:cover;max-height:120px">` : ''}
-      </div>
-      <div class="slip-bottom">
-        ${s.type==='VIP' ? `<span class="chip chip-gold"><i class="fa fa-crown" style="font-size:9px"></i> VIP</span>` : `<span class="chip chip-blue">Free</span>`}
-        ${s.published ? `<span class="chip chip-green">Published</span>` : `<span class="chip chip-gray">Draft</span>`}
-        <div style="margin-left:auto;display:flex;gap:5px">
-          ${isActive && isFinished ? `<button class="btn btn-success btn-xs" title="Auto-settle" onclick="event.stopPropagation();settleSlipFromResult('${s.id}')"><i class="fa fa-wand-magic-sparkles"></i></button>` : ''}
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipDetail('${s.id}')"><i class="fa fa-eye"></i></button>
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();openSlipStatus('${s.id}','${s.status||'ACTIVE'}')"><i class="fa fa-pen"></i></button>
-          <button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();toggleSlipPublish('${s.id}')"><i class="fa ${s.published?'fa-eye-slash':'fa-eye'}"></i></button>
-          <button class="btn btn-danger btn-xs" onclick="event.stopPropagation();deleteSlip('${s.id}')"><i class="fa fa-trash"></i></button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  snap._qid = Date.now() + Math.random();
+  CS_SLIP_QUEUE.push(snap);
+  renderSlipQueue();
+  showToast(`Slip added to queue (${CS_SLIP_QUEUE.length} total)`, 'blue');
 }
 
-function openSlipDetail(id) {
-  const s = (window._ALL_SLIPS||[]).find(x => x.id === id);
-  if (!s) return;
-  const modal = document.getElementById('slip-status-modal');
-  if (!modal) return;
-  const sc = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
-  const fmtDt = dt => { try { return new Date(dt).toLocaleString([],{dateStyle:'medium',timeStyle:'short'}); } catch{return dt||'—';} };
-  modal.querySelector('.modal-title').textContent = `${s.bookmaker} · ${s.bookingCode}`;
-  let hiddenId = modal.querySelector('#slip-status-id');
-  if (!hiddenId) {
-    hiddenId = document.createElement('input'); hiddenId.type='hidden'; hiddenId.id='slip-status-id';
-    modal.appendChild(hiddenId);
-  }
-  hiddenId.value = s.id;
-  modal.querySelector('.modal-body').innerHTML = `
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
-      <span class="chip ${sc[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span>
-      <span class="chip ${s.type==='VIP'?'chip-gold':'chip-blue'}">${s.type||'FREE'}</span>
-      <span class="chip ${s.published?'chip-green':'chip-gray'}">${s.published?'Published':'Draft'}</span>
-    </div>
-    ${s.homeTeam ? `
-    <div style="padding:14px;background:var(--panel);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
-      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-family:var(--font-mono)">
-        Linked Match
-        ${s.gameStatus==='FINISHED'?`<span style="color:var(--accent);margin-left:8px">● Finished</span>`:s.gameStatus==='LIVE'?`<span style="color:var(--accent2);margin-left:8px"><span class="live-dot" style="width:5px;height:5px;margin-right:3px"></span>Live</span>`:''}
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        ${s.homeLogo?`<img src="${s.homeLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}
-        <div style="flex:1;font-size:14px;font-weight:700;text-align:right">${s.homeTeam}</div>
-        <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;padding:4px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;white-space:nowrap">
-          ${s.homeScore!=null ? `${s.homeScore} – ${s.awayScore}` : 'vs'}
-        </div>
-        <div style="flex:1;font-size:14px;font-weight:700">${s.awayTeam}</div>
-        ${s.awayLogo?`<img src="${s.awayLogo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">`:''}
-      </div>
-      <div style="font-size:11.5px;color:var(--muted);text-align:center">${[s.league,fmtTime(s.kickoffTime)].filter(Boolean).join(' · ')}</div>
-      ${[s.homeWinOdds,s.drawOdds,s.awayWinOdds].some(Boolean)?`
-      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;justify-content:center">
-        ${s.homeWinOdds?`<div class="odd-pill">1: ${fmtOdd(s.homeWinOdds)}</div>`:''}
-        ${s.drawOdds?`<div class="odd-pill">X: ${fmtOdd(s.drawOdds)}</div>`:''}
-        ${s.awayWinOdds?`<div class="odd-pill">2: ${fmtOdd(s.awayWinOdds)}</div>`:''}
-        ${s.over25Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${fmtOdd(s.over25Odds)}</div>`:''}
-        ${s.over15Odds?`<div class="odd-pill" style="background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O1.5: ${fmtOdd(s.over15Odds)}</div>`:''}
-      </div>`:''}
-      ${s.gameStatus==='FINISHED' ? determineSlipResult(s) : ''}
-    </div>` : ''}
-    ${s.totalOdds && parseFloat(s.totalOdds)>1 ? `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gold-lt);border:1px solid #3a2810;border-radius:8px;margin-bottom:14px">
-      <span style="font-size:13px;color:var(--gold);font-weight:600">Total Odds</span>
-      <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--gold)">${parseFloat(s.totalOdds).toFixed(2)}</span>
-    </div>` : ''}
-    ${s.imageUrl?`<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;object-fit:cover">`:''}
-    <div style="font-size:11.5px;color:var(--muted);margin-bottom:16px">
-      Created: ${fmtDt(s.createdAt)}${s.validUntil?` · Valid until: ${fmtDt(s.validUntil)}`:''}
-    </div>
-    <hr style="margin-bottom:16px"/>
-    <div class="form-group" style="margin-bottom:12px">
-      <label class="form-label">Update Status</label>
-      <select class="form-input" id="slip-status-val">
-        <option value="ACTIVE"  ${(s.status||'ACTIVE')==='ACTIVE'?'selected':''}>ACTIVE</option>
-        <option value="WON"     ${s.status==='WON'?'selected':''}>WON</option>
-        <option value="LOST"    ${s.status==='LOST'?'selected':''}>LOST</option>
-        <option value="EXPIRED" ${s.status==='EXPIRED'?'selected':''}>EXPIRED</option>
-        <option value="VOID"    ${s.status==='VOID'?'selected':''}>VOID</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-primary btn-sm" id="slip-status-btn" onclick="submitSlipStatus()" style="flex:1">
-        <i class="fa fa-check"></i> Save Status
-      </button>
-      ${s.gameStatus==='FINISHED' && (!s.status||s.status==='ACTIVE') ? `
-      <button class="btn btn-success btn-sm" onclick="settleSlipFromResult('${s.id}');closeModal('slip-status-modal')">
-        <i class="fa fa-wand-magic-sparkles"></i> Auto-Settle
-      </button>`:''}
-      <button class="btn btn-danger btn-sm" onclick="deleteSlip('${s.id}');closeModal('slip-status-modal')">
-        <i class="fa fa-trash"></i>
-      </button>
-    </div>`;
-  openModal('slip-status-modal');
-}
+function renderSlipQueue() {
+  const wrap = document.getElementById('cs-queue-wrap');
+  const list = document.getElementById('cs-queue-list');
+  const count= document.getElementById('cs-queue-count');
+  const previewWrap = document.getElementById('preview-queue-summary');
+  const previewCount= document.getElementById('preview-queue-count-text');
 
-function openSlipStatus(id, current) { openSlipDetail(id); }
-
-async function submitSlipStatus() {
-  const id = v('slip-status-id'), status = v('slip-status-val');
-  await submitBtn('slip-status-btn', async () => {
-    const res = await PATCH(`/api/v1/admin/games/slips/${id}/status`, { status });
-    if (!res.success) throw new Error(res.message);
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.map(s => s.id===id ? {...s, status} : s);
-    closeModal('slip-status-modal');
-    showToast(`Status → ${status}`, status==='WON'?'green':status==='LOST'?'red':'blue');
-    CHARTS_INIT.slips = false; loadSlips();
-  });
-}
-
-async function toggleSlipPublish(id) {
-  try {
-    const res = await PATCH(`/api/v1/admin/games/slips/${id}/toggle-publish`);
-    if (!res.success) throw new Error(res.message);
-    showToast(res.data?.published ? 'Published' : 'Unpublished', 'green');
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
-
-async function deleteSlip(id) {
-  if (!confirm('Delete this slip?')) return;
-  try {
-    await DEL(`/api/v1/admin/games/slips/${id}`);
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.filter(s => s.id !== id);
-    showToast('Slip deleted', 'red');
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
-
-async function settleSlipFromResult(slipId) {
-  try {
-    const res = await PATCH(`/api/v1/admin/games/slips/${slipId}/auto-settle`);
-    if (!res.success) throw new Error(res.message);
-    const d = res.data;
-    showToast(`Settled → ${d.status}`, d.status === 'WON' ? 'green' : 'red');
-    if (window._ALL_SLIPS) window._ALL_SLIPS = window._ALL_SLIPS.map(s => s.id===slipId ? {...s, status:d.status} : s);
-    CHARTS_INIT.slips = false; loadSlips();
-  } catch(e) { showToast(e.message, 'red'); }
-}
-
-// ══════════════════════════════════════════════════════
-// CREATE SLIP
-// ══════════════════════════════════════════════════════
-
-let CS_TYPE='booking', CS_GAME=null, CS_PREDICTIONS=[], CS_ODDS_LEGS=[];
-let CS_GAMES_ALL=[], CS_GAME_FILTER='all', CS_DATE_FILTER='today';
-
-function initCreateSlipPage() {
-  CS_TYPE='booking'; CS_GAME=null; CS_PREDICTIONS=[]; CS_ODDS_LEGS=[];
-  document.querySelectorAll('.slip-type-card').forEach(c=>c.classList.remove('active'));
-  document.getElementById('stc-booking')?.classList.add('active');
-  document.querySelectorAll('.slip-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('cs-section-booking')?.classList.add('active');
-  ['cs-bm','cs-code','cs-desc','cs-odds-bk','cs-odds-desc','cs-pred-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  ['cs-img','cs-img-pred','cs-img-odds'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  const cstype=document.getElementById('cs-type');if(cstype)cstype.value='FREE';
-  const cspub=document.getElementById('cs-pub');if(cspub)cspub.checked=true;
-  const cspredconf=document.getElementById('cs-pred-conf');if(cspredconf)cspredconf.value='';
-  clearCreateSlipGame();
-  document.getElementById('cs-pred-no-game').style.display='';
-  document.getElementById('cs-pred-outcomes').style.display='none';
-  document.getElementById('cs-odds-from-game').style.display='none';
-  document.getElementById('cs-odds-legs').innerHTML='';
-  document.getElementById('cs-combined-odds').textContent='—';
-  CS_GAME_FILTER='all'; CS_DATE_FILTER='today';
-  document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
-  document.querySelector('.csgf[data-f="all"]')?.classList.add('active');
-  document.querySelectorAll('#page-create-slip .csdf').forEach(b=>b.classList.remove('active'));
-  document.querySelector('#page-create-slip .csdf[data-d="today"]')?.classList.add('active');
-  const csd=document.getElementById('cs-custom-date');if(csd)csd.value='';
-  updateSlipPreview();
-  loadCreateSlipGames();
-}
-
-function setCreateSlipType(type) {
-  CS_TYPE=type;
-  document.querySelectorAll('.slip-type-card').forEach(c=>c.classList.remove('active'));
-  document.getElementById('stc-'+type)?.classList.add('active');
-  document.querySelectorAll('.slip-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('cs-section-'+type)?.classList.add('active');
-  if(type==='odds' && CS_GAME) populateCreateOddsFromGame(CS_GAME);
-  if(type==='prediction' && CS_GAME) renderCreatePredOutcomes(CS_GAME);
-  updateSlipPreview();
-}
-
-function setCreateSlipDateFilter(d, el) {
-  CS_DATE_FILTER = d;
-  document.querySelectorAll('#page-create-slip .csdf').forEach(b => b.classList.remove('active'));
-  if (el) el.classList.add('active');
-  if (d !== 'custom') { const csd=document.getElementById('cs-custom-date'); if(csd)csd.value=''; }
-  loadCreateSlipGames();
-}
-
-async function loadCreateSlipGames() {
-  const el=document.getElementById('cs-game-list'); if(!el)return;
-  el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading games…</div>';
-  try {
-    let endpoint = '/api/v1/admin/games/today';
-    if      (CS_DATE_FILTER==='tomorrow')  endpoint='/api/v1/admin/games/tomorrow';
-    else if (CS_DATE_FILTER==='day-after') endpoint='/api/v1/admin/games/day-after-tomorrow';
-    else if (CS_DATE_FILTER==='next-week') endpoint='/api/v1/admin/games/next-week';
-    else if (CS_DATE_FILTER==='custom') {
-      const d=document.getElementById('cs-custom-date')?.value;
-      if(d) endpoint=`/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res = await GET(endpoint);
-    CS_GAMES_ALL = res.data||[];
-    renderCreateSlipGameList(CS_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
-}
-
-function setCreateSlipGameFilter(f,el) {
-  CS_GAME_FILTER=f;
-  document.querySelectorAll('.csgf').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  filterCreateSlipGames();
-}
-
-function filterCreateSlipGames() {
-  const q=(document.getElementById('cs-game-search')?.value||'').toLowerCase();
-  let list=CS_GAMES_ALL;
-  if(CS_GAME_FILTER==='live')     list=list.filter(g=>g.status==='LIVE');
-  if(CS_GAME_FILTER==='upcoming') list=list.filter(g=>g.status==='UPCOMING');
-  if(CS_GAME_FILTER==='odds')     list=list.filter(g=>g.homeWinOdds||g.drawOdds||g.awayWinOdds);
-  if(q) list=list.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q));
-  renderCreateSlipGameList(list);
-}
-
-function renderCreateSlipGameList(games) {
-  const el=document.getElementById('cs-game-list'); if(!el)return;
-  if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No games found</div>';return;}
-  const selId=CS_GAME?.id;
-  el.innerHTML=games.map(g=>{
-    const isSel=g.id===selId, hasOdds=g.homeWinOdds||g.drawOdds||g.awayWinOdds;
-    return `
-      <div onclick="selectCreateSlipGame(${JSON.stringify(g).replace(/"/g,'&quot;')})"
-        style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s"
-        onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'"
-        onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-          </div>
-          ${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}
-        </div>
-        ${hasOdds?`<div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">
-          ${g.homeWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">1: ${g.homeWinOdds}</span>`:''}
-          ${g.drawOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">X: ${g.drawOdds}</span>`:''}
-          ${g.awayWinOdds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px">2: ${g.awayWinOdds}</span>`:''}
-          ${g.over25Odds?`<span class="odd-pill" style="font-size:10px;padding:1px 5px;background:var(--blue-lt);border-color:#0d2040;color:var(--blue)">O2.5: ${g.over25Odds}</span>`:''}
-        </div>`:``}
-      </div>`;
-  }).join('');
-}
-
-function selectCreateSlipGame(g) {
-  CS_GAME=g;
-  document.getElementById('cs-gid').value=g.id;
-  document.getElementById('cs-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;
-  document.getElementById('cs-game-selected').style.display='flex';
-  document.getElementById('preview-game').style.display='';
-  document.getElementById('preview-game-name').textContent=`${g.homeTeam} vs ${g.awayTeam}`;
-  document.getElementById('preview-game-meta').textContent=`${g.league||''} · ${fmtTime(g.kickoffTime)}`;
-  filterCreateSlipGames();
-  if(CS_TYPE==='prediction') renderCreatePredOutcomes(g);
-  if(CS_TYPE==='odds') populateCreateOddsFromGame(g);
-  updateSlipPreview();
-}
-
-function clearCreateSlipGame() {
-  CS_GAME=null;
-  document.getElementById('cs-gid').value='';
-  document.getElementById('cs-game-selected').style.display='none';
-  document.getElementById('preview-game').style.display='none';
-  document.getElementById('cs-pred-outcomes').style.display='none';
-  document.getElementById('cs-pred-no-game').style.display='';
-  document.getElementById('cs-odds-from-game').style.display='none';
-  CS_PREDICTIONS=[];
-  filterCreateSlipGames();
-  updateSlipPreview();
-}
-
-function renderCreatePredOutcomes(g) {
-  document.getElementById('cs-pred-no-game').style.display='none';
-  document.getElementById('cs-pred-outcomes').style.display='';
-  const outcomes=[
-    {key:'HOME_WIN',label:`${g.homeTeam} Win`,sub:g.homeWinOdds?`Odds: ${g.homeWinOdds}`:null},
-    {key:'DRAW',label:'Draw',sub:g.drawOdds?`Odds: ${g.drawOdds}`:null},
-    {key:'AWAY_WIN',label:`${g.awayTeam} Win`,sub:g.awayWinOdds?`Odds: ${g.awayWinOdds}`:null},
-    {key:'BTTS',label:'Both Teams Score',sub:null},
-    {key:'OVER_1_5',label:'Over 1.5',sub:g.over15Odds?`Odds: ${g.over15Odds}`:null},
-    {key:'OVER_2_5',label:'Over 2.5',sub:g.over25Odds?`Odds: ${g.over25Odds}`:null},
-    {key:'OVER_3_5',label:'Over 3.5',sub:g.over35Odds?`Odds: ${g.over35Odds}`:null},
-    {key:'UNDER_2_5',label:'Under 2.5',sub:g.under25Odds?`Odds: ${g.under25Odds}`:null},
-  ];
-  document.getElementById('cs-pred-grid').innerHTML=outcomes.map(o=>`
-    <button class="outcome-btn ${CS_PREDICTIONS.includes(o.key)?'selected':''}" onclick="toggleCreatePred('${o.key}',this)">
-      <div>${o.label}</div>
-      ${o.sub?`<div style="font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px;font-family:var(--font-mono)">${o.sub}</div>`:''}
-    </button>`).join('');
-}
-
-function toggleCreatePred(key,el) {
-  if(CS_PREDICTIONS.includes(key)){CS_PREDICTIONS=CS_PREDICTIONS.filter(k=>k!==key);el.classList.remove('selected');}
-  else{CS_PREDICTIONS.push(key);el.classList.add('selected');}
-  updateSlipPreview();
-}
-
-function populateCreateOddsFromGame(g) {
-  const pills=[];
-  if(g.homeWinOdds)pills.push({label:`${g.homeTeam} Win`,odds:g.homeWinOdds});
-  if(g.drawOdds)   pills.push({label:'Draw',odds:g.drawOdds});
-  if(g.awayWinOdds)pills.push({label:`${g.awayTeam} Win`,odds:g.awayWinOdds});
-  if(g.over25Odds) pills.push({label:'Over 2.5',odds:g.over25Odds});
-  if(g.over15Odds) pills.push({label:'Over 1.5',odds:g.over15Odds});
-  const container=document.getElementById('cs-odds-from-game');
-  if(!pills.length){container.style.display='none';return;}
-  container.style.display='';
-  document.getElementById('cs-odds-game-pills').innerHTML=pills.map(p=>`
-    <button class="odd-pill" style="cursor:pointer;border:none;font-size:11px" onclick="addCreateOddsLegFromGame('${p.label.replace(/'/g,"\\'")}',${p.odds})">
-      <i class="fa fa-plus" style="font-size:9px;margin-right:3px"></i>${p.label}: ${p.odds}
-    </button>`).join('');
-}
-
-function addCreateOddsLegFromGame(label,odds){CS_ODDS_LEGS.push({label,odds:parseFloat(odds)});renderCreateOddsLegs();}
-function addCreateOddsLeg(){CS_ODDS_LEGS.push({label:'',odds:''});renderCreateOddsLegs();const inputs=document.querySelectorAll('.cs-leg-label');if(inputs.length)inputs[inputs.length-1].focus();}
-function removeCreateOddsLeg(i){CS_ODDS_LEGS.splice(i,1);renderCreateOddsLegs();}
-
-function renderCreateOddsLegs() {
-  const el=document.getElementById('cs-odds-legs');
-  if(!CS_ODDS_LEGS.length){
-    el.innerHTML=`<div style="padding:14px;text-align:center;font-size:12.5px;color:var(--muted);background:var(--panel);border-radius:8px">No legs — add one or click a quick-add pill above</div>`;
-    document.getElementById('cs-combined-odds').textContent='—';
+  if(!CS_SLIP_QUEUE.length) {
+    wrap.style.display   = 'none';
+    if(previewWrap) previewWrap.style.display = 'none';
     return;
   }
-  el.innerHTML=CS_ODDS_LEGS.map((leg,i)=>`
-    <div class="odds-leg">
-      <input class="form-input cs-leg-label" style="flex:2;margin-bottom:0;font-size:13px" placeholder="Selection (e.g. Arsenal Win)" value="${leg.label}"
-        oninput="CS_ODDS_LEGS[${i}].label=this.value;updateSlipPreview()"/>
-      <input class="form-input" style="flex:1;margin-bottom:0;font-size:13px;font-family:var(--font-mono)" placeholder="Odds" type="number" step="0.01" min="1" value="${leg.odds}"
-        oninput="CS_ODDS_LEGS[${i}].odds=parseFloat(this.value)||'';calcCreateCombinedOdds()"/>
-      <button class="btn btn-ghost btn-xs" onclick="removeCreateOddsLeg(${i})"><i class="fa fa-trash" style="color:var(--accent2)"></i></button>
+  wrap.style.display   = '';
+  count.textContent    = CS_SLIP_QUEUE.length;
+  if(previewWrap) {
+    previewWrap.style.display = '';
+    previewCount.textContent  = `${CS_SLIP_QUEUE.length} slip${CS_SLIP_QUEUE.length>1?'s':''} in queue`;
+  }
+
+  const typeIcon  = { booking:'fa-ticket', prediction:'fa-bullseye', odds:'fa-percent' };
+  const typeColor = { booking:'ic-green',  prediction:'ic-red',      odds:'ic-gold'    };
+
+  list.innerHTML = CS_SLIP_QUEUE.map((snap, i) => `
+    <div class="slip-queue-item">
+      <div class="sqi-icon ${typeColor[snap.type]}"><i class="fa ${typeIcon[snap.type]}"></i></div>
+      <div class="sqi-info">
+        <div class="sqi-bm">${snap.bookmaker} · <span style="font-family:var(--font-mono);color:var(--accent)">${snap.code}</span></div>
+        <div class="sqi-meta">
+          ${snap.slipType === 'VIP' ? `<span style="color:var(--gold)">VIP</span> · ` : ''}
+          ${snap.gameName ? `${snap.gameName} · ` : ''}
+          ${snap.odds ? `<span style="color:var(--gold)">${parseFloat(snap.odds).toFixed(2)}×</span>` : ''}
+          ${!snap.published ? ' · <span style="color:var(--muted)">Draft</span>' : ''}
+        </div>
+      </div>
+      <div class="sqi-actions">
+        <button class="btn btn-danger btn-xs" onclick="removeSlipFromQueue(${i})" title="Remove"><i class="fa fa-xmark"></i></button>
+      </div>
     </div>`).join('');
-  calcCreateCombinedOdds();
 }
 
-function calcCreateCombinedOdds() {
-  const total=CS_ODDS_LEGS.reduce((acc,leg)=>{const o=parseFloat(leg.odds);return(o>0)?acc*o:acc;},1);
-  const hasAny=CS_ODDS_LEGS.some(l=>parseFloat(l.odds)>0);
-  document.getElementById('cs-combined-odds').textContent=hasAny?total.toFixed(2):'—';
-  updateSlipPreview();
+function removeSlipFromQueue(index) {
+  CS_SLIP_QUEUE.splice(index, 1);
+  renderSlipQueue();
 }
 
-function updateSlipPreview() {
-  let bookmaker='Bookmaker', code='CODE', odds='—', desc='';
-  if(CS_TYPE==='booking'){
-    bookmaker=v('cs-bm')||'Bookmaker'; code=v('cs-code')||'CODE';
-    odds=(v('cs-odds-bk')||'—')+(v('cs-odds-bk')?'×':''); desc=v('cs-desc')||'';
-  } else if(CS_TYPE==='prediction'){
-    bookmaker='Prediction Slip';
-    code=CS_PREDICTIONS.length?CS_PREDICTIONS.join(', '):'No outcomes selected';
-    odds='—'; desc=v('cs-pred-notes')||'';
-  } else if(CS_TYPE==='odds'){
-    bookmaker='Odds Accumulator';
-    code=CS_ODDS_LEGS.length?`${CS_ODDS_LEGS.length} leg${CS_ODDS_LEGS.length>1?'s':''}`:' No legs yet';
-    const combined=document.getElementById('cs-combined-odds')?.textContent||'—';
-    odds=combined!=='—'?combined+'×':'—'; desc=v('cs-odds-desc')||'';
-  }
-  document.getElementById('preview-bookmaker').textContent=bookmaker;
-  document.getElementById('preview-code').textContent=code;
-  document.getElementById('preview-odds').textContent=odds;
-  document.getElementById('preview-desc').textContent=desc;
-  const typeChip=document.getElementById('preview-slip-type');
-  if(typeChip){
-    const t=document.getElementById('cs-type')?.value||'FREE';
-    typeChip.textContent=t;
-    typeChip.className=`chip ${t==='VIP'?'chip-gold':t==='PREMIUM'?'chip-gold':'chip-blue'}`;
-  }
-  const typeIcons={booking:'fa-ticket',prediction:'fa-bullseye',odds:'fa-percent'};
-  document.getElementById('preview-type-chip').innerHTML=`<span class="chip chip-gray"><i class="fa ${typeIcons[CS_TYPE]}" style="font-size:9px"></i> ${CS_TYPE.charAt(0).toUpperCase()+CS_TYPE.slice(1)}</span>`;
+function clearSlipQueue() {
+  CS_SLIP_QUEUE = [];
+  renderSlipQueue();
 }
 
-async function submitCreateSlipPage() {
-  if(CS_TYPE==='booking' && (!v('cs-bm')||!v('cs-code'))) return showToast('Bookmaker and booking code required','red');
-  if(CS_TYPE==='prediction' && !CS_PREDICTIONS.length) return showToast('Select at least one outcome','red');
-  if(CS_TYPE==='odds' && !CS_ODDS_LEGS.length) return showToast('Add at least one odds leg','red');
-  await submitBtn('cs-submit-btn', async()=>{
-    const fd = new FormData();
-    fd.append('type', document.getElementById('cs-type').value);
-    fd.append('published', document.getElementById('cs-pub').checked ? 'true' : 'false');
-    const gameId = document.getElementById('cs-gid').value;
-    if(gameId) fd.append('gameId', gameId);
-    const validUntil = v('cs-valid');
-    if(validUntil) fd.append('validUntil', validUntil);
-    if(CS_TYPE==='booking'){
-      fd.append('bookmaker',   v('cs-bm'));
-      fd.append('bookingCode', v('cs-code'));
-      fd.append('description', v('cs-desc') || '');
-      fd.append('totalOdds',   v('cs-odds-bk') || '1.0');
-      const img = document.getElementById('cs-img').files[0];
-      if(img) fd.append('image', img);
-    } else if(CS_TYPE==='prediction'){
-      const conf=document.getElementById('cs-pred-conf').value, notes=v('cs-pred-notes')||'';
-      fd.append('bookmaker',   'Prediction');
-      fd.append('bookingCode', 'PREDICTION');
-      fd.append('description', `${CS_PREDICTIONS.join(', ')}${conf?' | Conf: '+conf:''}${notes?' | '+notes:''}`);
-      fd.append('totalOdds',   '1.0');
-      const img = document.getElementById('cs-img-pred').files[0];
-      if(img) fd.append('image', img);
-    } else if(CS_TYPE==='odds'){
-      const legsStr=CS_ODDS_LEGS.map(l=>`${l.label} @ ${l.odds}`).join(' | ');
-      const combined=document.getElementById('cs-combined-odds').textContent;
-      const userDesc=v('cs-odds-desc')||'';
-      fd.append('bookmaker',   'Odds Slip');
-      fd.append('bookingCode', 'ACCUMULATOR');
-      fd.append('description', `${legsStr}${userDesc?' — '+userDesc:''}`);
-      fd.append('totalOdds',   combined !== '—' ? combined : '1.0');
-      const img = document.getElementById('cs-img-odds').files[0];
-      if(img) fd.append('image', img);
+async function submitSlipQueue() {
+  if(!CS_SLIP_QUEUE.length) return showToast('Queue is empty', 'red');
+
+  const btn    = document.getElementById('cs-queue-submit-btn');
+  const prog   = document.getElementById('cs-queue-progress');
+  const progL  = document.getElementById('cs-queue-progress-label');
+  const progF  = document.getElementById('cs-queue-progress-fill');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Submitting…';
+  prog.style.display = '';
+
+  let successCount = 0;
+  const total = CS_SLIP_QUEUE.length;
+
+  for(let i = 0; i < CS_SLIP_QUEUE.length; i++) {
+    const snap = CS_SLIP_QUEUE[i];
+    progL.textContent = `Submitting ${i+1} / ${total}…`;
+    progF.style.width = `${Math.round(((i) / total) * 100)}%`;
+
+    try {
+      const fd = new FormData();
+      fd.append('type',      snap.slipType);
+      fd.append('published', snap.published ? 'true' : 'false');
+      if(snap.gameId)    fd.append('gameId',    snap.gameId);
+      if(snap.validUntil)fd.append('validUntil', snap.validUntil);
+      fd.append('bookmaker',   snap.bookmaker);
+      fd.append('bookingCode', snap.code);
+      fd.append('description', snap.desc || '');
+      fd.append('totalOdds',   snap.odds ? String(snap.odds) : '1.0');
+      if(snap.image)     fd.append('image', snap.image);
+
+      const res = await POST('/api/v1/admin/games/slips', fd, true);
+      if(!res.success) throw new Error(res.message);
+      successCount++;
+    } catch(e) {
+      console.warn(`Slip ${i+1} failed:`, e.message);
     }
-    const res = await POST('/api/v1/admin/games/slips', fd, true);
-    if(!res.success) throw new Error(res.message || 'Failed to create slip');
-    showToast('Slip created successfully', 'green');
+  }
+
+  progF.style.width = '100%';
+  progL.textContent = `Done! ${successCount}/${total} submitted.`;
+
+  setTimeout(() => {
+    prog.style.display = 'none';
+    progF.style.width  = '0%';
+    btn.disabled       = false;
+    btn.innerHTML      = '<i class="fa fa-paper-plane"></i> Submit All in Queue';
+  }, 1500);
+
+  if(successCount > 0) {
+    CS_SLIP_QUEUE = [];
+    renderSlipQueue();
+    showToast(`${successCount} slip${successCount>1?'s':''} created`, 'green');
     CHARTS_INIT.slips = false;
-    nav('slips', null);
-  });
-}
-
-// ══════════════════════════════════════════════════════
-// VIP
-// ══════════════════════════════════════════════════════
-
-const CUR_SYM = { USD:'$', GHS:'₵', NGN:'₦', EUR:'€', GBP:'£' };
-function curSym(c) { return CUR_SYM[c] || c+' '; }
-const FALLBACK_RATES_USD = { USD:1, GHS:15.5, NGN:1600, EUR:0.92, GBP:0.79 };
-
-async function fetchModalRates() {
-  if (_vipModalRates) return _vipModalRates;
-  try {
-    const res = await fetch('https://open.er-api.com/v6/latest/USD');
-    const json = await res.json();
-    if (json.result === 'success') { _vipModalRates = json.rates; return _vipModalRates; }
-  } catch {}
-  return FALLBACK_RATES_USD;
-}
-
-async function convertAmount(amount, baseCur, targetCur) {
-  if (baseCur === targetCur) return amount;
-  const rates = await fetchModalRates();
-  const usdToBase   = rates[baseCur]   || FALLBACK_RATES_USD[baseCur]   || 1;
-  const usdToTarget = rates[targetCur] || FALLBACK_RATES_USD[targetCur] || 1;
-  return Math.round((amount / usdToBase) * usdToTarget * 100) / 100;
-}
-
-async function updateVipModalPreview() {
-  const price = parseFloat(document.getElementById('vp-price')?.value);
-  const baseCur = document.getElementById('vp-currency')?.value || 'USD';
-  const preview = document.getElementById('vip-modal-preview');
-  const equivEl = document.getElementById('vip-modal-equiv');
-  const noteEl  = document.getElementById('vip-modal-rate-note');
-  if (!preview || !equivEl) return;
-  if (!price || price <= 0) { preview.style.display = 'none'; return; }
-  preview.style.display = '';
-  equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)"><div class="spinner" style="width:12px;height:12px;border-width:1.5px;display:inline-block"></div> Fetching rates…</span>`;
-  try {
-    const results = await Promise.all(['GHS','NGN','USD'].map(async cur => ({ cur, converted: await convertAmount(price, baseCur, cur) })));
-    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
-    equivEl.innerHTML = results.map(({cur,converted}) => `
-      <div class="vip-equiv-card" style="flex:1;min-width:80px">
-        <div class="vip-equiv-label">${cur}</div>
-        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-      </div>`).join('');
-    const rates = await fetchModalRates();
-    const usdToBase = rates[baseCur] || FALLBACK_RATES_USD[baseCur] || 1;
-    noteEl.textContent = `1 USD = ${curSym(baseCur)}${usdToBase.toFixed(2)} ${baseCur} · ${rates !== FALLBACK_RATES_USD ? '🟢 Live rate' : '🟡 Fallback rate'}`;
-  } catch(e) {
-    equivEl.innerHTML = `<span style="font-size:11px;color:var(--muted)">Could not load rates</span>`;
+    if(successCount === total) nav('slips', null);
+  } else {
+    showToast('All submissions failed — check console', 'red');
   }
 }
-
-async function loadVip() {
-  try {
-    const [priceRes,statsRes]=await Promise.allSettled([GET('/api/v1/admin/vip/price'),GET('/api/v1/admin/stats')]);
-    if(priceRes.status==='fulfilled'&&priceRes.value.success){
-      const p=priceRes.value.data;
-      document.getElementById('vip-price-display').innerHTML=`
-        <div style="font-size:52px;font-family:var(--font-mono);font-weight:700;color:var(--gold);line-height:1">${curSym(p.currency)}${Number(p.price).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:6px">Base price · Set in <span style="color:var(--text)">${p.currency}</span></div>
-        <div style="font-size:13px;color:var(--text2);margin-top:2px;margin-bottom:16px">${p.description||''}</div>
-        <div id="vip-equiv-display" class="vip-currency-grid">
-          <div class="vip-equiv-card"><div class="vip-equiv-label">Loading</div><div class="vip-equiv-val"><div class="spinner" style="width:12px;height:12px;border-width:1.5px"></div></div></div>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-live-rate-note"></div>
-        <button class="btn btn-gold" style="margin-top:18px" onclick="openVipModal(${p.price},'${p.currency}',\`${(p.description||'').replace(/`/g,"'")}\`)">
-          <i class="fa fa-pen"></i> Update Pricing
-        </button>`;
-      renderVipEquivalents(p.price, p.currency);
-    } else {
-      document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--muted);font-size:13px">No price set yet</div><button class="btn btn-gold" style="margin-top:16px" onclick="openModal('vip-modal')"><i class="fa fa-plus"></i> Set Price</button>`;
-    }
-    if(statsRes.status==='fulfilled'&&statsRes.value.success){
-      const d=statsRes.value.data;
-      document.getElementById('vip-metrics').innerHTML=`
-        <div class="metric-row"><span class="m-label">Active VIP Users</span><span class="m-val" style="color:var(--gold)">${d.activeVipUsers??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Total Predictions</span><span class="m-val">${d.totalPredictions??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Won Predictions</span><span class="m-val" style="color:var(--accent)">${d.wonPredictions??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Win Rate</span><span class="m-val">${d.winRate!=null?d.winRate.toFixed(1)+'%':'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Active VIP Slips</span><span class="m-val" style="color:var(--gold)">${d.activeVipSlips??'—'}</span></div>
-        <div class="metric-row"><span class="m-label">Active Free Slips</span><span class="m-val" style="color:var(--blue)">${d.activeFreeSlips??'—'}</span></div>`;
-      buildVipCharts(d);
-    }
-  } catch(e) {
-    document.getElementById('vip-price-display').innerHTML=`<div style="color:var(--accent2);font-size:13px">${e.message}</div>`;
-  }
-}
-
-async function renderVipEquivalents(price, baseCur) {
-  const equivEl = document.getElementById('vip-equiv-display');
-  const noteEl  = document.getElementById('vip-live-rate-note');
-  if (!equivEl) return;
-  try {
-    const results = await Promise.all(['GHS','NGN','USD'].map(async cur => ({ cur, converted: await convertAmount(price, baseCur, cur) })));
-    const classes = { GHS:'ghs', NGN:'ngn', USD:'' };
-    equivEl.innerHTML = results.map(({cur,converted}) => `
-      <div class="vip-equiv-card">
-        <div class="vip-equiv-label">${cur}</div>
-        <div class="vip-equiv-val ${classes[cur]||''}">${curSym(cur)}${converted.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
-      </div>`).join('');
-    const rates = await fetchModalRates();
-    if (noteEl) noteEl.textContent = `${rates !== FALLBACK_RATES_USD ? '🟢 Live exchange rates' : '🟡 Fallback rates'} · Users pay in their local currency`;
-  } catch(e) {
-    if(equivEl) equivEl.innerHTML = `<div style="color:var(--muted);font-size:12px">Could not load equivalents</div>`;
-  }
-}
-
-async function refreshVipRates() {
-  _vipModalRates=null; CHARTS_INIT.vip=false; loadVip(); showToast('Exchange rates refreshed','green');
-}
-
-function buildVipCharts(d) {
-  const vip=d.activeVipUsers||0, total=d.totalUsers||0, free=Math.max(0,total-vip);
-  const won=d.wonPredictions||0, lost=Math.max(0,(d.totalPredictions||0)-won);
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const vgc=document.getElementById('vipGrowthChart');
-  if(vgc){try{Chart.getChart(vgc)?.destroy();}catch{}
-    new Chart(vgc,{type:'bar',data:{labels:['Free Users','VIP Users'],datasets:[{data:[free,vip],backgroundColor:['#2e2c29','#c8943a'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-  }
-  const vrc=document.getElementById('vipRevChart');
-  if(vrc){try{Chart.getChart(vrc)?.destroy();}catch{}
-    new Chart(vrc,{type:'bar',data:{labels:['Won','Lost'],datasets:[{data:[won,lost],backgroundColor:['#2d9e6e','#e05a2b'],borderRadius:6,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,precision:0}}}}});
-  }
-}
-
-function openVipModal(price, currency, desc) {
-  document.getElementById('vp-price').value    = price;
-  document.getElementById('vp-currency').value = currency;
-  document.getElementById('vp-desc').value     = desc;
-  document.getElementById('vip-modal-preview').style.display = 'none';
-  openModal('vip-modal');
-  setTimeout(updateVipModalPreview, 50);
-}
-
-async function submitVipPrice(){
-  const price=parseFloat(v('vp-price'));
-  if(!price||price<=0) return showToast('Enter a valid price greater than zero','red');
-  const currency=v('vp-currency');
-  if(!currency) return showToast('Select a currency','red');
-  await submitBtn('vip-submit-btn',async()=>{
-    const res=await POST('/api/v1/admin/vip/price',{price,currency,description:v('vp-desc')});
-    if(!res.success)throw new Error(res.message);
-    closeModal('vip-modal');
-    showToast(`VIP price set: ${curSym(currency)}${price} ${currency}`,'green');
-    _vipModalRates=null; CHARTS_INIT.vip=false; loadVip();
-  });
-}
-
-// ══════════════════════════════════════════════════════
-// PROMOS
-// ══════════════════════════════════════════════════════
-
-async function loadPromos() {
-  document.getElementById('promos-grid').innerHTML='<div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading promos…</div>';
-  try {
-    const res=await GET('/api/v1/admin/promos');
-    const promos=res.data||[];
-    renderPromos(promos);
-    buildPromoChart(promos);
-  } catch(e) {
-    document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1" class="loading-state" style="color:var(--accent2)">${e.message}</div>`;
-  }
-}
-
-function buildPromoChart(promos) {
-  const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-  const labels=promos.map(p=>p.title||'Promo');
-  const data=promos.map(p=>p.discountPercent||0);
-  const pc=document.getElementById('promoChart');
-  if(pc){try{Chart.getChart(pc)?.destroy();}catch{}
-    new Chart(pc,{type:'bar',data:{labels:labels.length?labels:['No promos'],datasets:[{label:'Discount %',data:data.length?data:[0],backgroundColor:promos.map((_,i)=>['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610'][i%4]),borderColor:promos.map((_,i)=>['#2d9e6e','#c8943a','#3a72c8','#e05a2b'][i%4]),borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:{...CDm,callback:v=>v+'%'}}}}});
-  }
-}
-
-function renderPromos(promos) {
-  const icons=['🎉','🎁','🤝','⚡','🔥','🏆'];
-  const bgs=['#0f2d1f','#2a1f0a','#0d1e3a','#2d1610','#1e1030','#2d1e0a'];
-  if(!promos.length){
-    document.getElementById('promos-grid').innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><i class="fa fa-tags" style="font-size:32px;opacity:.2;display:block;margin-bottom:10px"></i>No promos</div>`;
-    return;
-  }
-  document.getElementById('promos-grid').innerHTML=promos.map((p,i)=>`
-    <div class="promo-card">
-      <div class="promo-banner" style="background:${bgs[i%bgs.length]}">${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover">`:icons[i%icons.length]}</div>
-      <div class="promo-body">
-        <div style="font-size:15px;font-weight:700;margin-bottom:2px">${p.title}</div>
-        <div class="promo-discount">${p.discountPercent??0}% OFF</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:4px">${p.description||''}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:5px">${fmtDate(p.startsAt)} → ${fmtDate(p.expiresAt)}</div>
-        <div style="display:flex;gap:6px;margin-top:10px;align-items:center">
-          <span class="chip ${p.active?'chip-green':'chip-gray'}">${p.active?'Active':'Inactive'}</span>
-          <span class="chip chip-blue" style="font-size:10px">${p.type||''}</span>
-          <button class="btn btn-danger btn-xs" style="margin-left:auto" onclick="deletePromo('${p.id}')"><i class="fa fa-trash"></i></button>
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-/**
- * submitCreatePromo
- * ─────────────────
- * KEY FIX: startsAt and expiresAt are passed through toISOWithSeconds()
- * before being appended to FormData. This ensures Spring receives
- * "YYYY-MM-DDTHH:MM:SS" which @DateTimeFormat(iso = DATE_TIME) can parse.
- *
- * Without this, datetime-local inputs give "YYYY-MM-DDTHH:MM" (no seconds),
- * which Spring's LocalDateTime binder rejects with a 400 Bad Request.
- */
-async function submitCreatePromo() {
-  const title = v('pm-title');
-  if (!title) return showToast('Title required', 'red');
-
-  const startRaw = v('pm-start');
-  const endRaw   = v('pm-end');
-  if (!startRaw) return showToast('Start time is required', 'red');
-  if (!endRaw)   return showToast('Expiry time is required', 'red');
-
-  // ▼ Append ":00" so Spring LocalDateTime parsing doesn't fail
-  const startsAt  = toISOWithSeconds(startRaw);
-  const expiresAt = toISOWithSeconds(endRaw);
-
-  // Basic date sanity check
-  if (new Date(startsAt) >= new Date(expiresAt)) {
-    return showToast('Expiry must be after start time', 'red');
-  }
-
-  await submitBtn('promo-submit-btn', async () => {
-    const fd = new FormData();
-    fd.append('title',           title);
-    fd.append('description',     v('pm-desc'));
-    fd.append('type',            v('pm-type'));
-    fd.append('discountPercent', v('pm-disc') || '0');
-    fd.append('startsAt',        startsAt);
-    fd.append('expiresAt',       expiresAt);
-
-    const img = document.getElementById('pm-img').files[0];
-    if (img) fd.append('image', img);
-
-    const res = await POST('/api/v1/admin/promos', fd, true);
-    if (!res.success) throw new Error(res.message);
-    closeModal('promo-modal');
-    showToast('Promotion created', 'green');
-    CHARTS_INIT.promos = false;
-    loadPromos();
-  });
-}
-
-async function deletePromo(id){
-  if(!confirm('Delete this promotion?')) return;
-  try {
-    await DEL(`/api/v1/admin/promos/${id}`);
-    showToast('Promo deleted','red');
-    CHARTS_INIT.promos = false;
-    loadPromos();
-  } catch(e) { showToast(e.message,'red'); }
-}
-
-// ══════════════════════════════════════════════════════
-// ANALYTICS
-// ══════════════════════════════════════════════════════
-
-let AN_GAMES_ALL=[], AN_GAME_SEL=null, AN_DATE_FILTER='today';
-
-function initAnalyticsPage() {
-  AN_DATE_FILTER='today'; AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
-  document.getElementById('analytics-result').classList.remove('show');
-  document.getElementById('an-game-search').value='';
-  document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));
-  document.querySelector('#page-analytics .csdf[data-d="today"]')?.classList.add('active');
-  const acd=document.getElementById('an-custom-date'); if(acd)acd.value='';
-  loadAnalyticsGames();
-}
-
-function setAnalyticsDateFilter(d, el) {
-  AN_DATE_FILTER=d;
-  document.querySelectorAll('#page-analytics .csdf').forEach(b=>b.classList.remove('active'));
-  if(el)el.classList.add('active');
-  if(d!=='custom'){const acd=document.getElementById('an-custom-date');if(acd)acd.value='';}
-  AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
-  document.getElementById('analytics-result').classList.remove('show');
-  loadAnalyticsGames();
-}
-
-async function loadAnalyticsGames() {
-  const el=document.getElementById('an-game-list'); if(!el)return;
-  el.innerHTML='<div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>';
-  try {
-    let endpoint='/api/v1/admin/games/today';
-    if      (AN_DATE_FILTER==='tomorrow')  endpoint='/api/v1/admin/games/tomorrow';
-    else if (AN_DATE_FILTER==='day-after') endpoint='/api/v1/admin/games/day-after-tomorrow';
-    else if (AN_DATE_FILTER==='next-week') endpoint='/api/v1/admin/games/next-week';
-    else if (AN_DATE_FILTER==='custom') {
-      const d=document.getElementById('an-custom-date')?.value;
-      if(d) endpoint=`/api/v1/admin/games/by-date?date=${d}`;
-    }
-    const res=await GET(endpoint);
-    AN_GAMES_ALL=res.data||[];
-    renderAnalyticsGameList(AN_GAMES_ALL);
-  } catch(e) {
-    el.innerHTML=`<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">${e.message}</div>`;
-  }
-}
-
-function filterAnalyticsGames() {
-  const q=(document.getElementById('an-game-search')?.value||'').toLowerCase();
-  const list=q?AN_GAMES_ALL.filter(g=>(g.homeTeam||'').toLowerCase().includes(q)||(g.awayTeam||'').toLowerCase().includes(q)||(g.league||'').toLowerCase().includes(q)):AN_GAMES_ALL;
-  renderAnalyticsGameList(list);
-}
-
-function renderAnalyticsGameList(games) {
-  const el=document.getElementById('an-game-list'); if(!el)return;
-  if(!games.length){el.innerHTML='<div style="padding:16px;text-align:center;font-size:12.5px;color:var(--muted)">No fixtures found</div>';return;}
-  window._AN_GAMES_MAP={};
-  games.forEach(g=>{window._AN_GAMES_MAP[g.id]=g;});
-  const selId=AN_GAME_SEL?.id;
-  el.innerHTML=games.map(g=>{
-    const isSel=g.id===selId;
-    return `
-      <div onclick="selectAnalyticsGame('${g.id}')"
-        style="padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;background:${isSel?'var(--accent-lt)':'transparent'};transition:background .1s"
-        onmouseover="this.style.background='${isSel?'var(--accent-lt)':'var(--panel)'}'"
-        onmouseout="this.style.background='${isSel?'var(--accent-lt)':'transparent'}'">
-        <div style="display:flex;align-items:center;gap:8px">
-          ${g.status==='LIVE'?`<span class="live-dot" style="width:6px;height:6px;flex-shrink:0"></span>`:''}
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${g.homeTeam} <span style="color:var(--muted);font-weight:400">vs</span> ${g.awayTeam}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:1px">${g.league||''} · ${fmtTime(g.kickoffTime)}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)">game id: ${g.id}</div>
-          </div>
-          ${isSel?`<i class="fa fa-circle-check" style="color:var(--accent);font-size:14px;flex-shrink:0"></i>`:''}
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function selectAnalyticsGame(id) {
-  const g=window._AN_GAMES_MAP?.[id]; if(!g)return;
-  AN_GAME_SEL=g;
-  document.getElementById('an-game-label').textContent=`${g.homeTeam} vs ${g.awayTeam}${g.league?' · '+g.league:''}`;
-  document.getElementById('an-game-ids').textContent=`game id: ${g.id}`;
-  document.getElementById('an-game-selected').style.display='flex';
-  filterAnalyticsGames();
-  document.getElementById('analytics-result').classList.remove('show');
-}
-
-function clearAnalyticsGame() {
-  AN_GAME_SEL=null;
-  document.getElementById('an-game-selected').style.display='none';
-  document.getElementById('analytics-result').classList.remove('show');
-  filterAnalyticsGames();
-}
-
-async function runAnalytics() {
-  if(!AN_GAME_SEL) return showToast('Please select a fixture above first','red');
-  const gameId=AN_GAME_SEL.id;
-  if(!gameId) return showToast('Selected game has no UUID','red');
-  const btn=document.getElementById('an-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Analysing…';
-  document.getElementById('analytics-result').classList.remove('show');
-  try {
-    const res=await GET(`/api/v1/analytics/match?gameId=${gameId}`);
-    if(!res.success) throw new Error(res.message);
-    const d=res.data;
-    document.getElementById('an-stats').innerHTML=[
-      {label:'Home Win Rate',val:`${d.homeWinRate??0}%`,ic:'ic-green'},
-      {label:'Away Win Rate',val:`${d.awayWinRate??0}%`,ic:'ic-red'},
-      {label:'Draw Rate',    val:`${d.drawRate??0}%`,   ic:'ic-gray'},
-      {label:'Confidence',   val:`${d.confidencePercent??0}%`,ic:'ic-blue'},
-    ].map(s=>`<div class="stat-card"><div class="stat-card-icon ${s.ic}"><i class="fa fa-chart-pie"></i></div><div class="stat-label">${s.label}</div><div class="stat-value">${s.val}</div></div>`).join('');
-    document.getElementById('an-btts').textContent=(d.bttsRate??0)+'%';
-    document.getElementById('an-o25').textContent=(d.over25Rate??0)+'%';
-    document.getElementById('an-hg').textContent=d.homeAvgGoalsScored??'—';
-    document.getElementById('an-ag').textContent=d.awayAvgGoalsScored??'—';
-    document.getElementById('an-conf').textContent=(d.confidencePercent??0)+'%';
-    document.getElementById('an-risk').textContent=d.riskLevel??'—';
-    document.getElementById('an-outcome').textContent=d.predictedOutcome??'—';
-    document.getElementById('an-tip').textContent='Suggested tip: '+(d.suggestedTip??'—');
-    const riskChip=d.riskLevel?.includes('LOW')?'chip-green':d.riskLevel?.includes('MEDIUM')?'chip-gold':'chip-red';
-    document.getElementById('an-chips').innerHTML=`<span class="chip ${riskChip}">${d.riskLevel??''}</span><span class="chip chip-blue">${d.confidencePercent??0}% Confidence</span>`;
-    document.getElementById('analytics-result').classList.add('show');
-    setTimeout(()=>{
-      if(anProbRef) try{anProbRef.destroy();}catch{}
-      if(anGoalsRef) try{anGoalsRef.destroy();}catch{}
-      const CDm={font:{family:"'JetBrains Mono',monospace",size:10},color:'#5c5a56'};
-      anProbRef=new Chart(document.getElementById('anProbChart'),{type:'doughnut',data:{labels:['Home Win','Draw','Away Win'],datasets:[{data:[d.homeWinRate,d.drawRate,d.awayWinRate],backgroundColor:['#2d9e6e','#5c5a56','#e05a2b'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
-      anGoalsRef=new Chart(document.getElementById('anGoalsChart'),{type:'bar',data:{labels:['Home Scored','Home Conceded','Away Scored','Away Conceded'],datasets:[{data:[d.homeAvgGoalsScored,d.homeAvgGoalsConceded,d.awayAvgGoalsScored,d.awayAvgGoalsConceded],backgroundColor:['#2d9e6e','#0f2d1f','#e05a2b','#2d1610'],borderRadius:5,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:CDm},y:{grid:{color:'#2e2c29'},ticks:CDm}}}});
-    },60);
-  } catch(e){showToast('Analytics failed: '+e.message,'red');}
-  finally{btn.disabled=false;btn.innerHTML='<i class="fa fa-brain"></i> Run AI Analysis';}
-}
-
-// ══════════════════════════════════════════════════════
-// SCHEDULER
-// ══════════════════════════════════════════════════════
-
-const JOBS=[
-  {key:'fetchTodayFixtures',     label:'Fetch Today Fixtures',    path:'fixtures',           icon:'fa-futbol', color:'ic-blue'},
-  {key:'fetchOdds',              label:'Fetch Odds',              path:'odds',               icon:'fa-percent',color:'ic-gold'},
-  {key:'fetchLiveScores',        label:'Fetch Live Scores',       path:'live-scores',        icon:'fa-circle', color:'ic-green'},
-  {key:'autoSettlePredictions',  label:'Auto-Settle Predictions', path:'settle-predictions', icon:'fa-check',  color:'ic-blue'},
-  {key:'expireVipSubscriptions', label:'Expire VIP Subscriptions',path:'expire-vip',         icon:'fa-crown',  color:'ic-gold'},
-];
-
-async function loadSchedulerStatus(){
-  try{const res=await GET('/api/v1/admin/scheduler/status');renderSchedulerJobs(res.success?res.data:{});}
-  catch{renderSchedulerJobs({});}
-}
-
-function renderSchedulerJobs(status){
-  document.getElementById('scheduler-jobs').innerHTML=JOBS.map(j=>{
-    const st=status[j.key]||{};
-    return `<div class="job-card">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="stat-card-icon ${j.color}" style="width:36px;height:36px;margin:0;flex-shrink:0"><i class="fa ${j.icon}"></i></div>
-        <div><div class="job-name">${j.label}</div><div class="job-meta">${st.running?'⚙️ Running…':(st.lastRun?'✅ Last run: '+fmtDate(st.lastRun):'Never run')}</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="job-status-dot ${st.running?'running':st.lastRun?'done':''}"></div>
-        <button class="btn btn-ghost btn-sm" id="job-btn-${j.key}" onclick="triggerJob('${j.path}','${j.key}')"><i class="fa fa-play"></i> Run</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function triggerJob(path,key){
-  const btnId=key?'job-btn-'+key:null;
-  if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=true;b.innerHTML='<div class="spinner"></div>';}}
-  try{
-    const res=await POST(`/api/v1/admin/scheduler/run/${path}`);
-    if(!res.success)throw new Error(res.message);
-    showToast(res.message||'Job triggered','green');
-    setTimeout(loadSchedulerStatus,2000);
-  } catch(e){showToast(e.message,'red');}
-  finally{if(btnId){const b=document.getElementById(btnId);if(b){b.disabled=false;b.innerHTML='<i class="fa fa-play"></i> Run';}}}
-}
-
-// ══════════════════════════════════════════════════════
-// PROFILE
-// ══════════════════════════════════════════════════════
-
-async function _doProfileSave(nameId,emailId,curPwId,newPwId,cnfPwId,btnId){
-  const body={fullName:v(nameId),email:v(emailId)};
-  const curPw=v(curPwId),newPw=v(newPwId),cnfPw=v(cnfPwId);
-  if(newPw){
-    if(newPw!==cnfPw){showToast('Passwords do not match','red');return;}
-    body.currentPassword=curPw; body.newPassword=newPw; body.confirmNewPassword=cnfPw;
-  }
-  await submitBtn(btnId,async()=>{
-    const res=await PATCH('/api/v1/admin/me',body);
-    if(!res.success)throw new Error(res.message);
-    ADMIN={...ADMIN,...res.data}; AdminStore.set(ADMIN);
-    document.getElementById('sidebar-name').textContent=ADMIN.fullName;
-    document.getElementById('sidebar-avatar').textContent=ADMIN.fullName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    document.getElementById('prof-name').value=ADMIN.fullName;
-    document.getElementById('prof-email').value=ADMIN.email||'';
-    document.getElementById('modal-prof-name').value=ADMIN.fullName;
-    document.getElementById('modal-prof-email').value=ADMIN.email||'';
-    showToast('Profile updated','green');
-  });
-}
-function submitProfile(){_doProfileSave('prof-name','prof-email','prof-cur-pw','prof-new-pw','prof-cnf-pw','prof-save-btn');}
-function submitProfileModal(){_doProfileSave('modal-prof-name','modal-prof-email','modal-prof-cur-pw','modal-prof-new-pw','modal-prof-cnf-pw','profile-submit-btn');closeModal('profile-modal');}
-
-// ══════════════════════════════════════════════════════
-// MODAL / TOAST / UTILITIES
-// ══════════════════════════════════════════════════════
-
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.addEventListener('click',e=>{if(e.target.classList.contains('overlay'))e.target.classList.remove('open');});
-
-let toastTimer;
-function showToast(msg,type='green'){
-  document.querySelector('.toast')?.remove(); clearTimeout(toastTimer);
-  const icons={green:'fa-circle-check',red:'fa-circle-xmark',blue:'fa-circle-info',gold:'fa-crown'};
-  const colors={green:'var(--accent)',red:'var(--accent2)',blue:'var(--blue)',gold:'var(--gold)'};
-  const t=document.createElement('div'); t.className='toast';
-  t.innerHTML=`<i class="fa ${icons[type]||'fa-circle-check'}" style="color:${colors[type]||colors.green};font-size:15px"></i> ${msg}`;
-  document.body.appendChild(t); toastTimer=setTimeout(()=>t.remove(),3500);
-}
-
-async function submitBtn(btnId,fn){
-  const btn=document.getElementById(btnId);
-  if(!btn){await fn();return;}
-  const orig=btn.innerHTML; btn.disabled=true; btn.innerHTML='<div class="spinner"></div> Saving…';
-  try{await fn();}catch(e){showToast(e.message,'red');}
-  finally{btn.disabled=false;btn.innerHTML=orig;}
-}
-
-const v         = id => document.getElementById(id)?.value?.trim()||'';
-const numOrNull = id => { const val=v(id); return val?parseFloat(val):null; };
-function fmtTime(dt){if(!dt)return'—';try{return new Date(dt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}catch{return dt;}}
-function fmtDate(dt){if(!dt)return'—';try{return new Date(dt).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'});}catch{return dt;}}
-function statusChip(g){
-  if(!g.status)return'';
-  if(g.status==='LIVE')     return`<span class="chip chip-green"><span class="live-dot" style="width:6px;height:6px;margin-right:3px"></span>LIVE${g.elapsedMinutes?` ${g.elapsedMinutes}'`:''}</span>`;
-  if(g.status==='UPCOMING') return`<span class="chip chip-blue">Upcoming</span>`;
-  if(g.status==='FINISHED') return`<span class="chip chip-gray">Finished</span>`;
-  return`<span class="chip chip-gray">${g.status}</span>`;
-}
-
-// ══════════════════════════════════════════════════════
-// MOBILE NAV
-// ══════════════════════════════════════════════════════
-
-function syncMobileNav(page) {
-  const map={dashboard:'mn-dash',users:'mn-users',games:'mn-games',slips:'mn-slips','create-slip':'mn-slips'};
-  document.querySelectorAll('.mobile-nav-item').forEach(el=>el.classList.remove('active'));
-  const active=map[page];
-  if(active) document.getElementById(active)?.classList.add('active');
-}
-
-function toggleMoreMenu() {
-  const m=document.getElementById('mobile-more-menu');
-  const isOpen=m.classList.contains('open');
-  if(isOpen){ m.classList.remove('open'); }
-  else {
-    m.classList.add('open');
-    setTimeout(()=>{
-      document.addEventListener('click',function _close(e){
-        if(!m.contains(e.target)&&!e.target.closest('.mobile-nav-more')){
-          m.classList.remove('open');
-          document.removeEventListener('click',_close);
-        }
-      });
-    },50);
-  }
-}
-
-function mobileNavTo(page) {
-  document.getElementById('mobile-more-menu')?.classList.remove('open');
-  nav(page,null);
-}
-
-const _navOrig=nav;
-window.nav=function(page,el){ _navOrig(page,el); syncMobileNav(page); };
-
-const _launchOrig=launchApp;
-window.launchApp=function(){ _launchOrig(); document.getElementById('mobile-nav')?.style.setProperty('display','flex'); };
-
-const _logoutOrig=logout;
-window.logout=function(){
-  _logoutOrig();
-  document.getElementById('mobile-nav')?.style.setProperty('display','none');
-  document.getElementById('mobile-more-menu')?.classList.remove('open');
-};
 </script>
 </body>
 </html>
