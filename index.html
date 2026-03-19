@@ -4,599 +4,947 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>BetChale — Admin</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{
-  --bg:#0f0e0d;--surface:#1a1917;--panel:#212019;--border:#2e2c29;--border2:#3a3834;
-  --text:#e8e6e1;--text2:#a09d97;--muted:#5c5a56;
-  --accent:#2d9e6e;--accent-lt:#0f2d1f;
-  --accent2:#e05a2b;--accent2-lt:#2d1610;
-  --gold:#c8943a;--gold-lt:#2a1f0a;
-  --blue:#3a72c8;--blue-lt:#0d1e3a;
-  --radius:10px;--radius-lg:16px;
+/* ═══════════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════════ */
+:root {
+  --bg:#0f0e0d; --surface:#1a1917; --panel:#212019;
+  --border:#2e2c29; --border2:#3a3834;
+  --text:#e8e6e1; --text2:#a09d97; --muted:#5c5a56;
+  --accent:#2d9e6e; --accent-lt:#0f2d1f;
+  --accent2:#e05a2b; --accent2-lt:#2d1610;
+  --gold:#c8943a; --gold-lt:#2a1f0a;
+  --blue:#3a72c8; --blue-lt:#0d1e3a;
+  --radius:10px; --radius-lg:16px;
   --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);
   --shadow-lg:0 8px 40px rgba(0,0,0,.5);
   --sidebar-w:252px;
+  --topbar-h:58px;
   --font:'Sora',sans-serif;
   --font-serif:'Crimson Pro',serif;
-  --font-mono:'JetBrains Mono',monospace
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:14px}
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;color-scheme:dark}
-
-/* ── AUTH ── */
-.auth-screen{display:flex;min-height:100vh}
-.auth-screen.hidden{display:none}
-.auth-left{width:420px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:48px 44px}
-.auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:52px}
-.auth-brand-mark{width:38px;height:38px;border-radius:9px;background:var(--text);display:flex;align-items:center;justify-content:center}
-.auth-brand-mark svg{width:20px;height:20px;fill:none;stroke:#0f0e0d;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.auth-brand-name{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.auth-brand-tag{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;display:block;margin-top:1px}
-.auth-heading{font-family:var(--font-serif);font-size:32px;font-weight:600;line-height:1.2;margin-bottom:8px}
-.auth-sub{font-size:13px;color:var(--text2);margin-bottom:36px}
-.auth-right{flex:1;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px}
-.auth-illustration{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg)}
-.auth-ill-hd{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:20px;font-family:var(--font-mono)}
-.auth-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
-.auth-stat-box{background:var(--bg);border-radius:9px;padding:14px;border:1px solid var(--border)}
-.auth-stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.auth-stat-val{font-size:22px;font-weight:700;font-family:var(--font-mono)}
-.auth-stat-val.g{color:var(--accent)}.auth-stat-val.r{color:var(--accent2)}.auth-stat-val.b{color:var(--blue)}
-.auth-bar-row{display:flex;gap:3px;height:48px;align-items:flex-end}
-.auth-bar{flex:1;border-radius:4px 4px 0 0;background:var(--accent);opacity:.7}
-.auth-tagline{font-family:var(--font-serif);font-size:22px;font-weight:600;color:var(--text);margin-top:32px;text-align:center;line-height:1.4}
-.auth-tagline span{color:var(--accent);font-style:italic}
-.auth-divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--muted);font-size:12px}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.auth-switch{font-size:13px;color:var(--text2);margin-top:24px;text-align:center}
-.auth-switch a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none}
-.form-error{background:var(--accent2-lt);border:1px solid #5a2518;border-radius:7px;padding:10px 14px;font-size:13px;color:var(--accent2);margin-bottom:16px;display:none}
-.form-error.show{display:flex;align-items:center;gap:8px}
-
-/* ── FORMS ── */
-.form-group{margin-bottom:18px}
-.form-label{display:block;font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:7px}
-.form-input{width:100%;background:var(--panel);border:1.5px solid var(--border2);border-radius:8px;padding:11px 14px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
-.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,158,110,.15);background:#252320}
-.form-input::placeholder{color:var(--muted)}
-select.form-input option{background:#1a1917;color:var(--text)}
-select.form-input{color-scheme:dark}
-textarea.form-input{resize:vertical;min-height:80px}
-.input-wrap{position:relative}
-.input-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px}
-.input-wrap .form-input{padding-left:38px}
-.input-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;font-size:13px;transition:color .15s}
-.input-eye:hover{color:var(--text)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.checkbox-row{display:flex;align-items:center;gap:8px;padding:4px 0}
-.checkbox-row input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
-.checkbox-row label{font-size:13.5px;color:var(--text);cursor:pointer}
-
-/* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:8px;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none}
-.btn-full{width:100%}
-.btn-primary{background:var(--text);color:#0f0e0d}
-.btn-primary:hover{background:#f0ede8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
-.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border2)}
-.btn-outline:hover{background:var(--panel);border-color:var(--text2)}
-.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border)}
-.btn-ghost:hover{background:var(--panel);color:var(--text)}
-.btn-danger{background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518}
-.btn-danger:hover{background:#3d1a0d}
-.btn-success{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32}
-.btn-success:hover{background:#162a1e}
-.btn-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810}
-.btn-gold:hover{background:#342310}
-.btn-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040}
-.btn-blue:hover{background:#101a2e}
-.btn-sm{padding:7px 13px;font-size:12.5px;border-radius:7px}
-.btn-xs{padding:5px 10px;font-size:11.5px;border-radius:6px}
-.outcome-btn{padding:9px 8px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:all .15s;font-family:var(--font);color:var(--text2)}
-.outcome-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt)}
-.outcome-btn.selected{border-color:var(--accent);background:var(--accent-lt);color:var(--accent)}
-.odds-leg{display:flex;gap:8px;align-items:center;padding:8px 10px;background:var(--panel);border-radius:8px;margin-bottom:6px}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-
-/* ── SLIP TYPE SELECTOR ── */
-.slip-type-card{border:2px solid var(--border);border-radius:var(--radius-lg);padding:20px;cursor:pointer;transition:all .18s;background:var(--surface);position:relative}
-.slip-type-card:hover{border-color:var(--accent);box-shadow:var(--shadow)}
-.slip-type-card.active{border-color:var(--accent);background:var(--accent-lt);box-shadow:0 0 0 3px rgba(45,158,110,.15)}
-.slip-type-card .stc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;transition:all .18s}
-.slip-type-card.active .stc-icon{background:var(--accent);color:#0f0e0d}
-.slip-type-card:not(.active) .stc-icon{background:var(--panel);color:var(--text2)}
-.slip-type-card .stc-name{font-size:14px;font-weight:700;margin-bottom:2px}
-.slip-type-card .stc-desc{font-size:12px;color:var(--muted)}
-.slip-type-card .stc-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#0f0e0d;display:none;align-items:center;justify-content:center;font-size:10px}
-.slip-type-card.active .stc-check{display:flex}
-
-/* ── APP SHELL ── */
-#app{display:none;min-height:100vh}
-#app.active{display:flex}
-#sidebar-backdrop{display:none;position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.65);backdrop-filter:blur(2px)}
-#sidebar-backdrop.show{display:block}
-
-/* ── SIDEBAR ── */
-.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .25s ease}
-.sidebar-brand{padding:22px 22px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px}
-.brand-mark{width:34px;height:34px;border-radius:8px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.brand-mark svg{width:18px;height:18px;fill:none;stroke:#0f0e0d;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.brand-name{font-size:15px;font-weight:700;letter-spacing:-.3px}
-.brand-sub{font-size:10px;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:1.5px}
-.nav-section{padding:18px 14px 6px}
-.nav-section-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);padding:0 8px 8px;font-family:var(--font-mono)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13.5px;font-weight:500;transition:all .12s;margin-bottom:1px;user-select:none}
-.nav-item i{width:17px;text-align:center;font-size:13px;flex-shrink:0}
-.nav-item:hover{background:var(--panel);color:var(--text)}
-.nav-item.active{background:var(--accent-lt);color:var(--accent);font-weight:600}
-.nav-badge{margin-left:auto;background:var(--accent2);color:white;font-size:10px;font-family:var(--font-mono);font-weight:600;padding:1px 6px;border-radius:20px}
-.sidebar-footer{margin-top:auto;padding:14px;border-top:1px solid var(--border)}
-.admin-chip{display:flex;align-items:center;gap:10px;padding:10px;border-radius:9px;cursor:pointer;transition:background .12s}
-.admin-chip:hover{background:var(--panel)}
-.admin-avatar{width:32px;height:32px;border-radius:50%;background:var(--text);color:#0f0e0d;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.admin-name{font-size:13px;font-weight:600;color:var(--text)}
-.admin-role{font-size:11px;color:var(--accent)}
-
-/* ── TOPBAR ── */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(15,14,13,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:13px 28px;height:58px}
-.topbar-title{font-size:16px;font-weight:700;flex:1;letter-spacing:-.2px}
-.topbar-actions{display:flex;gap:8px;align-items:center}
-.hamburger{display:none!important}
-
-/* ── MAIN / PAGES ── */
-.main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
-.page{display:none;padding:28px;animation:pageIn .2s ease;flex:1}
-.page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.page-headline{font-family:var(--font-serif);font-size:26px;font-weight:600;margin-bottom:4px;letter-spacing:-.3px}
-.page-sub{font-size:13px;color:var(--text2);margin-bottom:24px}
-
-/* ── STAT CARDS ── */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 20px 16px;transition:box-shadow .15s,transform .15s;cursor:default}
-.stat-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.stat-card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:14px}
-.ic-green{background:var(--accent-lt);color:var(--accent)}
-.ic-red{background:var(--accent2-lt);color:var(--accent2)}
-.ic-gold{background:var(--gold-lt);color:var(--gold)}
-.ic-blue{background:var(--blue-lt);color:var(--blue)}
-.ic-gray{background:var(--panel);color:var(--text2)}
-.stat-label{font-size:11.5px;color:var(--text2);font-weight:500;margin-bottom:4px}
-.stat-value{font-size:30px;font-weight:700;font-family:var(--font-mono);line-height:1;letter-spacing:-.5px;color:var(--text)}
-.stat-delta{font-size:11.5px;margin-top:6px;font-weight:500;display:flex;align-items:center;gap:4px}
-.delta-up{color:var(--accent)}.delta-dn{color:var(--accent2)}
-
-/* ── CARDS ── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.card-pad{padding:20px}
-.card-title{font-size:13.5px;font-weight:700;margin-bottom:4px}
-.card-sub{font-size:12px;color:var(--muted)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.g2-3{display:grid;grid-template-columns:2fr 1fr;gap:16px}
-.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
-.chart-box{position:relative}.chart-box canvas{max-width:100%}
-
-/* ── TABLE ── */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead th{padding:10px 16px;text-align:left;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:var(--panel);border-bottom:1px solid var(--border);font-family:var(--font-mono);white-space:nowrap}
-tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:var(--panel)}
-td{padding:12px 16px;font-size:13.5px;vertical-align:middle}
-.mono{font-family:var(--font-mono);font-size:12.5px}
-
-/* ── CHIPS ── */
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono);white-space:nowrap}
-.chip-green{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32}
-.chip-red{background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518}
-.chip-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810}
-.chip-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040}
-.chip-gray{background:var(--panel);color:var(--text2);border:1px solid var(--border2)}
-
-/* ── MISC ── */
-.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.metric-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
-.metric-row:last-child{border-bottom:none}
-.m-label{font-size:13px;color:var(--text2)}.m-val{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text)}
-.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.section-title{font-size:15px;font-weight:700}
-hr{border:none;border-top:1px solid var(--border);margin:18px 0}
-.search-group{position:relative}
-.search-group i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}
-.search-group input{padding-left:36px}
-
-/* ── GAME CARD ── */
-.game-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .1s}
-.game-card:last-child{border-bottom:none}
-.game-card:hover{background:var(--panel)}
-.team-badge{width:30px;height:30px;border-radius:50%;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--font-mono);color:var(--text2);flex-shrink:0}
-.game-teams{font-size:13.5px;font-weight:600}
-.game-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
-.game-score{font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--text);padding:0 12px;flex-shrink:0}
-.odd-pill{background:var(--gold-lt);border:1px solid #3a2810;color:var(--gold);font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px}
-.game-actions{display:flex;gap:6px;margin-left:auto}
-
-/* ── SLIP CARD ── */
-.slip-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface);transition:box-shadow .15s,transform .15s}
-.slip-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.slip-top{padding:16px;border-bottom:1px solid var(--border)}
-.slip-bookmaker{font-size:15px;font-weight:700}
-.slip-code{display:inline-block;font-family:var(--font-mono);font-size:12px;color:var(--accent);background:var(--accent-lt);padding:2px 8px;border-radius:5px;margin-top:4px}
-.slip-odds-big{font-family:var(--font-mono);font-size:28px;font-weight:700;color:var(--gold);margin:10px 0 4px}
-.slip-bottom{padding:12px 16px;background:var(--panel);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-
-/* ── PROMO CARD ── */
-.promo-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
-.promo-banner{height:90px;display:flex;align-items:center;justify-content:center;font-size:36px;filter:brightness(.85)}
-.promo-body{padding:14px}
-.promo-discount{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--accent)}
-
-/* ── MODAL ── */
-.overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
-.overlay.open{display:flex}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);width:560px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:modalIn .2s ease}
-@keyframes modalIn{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border)}
-.modal-title{font-size:16px;font-weight:700}
-.modal-close{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;transition:all .12s;font-size:14px}
-.modal-close:hover{background:var(--panel);color:var(--text)}
-.modal-body{padding:24px}
-.modal-ft{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
-
-/* ── TOAST ── */
-.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 18px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13.5px;animation:toastIn .25s ease;min-width:260px}
-@keyframes toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── SPINNER ── */
-.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-state{display:flex;align-items:center;justify-content:center;padding:40px;gap:12px;color:var(--muted);font-size:13px}
-
-/* ── ANALYTICS ── */
-.verdict-box{background:var(--accent-lt);border:1px solid #1a4d32;border-radius:var(--radius);padding:18px 20px}
-.verdict-outcome{font-family:var(--font-serif);font-size:28px;font-weight:600;color:var(--accent)}
-.verdict-tip{font-size:13px;color:var(--text2);margin-top:4px}
-.analytics-result{display:none}
-.analytics-result.show{display:block}
-
-/* ── SCHEDULER ── */
-.job-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.job-name{font-weight:600;font-size:13.5px}
-.job-meta{font-size:12px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)}
-.job-status-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);flex-shrink:0}
-.job-status-dot.running{background:var(--gold);animation:blink 1s infinite}
-.job-status-dot.done{background:var(--accent)}
-
-/* ── SESSION BANNER ── */
-.session-info-banner{background:var(--accent-lt);border:1px solid #1a4d32;border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;font-size:13px}
-.session-info-banner i{color:var(--accent);margin-top:1px;flex-shrink:0}
-
-/* ── CREATE SLIP PAGE ── */
-.slip-create-layout{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start}
-.slip-type-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px}
-.slip-section{display:none}
-.slip-section.active{display:block;animation:pageIn .18s ease}
-.slip-section-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
-.slip-section-card-hd{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.slip-section-card-hd .sec-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.slip-section-card-body{padding:20px}
-.slip-preview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:sticky;top:76px}
-.slip-preview-header{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-family:var(--font-mono);margin-bottom:16px}
-.preview-bookmaker{font-size:18px;font-weight:700;margin-bottom:4px}
-.preview-code{font-family:var(--font-mono);font-size:12px;color:var(--accent);background:var(--accent-lt);padding:3px 9px;border-radius:5px;display:inline-block;margin-bottom:12px}
-.preview-odds{font-family:var(--font-mono);font-size:36px;font-weight:700;color:var(--gold);margin-bottom:4px}
-.preview-meta{font-size:12px;color:var(--muted)}
-
-/* ── DATE FILTER TABS ── */
-.csdf.active{background:var(--accent-lt)!important;color:var(--accent)!important;border-color:#1a4d32!important}
-
-/* ── VIP CURRENCY GRID ── */
-.vip-currency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.vip-equiv-card{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center}
-.vip-equiv-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:var(--font-mono)}
-.vip-equiv-val{font-size:18px;font-weight:700;font-family:var(--font-mono);color:var(--text)}
-.vip-equiv-val.ghs{color:var(--accent)}.vip-equiv-val.ngn{color:var(--gold)}.vip-equiv-val.usd{color:var(--blue)}
-
-/* ══════════════════════════════════════════
-   NEW: BOOK GAME MODAL — GAME PICKER
-   ══════════════════════════════════════════ */
-
-/* Shared game picker list used in both book-modal and bulk-modal */
-.game-picker-list{
-  border:1.5px solid var(--border2);border-radius:8px;
-  max-height:220px;overflow-y:auto;background:var(--bg);
-}
-.game-picker-item{
-  padding:11px 14px;border-bottom:1px solid var(--border);
-  cursor:pointer;transition:background .1s;
-}
-.game-picker-item:last-child{border-bottom:none}
-.game-picker-item:hover{background:var(--panel)}
-.game-picker-item.selected{background:var(--accent-lt)}
-.game-picker-item-teams{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px}
-.game-picker-item-meta{font-size:11px;color:var(--muted);margin-top:2px}
-.game-picker-item-odds{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
-
-/* Selected game banner (inside book-modal) */
-.selected-game-banner{
-  display:none;padding:12px 14px;background:var(--accent-lt);
-  border:1px solid #1a4d32;border-radius:8px;margin-bottom:14px;
-  align-items:center;gap:10px;
-}
-.selected-game-banner.show{display:flex}
-
-/* Odds section — shown after game selected */
-.book-odds-section{
-  display:none;animation:pageIn .18s ease;
-}
-.book-odds-section.show{display:block}
-
-/* ══════════════════════════════════════════
-   NEW: BULK BOOK — PER-GAME ODDS ROWS
-   ══════════════════════════════════════════ */
-
-/* Table-style per-game odds editor inside bulk modal */
-.bulk-game-odds-list{
-  display:flex;flex-direction:column;gap:10px;
-  max-height:360px;overflow-y:auto;
-  padding-right:2px;
-}
-.bulk-game-odds-row{
-  background:var(--bg);border:1.5px solid var(--border);
-  border-radius:10px;overflow:hidden;
-  transition:border-color .15s;
-}
-.bulk-game-odds-row:hover{border-color:var(--border2)}
-.bgor-header{
-  display:flex;align-items:center;gap:10px;padding:10px 14px;
-  border-bottom:1px solid var(--border);background:var(--panel);
-  cursor:pointer;user-select:none;
-}
-.bgor-expand-btn{
-  width:22px;height:22px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--border);color:var(--text2);font-size:10px;
-  flex-shrink:0;transition:all .15s;border:none;cursor:pointer;
-}
-.bgor-expand-btn.open{background:var(--accent-lt);color:var(--accent);transform:rotate(180deg)}
-.bgor-teams{font-size:13px;font-weight:600;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bgor-meta{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-.bgor-remove{width:22px;height:22px;border-radius:6px;background:var(--accent2-lt);
-  color:var(--accent2);border:none;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;font-size:10px;flex-shrink:0;transition:all .12s}
-.bgor-remove:hover{background:#3d1a0d}
-.bgor-body{display:none;padding:12px 14px 14px;animation:pageIn .15s ease}
-.bgor-body.open{display:block}
-.bgor-odds-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
-.bgor-odds-grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
-.bgor-input-wrap .form-label{font-size:10px;margin-bottom:4px;letter-spacing:.4px}
-.bgor-input-wrap .form-input{padding:7px 10px;font-size:12.5px;font-family:var(--font-mono)}
-.bgor-flags{display:flex;gap:16px;flex-wrap:wrap;padding-top:4px}
-.bgor-flags .checkbox-row label{font-size:12px}
-
-/* Bulk modal — tabs: pick games / set odds */
-.bulk-tab-bar{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;border:1px solid var(--border)}
-.bulk-tab{flex:1;padding:8px 12px;border-radius:7px;font-size:12.5px;font-weight:600;text-align:center;cursor:pointer;color:var(--text2);transition:all .15s;border:none;background:transparent;font-family:var(--font)}
-.bulk-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.bulk-tab-panel{display:none}
-.bulk-tab-panel.active{display:block;animation:pageIn .15s ease}
-
-/* ══════════════════════════════════════════
-   NEW: MULTI-SLIP QUEUE (Create Slip page)
-   ══════════════════════════════════════════ */
-
-.slip-queue-wrap{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;
-}
-.slip-queue-hd{
-  padding:14px 20px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  background:var(--panel);
-}
-.slip-queue-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
-.slip-queue-count{
-  background:var(--accent);color:#0f0e0d;
-  font-size:10px;font-family:var(--font-mono);font-weight:700;
-  padding:1px 7px;border-radius:20px;
-}
-.slip-queue-body{padding:12px 16px}
-.slip-queue-empty{
-  padding:20px;text-align:center;color:var(--muted);font-size:12.5px;
-}
-.slip-queue-item{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;
-  background:var(--bg);border:1px solid var(--border);border-radius:8px;
-  margin-bottom:8px;transition:border-color .15s;
-}
-.slip-queue-item:last-child{margin-bottom:0}
-.slip-queue-item:hover{border-color:var(--border2)}
-.sqi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.sqi-info{flex:1;min-width:0}
-.sqi-bm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sqi-meta{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sqi-actions{display:flex;gap:4px;flex-shrink:0}
-
-/* Progress bar during bulk submit */
-.bulk-progress-bar{
-  height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden;
-}
-.bulk-progress-fill{
-  height:100%;background:var(--accent);border-radius:2px;
-  transition:width .3s ease;
+  --font-mono:'JetBrains Mono',monospace;
+  --page-pad:28px;
 }
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--panel)}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+/* ═══════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size:14px; scroll-behavior:smooth; }
+body {
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  color-scheme:dark;
+  overflow-x:hidden;
+}
 
-/* ══ RESPONSIVE ══ */
-@media(max-width:1100px){
-  .slip-create-layout{grid-template-columns:1fr}
-  .slip-preview-card{position:static}
+/* ═══════════════════════════════════════════════════
+   AUTH SCREENS
+═══════════════════════════════════════════════════ */
+.auth-screen { display:flex; min-height:100vh; }
+.auth-screen.hidden { display:none; }
+
+.auth-left {
+  width:420px; flex-shrink:0;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  padding:48px 44px;
+  overflow-y:auto;
 }
-@media(max-width:1024px){
-  :root{--sidebar-w:220px}
-  .g2-3{grid-template-columns:1fr}
-  .g3{grid-template-columns:1fr 1fr}
-  .page{padding:20px}
-  .topbar{padding:12px 20px}
+.auth-brand { display:flex; align-items:center; gap:12px; margin-bottom:52px; }
+.auth-brand-mark {
+  width:38px; height:38px; border-radius:9px;
+  background:var(--text);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
 }
-@media(max-width:768px){
-  .mobile-nav{
-    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:120;
-    background:var(--surface);border-top:1px solid var(--border);
-    height:60px;align-items:stretch;
+.auth-brand-mark svg { width:20px; height:20px; fill:none; stroke:#0f0e0d; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.auth-brand-name { font-size:17px; font-weight:700; letter-spacing:-.3px; }
+.auth-brand-tag { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; display:block; margin-top:1px; }
+.auth-heading { font-family:var(--font-serif); font-size:32px; font-weight:600; line-height:1.2; margin-bottom:8px; }
+.auth-sub { font-size:13px; color:var(--text2); margin-bottom:36px; }
+
+.auth-right {
+  flex:1; background:var(--panel);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:48px;
+}
+.auth-illustration {
+  width:100%; max-width:480px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:28px;
+  box-shadow:var(--shadow-lg);
+}
+.auth-ill-hd { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:20px; font-family:var(--font-mono); }
+.auth-stats-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px; }
+.auth-stat-box { background:var(--bg); border-radius:9px; padding:14px; border:1px solid var(--border); }
+.auth-stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.auth-stat-val { font-size:22px; font-weight:700; font-family:var(--font-mono); }
+.auth-stat-val.g { color:var(--accent); }
+.auth-stat-val.r { color:var(--accent2); }
+.auth-stat-val.b { color:var(--blue); }
+.auth-bar-row { display:flex; gap:3px; height:48px; align-items:flex-end; }
+.auth-bar { flex:1; border-radius:4px 4px 0 0; background:var(--accent); opacity:.7; }
+.auth-tagline { font-family:var(--font-serif); font-size:22px; font-weight:600; color:var(--text); margin-top:32px; text-align:center; line-height:1.4; }
+.auth-tagline span { color:var(--accent); font-style:italic; }
+.auth-divider { display:flex; align-items:center; gap:12px; margin:22px 0; color:var(--muted); font-size:12px; }
+.auth-divider::before,.auth-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+.auth-switch { font-size:13px; color:var(--text2); margin-top:24px; text-align:center; }
+.auth-switch a { color:var(--accent); font-weight:600; cursor:pointer; text-decoration:none; }
+
+.form-error {
+  background:var(--accent2-lt); border:1px solid #5a2518;
+  border-radius:7px; padding:10px 14px;
+  font-size:13px; color:var(--accent2);
+  margin-bottom:16px; display:none;
+}
+.form-error.show { display:flex; align-items:center; gap:8px; }
+
+/* ═══════════════════════════════════════════════════
+   FORM ELEMENTS
+═══════════════════════════════════════════════════ */
+.form-group { margin-bottom:18px; }
+.form-label {
+  display:block; font-size:11.5px; font-weight:600;
+  text-transform:uppercase; letter-spacing:.8px;
+  color:var(--text2); margin-bottom:7px;
+}
+.form-input {
+  width:100%; background:var(--panel);
+  border:1.5px solid var(--border2);
+  border-radius:8px; padding:11px 14px;
+  font-family:var(--font); font-size:14px; color:var(--text);
+  outline:none; transition:border-color .15s,box-shadow .15s;
+}
+.form-input:focus {
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(45,158,110,.15);
+  background:#252320;
+}
+.form-input::placeholder { color:var(--muted); }
+select.form-input option { background:#1a1917; color:var(--text); }
+select.form-input { color-scheme:dark; }
+textarea.form-input { resize:vertical; min-height:80px; }
+
+.input-wrap { position:relative; }
+.input-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; }
+.input-wrap .form-input { padding-left:38px; }
+.input-eye {
+  position:absolute; right:13px; top:50%; transform:translateY(-50%);
+  color:var(--muted); cursor:pointer; font-size:13px; transition:color .15s;
+}
+.input-eye:hover { color:var(--text); }
+
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+.checkbox-row { display:flex; align-items:center; gap:8px; padding:4px 0; }
+.checkbox-row input[type=checkbox] { accent-color:var(--accent); width:15px; height:15px; flex-shrink:0; }
+.checkbox-row label { font-size:13.5px; color:var(--text); cursor:pointer; }
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════ */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:11px 20px; border-radius:8px;
+  font-family:var(--font); font-size:13.5px; font-weight:600;
+  cursor:pointer; border:none;
+  transition:all .15s; white-space:nowrap; text-decoration:none;
+  min-height:42px;
+}
+.btn-full { width:100%; }
+.btn-primary { background:var(--text); color:#0f0e0d; }
+.btn-primary:hover { background:#f0ede8; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.4); }
+.btn-outline { background:transparent; color:var(--text); border:1.5px solid var(--border2); }
+.btn-outline:hover { background:var(--panel); border-color:var(--text2); }
+.btn-ghost { background:transparent; color:var(--text2); border:1.5px solid var(--border); }
+.btn-ghost:hover { background:var(--panel); color:var(--text); }
+.btn-danger { background:var(--accent2-lt); color:var(--accent2); border:1px solid #5a2518; }
+.btn-danger:hover { background:#3d1a0d; }
+.btn-success { background:var(--accent-lt); color:var(--accent); border:1px solid #1a4d32; }
+.btn-success:hover { background:#162a1e; }
+.btn-gold { background:var(--gold-lt); color:var(--gold); border:1px solid #3a2810; }
+.btn-gold:hover { background:#342310; }
+.btn-blue { background:var(--blue-lt); color:var(--blue); border:1px solid #0d2040; }
+.btn-blue:hover { background:#101a2e; }
+.btn-sm { padding:7px 13px; font-size:12.5px; border-radius:7px; min-height:36px; }
+.btn-xs { padding:5px 10px; font-size:11.5px; border-radius:6px; min-height:32px; }
+.btn:disabled { opacity:.5; cursor:not-allowed; transform:none !important; }
+
+/* ═══════════════════════════════════════════════════
+   SLIP TYPE CARDS
+═══════════════════════════════════════════════════ */
+.slip-type-card {
+  border:2px solid var(--border); border-radius:var(--radius-lg);
+  padding:20px; cursor:pointer; transition:all .18s;
+  background:var(--surface); position:relative;
+}
+.slip-type-card:hover { border-color:var(--accent); box-shadow:var(--shadow); }
+.slip-type-card.active { border-color:var(--accent); background:var(--accent-lt); box-shadow:0 0 0 3px rgba(45,158,110,.15); }
+.slip-type-card .stc-icon {
+  width:40px; height:40px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; margin-bottom:12px; transition:all .18s;
+}
+.slip-type-card.active .stc-icon { background:var(--accent); color:#0f0e0d; }
+.slip-type-card:not(.active) .stc-icon { background:var(--panel); color:var(--text2); }
+.slip-type-card .stc-name { font-size:14px; font-weight:700; margin-bottom:2px; }
+.slip-type-card .stc-desc { font-size:12px; color:var(--muted); }
+.slip-type-card .stc-check {
+  position:absolute; top:14px; right:14px;
+  width:20px; height:20px; border-radius:50%;
+  background:var(--accent); color:#0f0e0d;
+  display:none; align-items:center; justify-content:center; font-size:10px;
+}
+.slip-type-card.active .stc-check { display:flex; }
+
+/* ═══════════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════════ */
+#app { display:none; min-height:100vh; }
+#app.active { display:flex; }
+#sidebar-backdrop {
+  display:none; position:fixed; inset:0; z-index:99;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(2px);
+}
+#sidebar-backdrop.show { display:block; }
+
+/* ═══════════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════════ */
+.sidebar {
+  width:var(--sidebar-w); flex-shrink:0;
+  background:var(--surface); border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  position:fixed; top:0; left:0; height:100vh;
+  overflow-y:auto; z-index:100;
+  transition:transform .25s cubic-bezier(.4,0,.2,1);
+}
+.sidebar-brand {
+  padding:22px 22px 18px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:11px;
+  flex-shrink:0;
+}
+.brand-mark {
+  width:34px; height:34px; border-radius:8px;
+  background:var(--text); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.brand-mark svg { width:18px; height:18px; fill:none; stroke:#0f0e0d; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.brand-name { font-size:15px; font-weight:700; letter-spacing:-.3px; }
+.brand-sub { font-size:10px; color:var(--muted); display:block; text-transform:uppercase; letter-spacing:1.5px; }
+
+.nav-section { padding:18px 14px 6px; }
+.nav-section-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); padding:0 8px 8px; font-family:var(--font-mono); }
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 10px; border-radius:8px; cursor:pointer;
+  color:var(--text2); font-size:13.5px; font-weight:500;
+  transition:all .12s; margin-bottom:1px; user-select:none;
+}
+.nav-item i { width:17px; text-align:center; font-size:13px; flex-shrink:0; }
+.nav-item:hover { background:var(--panel); color:var(--text); }
+.nav-item.active { background:var(--accent-lt); color:var(--accent); font-weight:600; }
+.nav-badge {
+  margin-left:auto; background:var(--accent2); color:white;
+  font-size:10px; font-family:var(--font-mono); font-weight:600;
+  padding:1px 6px; border-radius:20px;
+}
+.sidebar-footer { margin-top:auto; padding:14px; border-top:1px solid var(--border); flex-shrink:0; }
+.admin-chip { display:flex; align-items:center; gap:10px; padding:10px; border-radius:9px; cursor:pointer; transition:background .12s; }
+.admin-chip:hover { background:var(--panel); }
+.admin-avatar {
+  width:32px; height:32px; border-radius:50%; background:var(--text);
+  color:#0f0e0d; display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; flex-shrink:0;
+}
+.admin-name { font-size:13px; font-weight:600; color:var(--text); }
+.admin-role { font-size:11px; color:var(--accent); }
+
+/* ═══════════════════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════════════════ */
+.topbar {
+  position:sticky; top:0; z-index:50;
+  background:rgba(15,14,13,.92); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:16px;
+  padding:13px 28px; height:var(--topbar-h);
+  flex-shrink:0;
+}
+.topbar-title { font-size:16px; font-weight:700; flex:1; letter-spacing:-.2px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.topbar-actions { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+.hamburger { display:none !important; }
+
+/* ═══════════════════════════════════════════════════
+   MAIN / PAGES
+═══════════════════════════════════════════════════ */
+.main {
+  margin-left:var(--sidebar-w); flex:1;
+  min-height:100vh; display:flex; flex-direction:column;
+  min-width:0;
+}
+.page { display:none; padding:var(--page-pad); animation:pageIn .2s ease; flex:1; }
+.page.active { display:block; }
+@keyframes pageIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.page-headline { font-family:var(--font-serif); font-size:26px; font-weight:600; margin-bottom:4px; letter-spacing:-.3px; }
+.page-sub { font-size:13px; color:var(--text2); margin-bottom:24px; }
+
+/* ═══════════════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════════════ */
+.stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin-bottom:24px; }
+.stat-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px 20px 16px;
+  transition:box-shadow .15s,transform .15s; cursor:default;
+}
+.stat-card:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
+.stat-card-icon { width:36px; height:36px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:15px; margin-bottom:14px; }
+.ic-green { background:var(--accent-lt); color:var(--accent); }
+.ic-red   { background:var(--accent2-lt); color:var(--accent2); }
+.ic-gold  { background:var(--gold-lt); color:var(--gold); }
+.ic-blue  { background:var(--blue-lt); color:var(--blue); }
+.ic-gray  { background:var(--panel); color:var(--text2); }
+.stat-label { font-size:11.5px; color:var(--text2); font-weight:500; margin-bottom:4px; }
+.stat-value { font-size:30px; font-weight:700; font-family:var(--font-mono); line-height:1; letter-spacing:-.5px; color:var(--text); }
+.stat-delta { font-size:11.5px; margin-top:6px; font-weight:500; display:flex; align-items:center; gap:4px; }
+.delta-up { color:var(--accent); }
+.delta-dn { color:var(--accent2); }
+
+/* ═══════════════════════════════════════════════════
+   CARDS & GRID
+═══════════════════════════════════════════════════ */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.card-pad { padding:20px; }
+.card-title { font-size:13.5px; font-weight:700; margin-bottom:4px; }
+.card-sub { font-size:12px; color:var(--muted); }
+.g2   { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.g3   { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.g2-3 { display:grid; grid-template-columns:2fr 1fr; gap:16px; }
+.mb16 { margin-bottom:16px; }
+.mb24 { margin-bottom:24px; }
+.chart-box { position:relative; }
+.chart-box canvas { max-width:100%; }
+
+/* ═══════════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════════ */
+.tbl-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+table { width:100%; border-collapse:collapse; min-width:560px; }
+thead th {
+  padding:10px 16px; text-align:left;
+  font-size:10.5px; font-weight:600; text-transform:uppercase;
+  letter-spacing:1px; color:var(--muted);
+  background:var(--panel); border-bottom:1px solid var(--border);
+  font-family:var(--font-mono); white-space:nowrap;
+}
+tbody tr { border-bottom:1px solid var(--border); transition:background .1s; }
+tbody tr:last-child { border-bottom:none; }
+tbody tr:hover { background:var(--panel); }
+td { padding:12px 16px; font-size:13.5px; vertical-align:middle; }
+.mono { font-family:var(--font-mono); font-size:12.5px; }
+
+/* ═══════════════════════════════════════════════════
+   CHIPS
+═══════════════════════════════════════════════════ */
+.chip {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:20px;
+  font-size:11px; font-weight:600; font-family:var(--font-mono); white-space:nowrap;
+}
+.chip-green { background:var(--accent-lt); color:var(--accent); border:1px solid #1a4d32; }
+.chip-red   { background:var(--accent2-lt); color:var(--accent2); border:1px solid #5a2518; }
+.chip-gold  { background:var(--gold-lt); color:var(--gold); border:1px solid #3a2810; }
+.chip-blue  { background:var(--blue-lt); color:var(--blue); border:1px solid #0d2040; }
+.chip-gray  { background:var(--panel); color:var(--text2); border:1px solid var(--border2); }
+
+/* ═══════════════════════════════════════════════════
+   MISC COMPONENTS
+═══════════════════════════════════════════════════ */
+.live-dot {
+  display:inline-block; width:7px; height:7px;
+  border-radius:50%; background:var(--accent); animation:blink 1.6s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+.metric-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
+.metric-row:last-child { border-bottom:none; }
+.m-label { font-size:13px; color:var(--text2); }
+.m-val   { font-family:var(--font-mono); font-size:13px; font-weight:600; color:var(--text); }
+
+.section-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px; }
+.section-title { font-size:15px; font-weight:700; }
+hr { border:none; border-top:1px solid var(--border); margin:18px 0; }
+
+.search-group { position:relative; }
+.search-group i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:13px; pointer-events:none; }
+.search-group input { padding-left:36px; }
+
+/* ═══════════════════════════════════════════════════
+   GAME CARD
+═══════════════════════════════════════════════════ */
+.game-card {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 16px; border-bottom:1px solid var(--border); transition:background .1s;
+}
+.game-card:last-child { border-bottom:none; }
+.game-card:hover { background:var(--panel); }
+.team-badge {
+  width:30px; height:30px; border-radius:50%;
+  background:var(--panel); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; font-family:var(--font-mono);
+  color:var(--text2); flex-shrink:0;
+}
+.game-teams { font-size:13.5px; font-weight:600; }
+.game-meta  { font-size:11.5px; color:var(--muted); margin-top:2px; }
+.game-score { font-family:var(--font-mono); font-size:16px; font-weight:700; color:var(--text); padding:0 12px; flex-shrink:0; }
+.odd-pill {
+  background:var(--gold-lt); border:1px solid #3a2810; color:var(--gold);
+  font-family:var(--font-mono); font-size:11px; font-weight:600;
+  padding:2px 7px; border-radius:5px; white-space:nowrap;
+}
+.game-actions { display:flex; gap:6px; margin-left:auto; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════════
+   SLIP CARD
+═══════════════════════════════════════════════════ */
+.slip-card { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); transition:box-shadow .15s,transform .15s; }
+.slip-card:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
+.slip-top { padding:16px; border-bottom:1px solid var(--border); }
+.slip-bookmaker { font-size:15px; font-weight:700; }
+.slip-code { display:inline-block; font-family:var(--font-mono); font-size:12px; color:var(--accent); background:var(--accent-lt); padding:2px 8px; border-radius:5px; margin-top:4px; }
+.slip-bottom { padding:12px 16px; background:var(--panel); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+
+/* ═══════════════════════════════════════════════════
+   PROMO CARD
+═══════════════════════════════════════════════════ */
+.promo-card { border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+.promo-banner { height:90px; display:flex; align-items:center; justify-content:center; font-size:36px; filter:brightness(.85); }
+.promo-body { padding:14px; }
+.promo-discount { font-family:var(--font-mono); font-size:26px; font-weight:700; color:var(--accent); }
+
+/* ═══════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════ */
+.overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,.72); backdrop-filter:blur(4px);
+  align-items:center; justify-content:center; padding:20px;
+  overflow-y:auto;
+}
+.overlay.open { display:flex; }
+.modal {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); width:560px; max-width:calc(100vw - 40px);
+  max-height:90vh; overflow-y:auto;
+  box-shadow:var(--shadow-lg); animation:modalIn .2s ease;
+  flex-shrink:0; margin:auto;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(.97) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
+.modal-hd {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:20px 24px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:var(--surface); z-index:1;
+}
+.modal-title { font-size:16px; font-weight:700; }
+.modal-close {
+  width:28px; height:28px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--muted); cursor:pointer; transition:all .12s; font-size:14px;
+  flex-shrink:0;
+}
+.modal-close:hover { background:var(--panel); color:var(--text); }
+.modal-body { padding:24px; }
+.modal-ft {
+  padding:16px 24px; border-top:1px solid var(--border);
+  display:flex; gap:10px; justify-content:flex-end;
+  flex-wrap:wrap;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+.toast {
+  position:fixed; bottom:24px; right:24px; z-index:999;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:13px 18px;
+  display:flex; align-items:center; gap:10px;
+  box-shadow:var(--shadow-lg); font-size:13.5px;
+  animation:toastIn .25s ease; min-width:260px; max-width:calc(100vw - 48px);
+}
+@keyframes toastIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════════════════
+   SPINNER
+═══════════════════════════════════════════════════ */
+.spinner {
+  display:inline-block; width:16px; height:16px;
+  border:2px solid var(--border); border-top-color:var(--accent);
+  border-radius:50%; animation:spin .6s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-state { display:flex; align-items:center; justify-content:center; padding:40px; gap:12px; color:var(--muted); font-size:13px; }
+
+/* ═══════════════════════════════════════════════════
+   ANALYTICS
+═══════════════════════════════════════════════════ */
+.verdict-box { background:var(--accent-lt); border:1px solid #1a4d32; border-radius:var(--radius); padding:18px 20px; }
+.verdict-outcome { font-family:var(--font-serif); font-size:28px; font-weight:600; color:var(--accent); }
+.verdict-tip { font-size:13px; color:var(--text2); margin-top:4px; }
+.analytics-result { display:none; }
+.analytics-result.show { display:block; }
+
+/* ═══════════════════════════════════════════════════
+   SCHEDULER
+═══════════════════════════════════════════════════ */
+.job-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.job-name { font-weight:600; font-size:13.5px; }
+.job-meta { font-size:12px; color:var(--muted); margin-top:2px; font-family:var(--font-mono); }
+.job-status-dot { width:8px; height:8px; border-radius:50%; background:var(--border2); flex-shrink:0; }
+.job-status-dot.running { background:var(--gold); animation:blink 1s infinite; }
+.job-status-dot.done    { background:var(--accent); }
+
+/* ═══════════════════════════════════════════════════
+   SESSION BANNER
+═══════════════════════════════════════════════════ */
+.session-info-banner {
+  background:var(--accent-lt); border:1px solid #1a4d32;
+  border-radius:var(--radius); padding:14px 18px; margin-bottom:20px;
+  display:flex; align-items:flex-start; gap:12px; font-size:13px;
+}
+.session-info-banner i { color:var(--accent); margin-top:1px; flex-shrink:0; }
+
+/* ═══════════════════════════════════════════════════
+   CREATE SLIP PAGE
+═══════════════════════════════════════════════════ */
+.slip-create-layout { display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:start; }
+.slip-type-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:24px; }
+.slip-section { display:none; }
+.slip-section.active { display:block; animation:pageIn .18s ease; }
+.slip-section-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:16px; }
+.slip-section-card-hd { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+.slip-section-card-hd .sec-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+.slip-section-card-body { padding:20px; }
+
+.slip-preview-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:20px;
+  position:sticky; top:calc(var(--topbar-h) + 16px);
+}
+.slip-preview-header { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-family:var(--font-mono); margin-bottom:16px; }
+.preview-bookmaker { font-size:18px; font-weight:700; margin-bottom:4px; }
+.preview-code { font-family:var(--font-mono); font-size:12px; color:var(--accent); background:var(--accent-lt); padding:3px 9px; border-radius:5px; display:inline-block; margin-bottom:12px; }
+.preview-odds { font-family:var(--font-mono); font-size:36px; font-weight:700; color:var(--gold); margin-bottom:4px; }
+.preview-meta { font-size:12px; color:var(--muted); }
+
+.outcome-btn {
+  padding:9px 8px; border:1.5px solid var(--border); border-radius:8px;
+  background:var(--surface); cursor:pointer; font-size:12px; font-weight:600;
+  text-align:center; transition:all .15s; font-family:var(--font); color:var(--text2);
+}
+.outcome-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-lt); }
+.outcome-btn.selected { border-color:var(--accent); background:var(--accent-lt); color:var(--accent); }
+.odds-leg { display:flex; gap:8px; align-items:center; padding:8px 10px; background:var(--panel); border-radius:8px; margin-bottom:6px; }
+
+/* Date filter tab active state */
+.csdf.active { background:var(--accent-lt) !important; color:var(--accent) !important; border-color:#1a4d32 !important; }
+
+/* ═══════════════════════════════════════════════════
+   BOOK GAME MODAL — GAME PICKER
+═══════════════════════════════════════════════════ */
+.game-picker-list { border:1.5px solid var(--border2); border-radius:8px; max-height:220px; overflow-y:auto; background:var(--bg); }
+.game-picker-item { padding:11px 14px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .1s; }
+.game-picker-item:last-child { border-bottom:none; }
+.game-picker-item:hover { background:var(--panel); }
+.game-picker-item.selected { background:var(--accent-lt); }
+.game-picker-item-teams { font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; }
+.game-picker-item-meta { font-size:11px; color:var(--muted); margin-top:2px; }
+.game-picker-item-odds { display:flex; gap:4px; flex-wrap:wrap; margin-top:5px; }
+
+.selected-game-banner {
+  display:none; padding:12px 14px;
+  background:var(--accent-lt); border:1px solid #1a4d32;
+  border-radius:8px; margin-bottom:14px; align-items:center; gap:10px;
+}
+.selected-game-banner.show { display:flex; }
+.book-odds-section { display:none; animation:pageIn .18s ease; }
+.book-odds-section.show { display:block; }
+
+/* ═══════════════════════════════════════════════════
+   BULK BOOK — TABS
+═══════════════════════════════════════════════════ */
+.bulk-tab-bar {
+  display:flex; gap:2px; background:var(--bg);
+  border-radius:9px; padding:3px; margin-bottom:16px;
+  border:1px solid var(--border);
+}
+.bulk-tab {
+  flex:1; padding:8px 12px; border-radius:7px;
+  font-size:12.5px; font-weight:600; text-align:center;
+  cursor:pointer; color:var(--text2); transition:all .15s;
+  border:none; background:transparent; font-family:var(--font);
+  white-space:nowrap;
+}
+.bulk-tab.active { background:var(--surface); color:var(--text); box-shadow:0 1px 4px rgba(0,0,0,.3); }
+.bulk-tab-panel { display:none; }
+.bulk-tab-panel.active { display:block; animation:pageIn .15s ease; }
+
+/* ═══════════════════════════════════════════════════
+   BULK BOOK — PER-GAME ODDS ROWS
+═══════════════════════════════════════════════════ */
+.bulk-game-odds-list { display:flex; flex-direction:column; gap:10px; max-height:360px; overflow-y:auto; padding-right:2px; }
+.bulk-game-odds-row { background:var(--bg); border:1.5px solid var(--border); border-radius:10px; overflow:hidden; transition:border-color .15s; }
+.bulk-game-odds-row:hover { border-color:var(--border2); }
+.bgor-header { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border); background:var(--panel); cursor:pointer; user-select:none; }
+.bgor-expand-btn {
+  width:22px; height:22px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--border); color:var(--text2); font-size:10px;
+  flex-shrink:0; transition:all .15s; border:none; cursor:pointer;
+}
+.bgor-expand-btn.open { background:var(--accent-lt); color:var(--accent); transform:rotate(180deg); }
+.bgor-teams { font-size:13px; font-weight:600; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bgor-meta  { font-size:11px; color:var(--muted); white-space:nowrap; flex-shrink:0; }
+.bgor-remove {
+  width:22px; height:22px; border-radius:6px;
+  background:var(--accent2-lt); color:var(--accent2); border:none;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:10px; flex-shrink:0; transition:all .12s;
+}
+.bgor-remove:hover { background:#3d1a0d; }
+.bgor-body { display:none; padding:12px 14px 14px; animation:pageIn .15s ease; }
+.bgor-body.open { display:block; }
+.bgor-odds-grid  { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px; }
+.bgor-odds-grid2 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px; }
+.bgor-input-wrap .form-label  { font-size:10px; margin-bottom:4px; letter-spacing:.4px; }
+.bgor-input-wrap .form-input  { padding:7px 10px; font-size:12.5px; font-family:var(--font-mono); }
+.bgor-flags { display:flex; gap:16px; flex-wrap:wrap; padding-top:4px; }
+.bgor-flags .checkbox-row label { font-size:12px; }
+
+/* ═══════════════════════════════════════════════════
+   SLIP QUEUE
+═══════════════════════════════════════════════════ */
+.slip-queue-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; margin-bottom:16px; }
+.slip-queue-hd {
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--panel); flex-wrap:wrap;
+}
+.slip-queue-title { font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.slip-queue-count { background:var(--accent); color:#0f0e0d; font-size:10px; font-family:var(--font-mono); font-weight:700; padding:1px 7px; border-radius:20px; }
+.slip-queue-body  { padding:12px 16px; }
+.slip-queue-empty { padding:20px; text-align:center; color:var(--muted); font-size:12.5px; }
+.slip-queue-item {
+  display:flex; align-items:center; gap:10px; padding:10px 12px;
+  background:var(--bg); border:1px solid var(--border); border-radius:8px;
+  margin-bottom:8px; transition:border-color .15s;
+}
+.slip-queue-item:last-child { margin-bottom:0; }
+.slip-queue-item:hover { border-color:var(--border2); }
+.sqi-icon  { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.sqi-info  { flex:1; min-width:0; }
+.sqi-bm    { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sqi-meta  { font-size:11px; color:var(--muted); margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sqi-actions { display:flex; gap:4px; flex-shrink:0; }
+
+/* Progress bar */
+.bulk-progress-bar  { height:3px; background:var(--border); border-radius:2px; margin-top:10px; overflow:hidden; }
+.bulk-progress-fill { height:100%; background:var(--accent); border-radius:2px; transition:width .3s ease; }
+
+/* ═══════════════════════════════════════════════════
+   VIP CURRENCY GRID
+═══════════════════════════════════════════════════ */
+.vip-currency-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+.vip-equiv-card    { background:var(--panel); border:1px solid var(--border); border-radius:9px; padding:12px 14px; text-align:center; }
+.vip-equiv-label   { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; font-family:var(--font-mono); }
+.vip-equiv-val     { font-size:18px; font-weight:700; font-family:var(--font-mono); color:var(--text); }
+.vip-equiv-val.ghs { color:var(--accent); }
+.vip-equiv-val.ngn { color:var(--gold); }
+.vip-equiv-val.usd { color:var(--blue); }
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--panel); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+
+/* ═══════════════════════════════════════════════════
+   MOBILE BOTTOM NAV
+═══════════════════════════════════════════════════ */
+.mobile-nav { display:none; }
+.mobile-more-menu { display:none; }
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — LARGE DESKTOP (1400px+)
+═══════════════════════════════════════════════════ */
+@media (min-width:1400px) {
+  :root { --sidebar-w:270px; --page-pad:36px; }
+  .stats-row { grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+  .g3 { grid-template-columns:repeat(3,1fr); }
+  .slip-create-layout { grid-template-columns:1fr 400px; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — MEDIUM LAPTOP (1024px–1280px)
+═══════════════════════════════════════════════════ */
+@media (max-width:1280px) {
+  :root { --sidebar-w:230px; --page-pad:24px; }
+  .g2-3 { grid-template-columns:1fr; }
+  .slip-create-layout { grid-template-columns:1fr 320px; gap:18px; }
+}
+
+@media (max-width:1100px) {
+  .slip-create-layout { grid-template-columns:1fr; }
+  .slip-preview-card  { position:static; }
+  .g3 { grid-template-columns:1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — SMALL LAPTOP / LARGE TABLET (900px–1024px)
+═══════════════════════════════════════════════════ */
+@media (max-width:1024px) {
+  :root { --sidebar-w:210px; --page-pad:20px; }
+  .topbar { padding:12px 20px; }
+  .stat-value { font-size:26px; }
+  .g3 { grid-template-columns:1fr 1fr; }
+  .form-row-3 { grid-template-columns:1fr 1fr; }
+  .bgor-odds-grid,.bgor-odds-grid2 { grid-template-columns:1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — TABLET (768px–899px)
+═══════════════════════════════════════════════════ */
+@media (max-width:899px) {
+  :root { --sidebar-w:200px; --page-pad:18px; }
+  html { font-size:13.5px; }
+  .g2 { grid-template-columns:1fr; }
+  .g3 { grid-template-columns:1fr 1fr; }
+  .stats-row { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+  .slip-type-grid { grid-template-columns:1fr 1fr; }
+  .vip-currency-grid { grid-template-columns:1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — MOBILE (≤768px) — SIDEBAR COLLAPSED
+═══════════════════════════════════════════════════ */
+@media (max-width:768px) {
+  html { font-size:13.5px; }
+
+  /* Sidebar becomes drawer */
+  .sidebar {
+    transform:translateX(-100%);
+    width:min(300px,82vw);
+    box-shadow:none;
+    z-index:200;
+  }
+  .sidebar.open {
+    transform:translateX(0);
+    box-shadow:var(--shadow-lg);
+  }
+  #sidebar-backdrop.show { display:block; }
+
+  /* Main fills full width */
+  .main { margin-left:0; padding-bottom:64px; }
+  #app.active { display:block; }
+
+  /* Topbar */
+  .topbar { padding:0 14px; gap:8px; height:54px; }
+  .topbar-title { font-size:15px; max-width:140px; }
+  .topbar-actions .btn-ghost:not(:last-child) { display:none; }
+  #topbar-cta { padding:8px 14px; font-size:12.5px; min-height:36px; }
+  .hamburger { display:inline-flex !important; }
+
+  /* Pages */
+  .page { padding:14px 14px 80px; }
+  .page-headline { font-size:22px; }
+  .page-sub { font-size:12px; margin-bottom:16px; line-height:1.5; }
+
+  /* Stats */
+  .stats-row { grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+  .stat-card { padding:14px 12px 12px; }
+  .stat-card-icon { width:32px; height:32px; font-size:13px; margin-bottom:10px; border-radius:8px; }
+  .stat-value { font-size:22px; }
+  .stat-label { font-size:11px; }
+  .stat-delta { font-size:11px; }
+
+  /* Grids */
+  .g2,.g3,.g2-3 { grid-template-columns:1fr; }
+  .g2>*+*,.g3>*+* { margin-top:0; }
+  .chart-box { height:180px !important; }
+
+  /* Form rows collapse */
+  .form-row,.form-row-3 { grid-template-columns:1fr; gap:0; }
+  .form-group { margin-bottom:16px; }
+  .form-label { font-size:11px; margin-bottom:6px; }
+  .form-input { font-size:16px !important; padding:13px 14px; }
+  .input-wrap .form-input { padding-left:40px; }
+
+  /* Game cards */
+  .game-card { flex-wrap:wrap; gap:8px; padding:12px 14px; }
+  .game-card .team-badge { width:28px; height:28px; font-size:10px; }
+  .game-teams { font-size:13px; }
+  .game-meta  { font-size:11px; }
+  .game-score { font-size:14px; padding:0 8px; }
+  .game-actions { width:100%; justify-content:flex-end; margin-top:2px; gap:6px; }
+  .game-actions .btn-xs { min-height:38px; min-width:38px; }
+
+  /* Table */
+  td,thead th { padding:10px 12px; font-size:12.5px; }
+  td:first-child,thead th:first-child { position:sticky; left:0; z-index:1; background:var(--surface); }
+  tbody tr:hover td:first-child { background:var(--panel); }
+
+  /* Slip grids */
+  #slips-grid,#promos-grid { grid-template-columns:1fr !important; }
+
+  /* Modal becomes bottom sheet */
+  .overlay { padding:0; align-items:flex-end; }
+  .modal {
+    width:100%; max-width:100%; border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+    max-height:94vh; animation:sheetIn .28s cubic-bezier(.4,0,.2,1);
+  }
+  .modal::before { content:''; display:block; width:40px; height:4px; background:var(--border2); border-radius:2px; margin:12px auto 0; }
+  @keyframes sheetIn { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .modal-hd { padding:14px 18px; }
+  .modal-body { padding:16px 18px; }
+  .modal-ft { padding:12px 18px 24px; flex-direction:column-reverse; gap:8px; }
+  .modal-ft .btn { width:100%; justify-content:center; padding:13px 20px; font-size:14px; }
+
+  /* Auth */
+  .auth-screen { flex-direction:column; }
+  .auth-left { width:100%; padding:32px 20px 36px; border-right:none; border-bottom:1px solid var(--border); flex:none; min-height:auto; }
+  .auth-brand { margin-bottom:28px; }
+  .auth-heading { font-size:26px; }
+  .auth-sub { margin-bottom:24px; font-size:13px; }
+  .auth-right { display:none; }
+  .btn-full { padding:14px 20px; font-size:14px; }
+
+  /* Create slip */
+  .slip-type-grid  { grid-template-columns:1fr 1fr; gap:10px; }
+  .slip-type-card  { padding:14px 12px; }
+  .slip-type-card .stc-name { font-size:13px; }
+  .slip-create-layout { grid-template-columns:1fr; }
+  .slip-preview-card  { display:none; }
+  .slip-section-card-hd  { padding:14px 16px; }
+  .slip-section-card-body{ padding:14px 16px; }
+
+  /* Bulk odds rows */
+  .bgor-odds-grid,.bgor-odds-grid2 { grid-template-columns:1fr 1fr; }
+  .bgor-meta { display:none; }
+
+  /* Toast */
+  .toast { left:12px; right:12px; bottom:72px; min-width:unset; font-size:13px; }
+
+  /* Session banner */
+  .session-info-banner { flex-direction:column; gap:8px; padding:12px 14px; }
+
+  /* Slip queue */
+  .slip-queue-hd { flex-direction:column; align-items:flex-start; gap:8px; }
+
+  /* Job cards */
+  .job-card>div:last-child { width:100%; justify-content:flex-end; }
+
+  /* VIP */
+  .vip-currency-grid { grid-template-columns:1fr 1fr; }
+  #vip-price-display>div:first-child { font-size:40px !important; }
+
+  /* Bulk tabs */
+  .bulk-tab { font-size:11.5px; padding:7px 8px; }
+
+  /* Buttons min-touch targets */
+  .btn     { min-height:44px; }
+  .btn-sm  { min-height:40px; }
+  .btn-xs  { min-height:38px; min-width:38px; }
+  .chip    { padding:4px 10px; font-size:11.5px; }
+  .odd-pill{ font-size:11.5px; padding:3px 8px; }
+
+  /* Mobile nav */
+  .mobile-nav {
+    display:flex !important;
+    position:fixed; bottom:0; left:0; right:0; z-index:120;
+    background:var(--surface); border-top:1px solid var(--border);
+    height:60px; align-items:stretch;
     box-shadow:0 -4px 24px rgba(0,0,0,.4);
-    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    backdrop-filter:blur(12px);
   }
-  .mobile-nav-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:3px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;
-    letter-spacing:.3px;text-transform:uppercase;padding:6px 2px;
-    border:none;background:none;font-family:var(--font);
-    transition:color .12s;-webkit-tap-highlight-color:transparent;
-    position:relative;
+  .mobile-more-menu {
+    display:none;
+    position:fixed; bottom:64px; right:0; left:0; z-index:119;
+    background:var(--surface); border-top:1px solid var(--border);
+    box-shadow:0 -8px 32px rgba(0,0,0,.5);
+    padding:8px 0;
+    max-height:60vh; overflow-y:auto;
   }
-  .mobile-nav-item i{font-size:18px;transition:transform .15s}
-  .mobile-nav-item.active{color:var(--accent)}
-  .mobile-nav-item.active i{transform:translateY(-2px)}
-  .mobile-nav-item.active::after{
-    content:'';position:absolute;bottom:0;left:25%;right:25%;
-    height:2px;background:var(--accent);border-radius:2px 2px 0 0;
-  }
-  .mobile-nav-more{position:relative}
+  .mobile-more-menu.open { display:block; animation:sheetIn .2s ease; }
 }
-.mobile-more-menu{
-  display:none;position:fixed;bottom:64px;right:0;left:0;z-index:119;
-  background:var(--surface);border-top:1px solid var(--border);
-  box-shadow:0 -8px 32px rgba(0,0,0,.5);
-  padding:8px 0 8px;
-  max-height:60vh;overflow-y:auto;
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — SMALL MOBILE (≤480px)
+═══════════════════════════════════════════════════ */
+@media (max-width:480px) {
+  html { font-size:13px; }
+  :root { --page-pad:12px; }
+  .stats-row { gap:8px; }
+  .stat-value { font-size:20px; }
+  .topbar-title { font-size:14px; max-width:110px; }
+  .slip-type-grid { grid-template-columns:1fr; }
+  .auth-left { padding:24px 16px 32px; }
+  .auth-heading { font-size:23px; }
+  .vip-currency-grid { grid-template-columns:1fr; }
+  .bgor-odds-grid,.bgor-odds-grid2 { grid-template-columns:1fr; }
+  .bulk-tab-bar { flex-direction:column; gap:4px; }
+  .bulk-tab { text-align:left; padding:10px 14px; }
+  .modal-ft { gap:6px; }
+  .page-headline { font-size:20px; }
+  .game-score { font-size:13px; }
 }
-.mobile-more-menu.open{display:block;animation:sheetIn .2s ease}
-.mobile-more-item{
-  display:flex;align-items:center;gap:14px;padding:14px 20px;
-  font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;
-  border-bottom:1px solid var(--border);transition:background .1s;
-  -webkit-tap-highlight-color:transparent;
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — VERY SMALL (≤380px)
+═══════════════════════════════════════════════════ */
+@media (max-width:380px) {
+  html { font-size:12.5px; }
+  .stats-row { grid-template-columns:1fr; }
+  .topbar-title { max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .auth-heading { font-size:22px; }
+  .page { padding:10px 10px 76px; }
 }
-.mobile-more-item:last-child{border-bottom:none}
-.mobile-more-item:active{background:var(--panel)}
-.mobile-more-item i{width:20px;text-align:center;font-size:15px;flex-shrink:0}
-.mobile-more-item.active{color:var(--accent)}
-@media(max-width:768px){
-  html{font-size:13.5px}
-  .auth-screen{flex-direction:column;min-height:100vh}
-  .auth-left{width:100%;padding:32px 20px 36px;border-right:none;border-bottom:1px solid var(--border);flex:none;min-height:auto;}
-  .auth-brand{margin-bottom:28px}
-  .auth-heading{font-size:26px}
-  .auth-sub{margin-bottom:24px;font-size:13px}
-  .auth-right{display:none}
-  .form-input{font-size:16px!important;padding:13px 14px}
-  .input-wrap .form-input{padding-left:40px}
-  .btn-full{padding:14px 20px;font-size:14px}
-  .hamburger{display:none!important}
-  .sidebar{transform:translateX(-100%);z-index:200;width:min(300px,85vw);box-shadow:none;transition:transform .25s cubic-bezier(.4,0,.2,1);}
-  .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
-  #sidebar-backdrop.show{display:block}
-  .main{margin-left:0}
-  #app.active{display:block}
-  .main{padding-bottom:64px}
-  .topbar{padding:0 14px;gap:8px;height:54px;position:sticky;top:0;z-index:50;}
-  .topbar-title{font-size:15px;font-weight:700;flex:1}
-  .topbar-actions .btn-ghost:not(:last-child){display:none}
-  #topbar-cta{padding:8px 14px;font-size:12.5px}
-  .page{padding:14px 14px 80px}
-  .page-headline{font-size:22px;margin-bottom:2px}
-  .page-sub{font-size:12px;margin-bottom:18px;line-height:1.5}
-  .stats-row{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-  .stat-card{padding:14px 12px 12px;border-radius:var(--radius)}
-  .stat-card-icon{width:32px;height:32px;font-size:13px;margin-bottom:10px;border-radius:8px}
-  .stat-value{font-size:24px}
-  .stat-label{font-size:11px}
-  .stat-delta{font-size:11px}
-  .g2,.g3,.g2-3{grid-template-columns:1fr}
-  .g2>*+*,.g3>*+*{margin-top:0}
-  .chart-box{height:180px!important}
-  .game-card{flex-wrap:wrap;gap:8px;padding:12px 14px}
-  .game-card .team-badge{width:28px;height:28px;font-size:10px}
-  .game-teams{font-size:13px}
-  .game-meta{font-size:11px}
-  .game-score{font-size:15px;padding:0 8px}
-  .game-actions{width:100%;justify-content:flex-end;margin-top:2px;gap:6px}
-  .game-actions .btn-xs{padding:7px 11px;font-size:12px;min-width:36px;min-height:36px}
-  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0}
-  table{min-width:560px}
-  td,thead th{padding:10px 12px;font-size:12.5px}
-  td:first-child,thead th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);}
-  tbody tr:hover td:first-child{background:var(--panel)}
-  #slips-grid,#promos-grid{grid-template-columns:1fr!important}
-  .slip-card .slip-bottom .btn-xs{min-width:36px;min-height:36px;padding:7px 10px;}
-  .overlay{padding:0;align-items:flex-end}
-  .modal{width:100%;max-width:100%;border-radius:var(--radius-lg) var(--radius-lg) 0 0;max-height:94vh;animation:sheetIn .28s cubic-bezier(.4,0,.2,1);}
-  @keyframes sheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal::before{content:'';display:block;width:40px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;}
-  .modal-hd{padding:14px 18px 14px}
-  .modal-body{padding:16px 18px}
-  .modal-ft{padding:12px 18px 20px;flex-direction:column-reverse;gap:8px}
-  .modal-ft .btn{width:100%;justify-content:center;padding:13px 20px;font-size:14px}
-  .form-row,.form-row-3{grid-template-columns:1fr;gap:0}
-  .form-group{margin-bottom:16px}
-  .form-label{font-size:11px;margin-bottom:6px}
-  .toast{left:12px;right:12px;bottom:68px;min-width:unset;font-size:13px}
-  .session-info-banner{flex-direction:column;gap:8px;padding:12px 14px}
-  .slip-type-grid{grid-template-columns:1fr 1fr;gap:10px}
-  .slip-type-card{padding:14px 12px}
-  .slip-type-card .stc-name{font-size:13px}
-  .slip-create-layout{grid-template-columns:1fr}
-  .slip-preview-card{display:none}
-  .slip-section-card-hd{padding:14px 16px}
-  .slip-section-card-body{padding:14px 16px}
-  .job-card{flex-wrap:wrap;gap:10px}
-  .job-card>div:last-child{width:100%;justify-content:flex-end}
-  #vip-price-display>div:first-child{font-size:40px!important}
-  .btn-xs{min-height:36px;min-width:36px}
-  .btn-sm{min-height:38px}
-  .btn{min-height:44px}
-  .chip{padding:4px 10px;font-size:11.5px}
-  .odd-pill{font-size:11.5px;padding:3px 8px}
-  .vip-currency-grid{grid-template-columns:1fr 1fr}
-  .bgor-odds-grid,.bgor-odds-grid2{grid-template-columns:1fr 1fr}
-  .bulk-tab{font-size:11.5px;padding:7px 8px}
+
+/* ═══════════════════════════════════════════════════
+   ██ RESPONSIVE — TABLET LANDSCAPE (600px–768px)
+═══════════════════════════════════════════════════ */
+@media (min-width:600px) and (max-width:768px) {
+  .auth-right { display:flex; padding:20px; min-height:240px; }
+  .auth-illustration { padding:16px; }
+  .auth-tagline { font-size:16px; margin-top:16px; }
+  .stats-row { grid-template-columns:repeat(3,1fr); }
+  .g2 { grid-template-columns:1fr 1fr; }
+  .slip-type-grid { grid-template-columns:repeat(3,1fr); }
 }
-@media(max-width:390px){
-  html{font-size:13px}
-  .auth-left{padding:24px 16px 32px}
-  .auth-heading{font-size:23px}
-  .page{padding:10px 10px 80px}
-  .stats-row{gap:8px}
-  .stat-value{font-size:22px}
-  .topbar-title{font-size:14px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .slip-type-grid{grid-template-columns:1fr}
-  .mobile-nav-item{font-size:9px}
-  .mobile-nav-item i{font-size:17px}
-  .vip-currency-grid{grid-template-columns:1fr}
-}
-@media(min-width:600px) and (max-width:768px){
-  .auth-right{display:flex;padding:20px;min-height:240px}
-  .auth-illustration{padding:16px}
-  .auth-tagline{font-size:16px;margin-top:16px}
-}
-@media(min-width:769px){
-  .mobile-nav{display:none!important}
-  .mobile-more-menu{display:none!important}
-  .hamburger{display:none!important}
+
+/* ═══════════════════════════════════════════════════
+   ██ DESKTOP ONLY — hide mobile nav
+═══════════════════════════════════════════════════ */
+@media (min-width:769px) {
+  .mobile-nav,
+  .mobile-more-menu,
+  .hamburger { display:none !important; }
 }
 </style>
 </head>
@@ -628,9 +976,9 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
     <div class="auth-illustration">
       <div class="auth-ill-hd">Platform Overview · Live</div>
       <div class="auth-stats-row">
-        <div class="auth-stat-box"><div class="auth-stat-label">Users</div><div class="auth-stat-val b" id="auth-users">—</div></div>
+        <div class="auth-stat-box"><div class="auth-stat-label">Users</div><div class="auth-stat-val b">—</div></div>
         <div class="auth-stat-box"><div class="auth-stat-label">Win Rate</div><div class="auth-stat-val g">—</div></div>
-        <div class="auth-stat-box"><div class="auth-stat-label">VIP</div><div class="auth-stat-val r" id="auth-vip">—</div></div>
+        <div class="auth-stat-box"><div class="auth-stat-label">VIP</div><div class="auth-stat-val r">—</div></div>
       </div>
       <div class="auth-bar-row">
         <div class="auth-bar" style="height:30%"></div><div class="auth-bar" style="height:50%"></div><div class="auth-bar" style="height:40%"></div><div class="auth-bar" style="height:75%"></div><div class="auth-bar" style="height:60%"></div><div class="auth-bar" style="height:85%"></div><div class="auth-bar" style="height:65%"></div><div class="auth-bar" style="height:90%"></div><div class="auth-bar" style="height:70%"></div><div class="auth-bar" style="height:95%;opacity:1"></div><div class="auth-bar" style="height:80%"></div><div class="auth-bar" style="height:88%"></div>
@@ -674,9 +1022,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
-<!-- ══ APP ══ -->
+<!-- ══ APP SHELL ══ -->
 <div id="app">
   <div id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
   <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="brand-mark"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
@@ -711,12 +1060,13 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="admin-chip" onclick="openModal('profile-modal')">
         <div class="admin-avatar" id="sidebar-avatar">AD</div>
         <div><div class="admin-name" id="sidebar-name">Admin</div><div class="admin-role">Super Admin</div></div>
-        <i class="fa fa-ellipsis" style="margin-left:auto;color:var(--muted);font-size:13px;"></i>
+        <i class="fa fa-ellipsis" style="margin-left:auto;color:var(--muted);font-size:13px"></i>
       </div>
     </div>
   </aside>
 
   <div class="main">
+    <!-- TOPBAR -->
     <div class="topbar">
       <button class="btn btn-ghost btn-sm hamburger" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
       <div class="topbar-title" id="page-title">Dashboard</div>
@@ -760,7 +1110,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <p class="page-sub">GET /api/v1/admin/users</p>
       <div class="card mb24">
         <div class="card-pad" style="border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <div class="search-group" style="flex:1;min-width:200px"><i class="fa fa-search"></i><input class="form-input" placeholder="Search by name or email…" id="user-search" oninput="filterUsers()" style="padding-left:36px"/></div>
+          <div class="search-group" style="flex:1;min-width:180px"><i class="fa fa-search"></i><input class="form-input" placeholder="Search by name or email…" id="user-search" oninput="filterUsers()" style="padding-left:36px"/></div>
           <select class="form-input" style="width:140px" onchange="filterUserRole(this.value)"><option value="">All Roles</option><option value="VIP">VIP</option><option value="USER">Free</option></select>
           <button class="btn btn-ghost btn-sm" onclick="loadUsers()"><i class="fa fa-rotate"></i> Refresh</button>
         </div>
@@ -770,7 +1120,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         </div>
       </div>
       <div class="g2">
-        <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">New Registrations</div><div class="card-sub">Weekly new users (real data)</div></div><div class="card-pad chart-box" style="height:200px"><canvas id="regChart"></canvas></div></div>
+        <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">New Registrations</div><div class="card-sub">Weekly new users</div></div><div class="card-pad chart-box" style="height:200px"><canvas id="regChart"></canvas></div></div>
         <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">VIP vs Free Split</div><div class="card-sub">Based on loaded users</div></div><div class="card-pad chart-box" style="height:200px;display:flex;align-items:center;justify-content:center"><canvas id="convChart"></canvas></div></div>
       </div>
     </div>
@@ -779,10 +1129,10 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
     <div class="page" id="page-games">
       <div class="page-headline">Game Management</div>
       <p class="page-sub">Book, configure and publish fixtures</p>
-      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
         <button class="btn btn-primary btn-sm" onclick="openBookModal()"><i class="fa fa-plus"></i> Book Game</button>
         <button class="btn btn-outline btn-sm" onclick="openBulkModal()"><i class="fa fa-layer-group"></i> Bulk Book</button>
-        <div style="flex:1"></div>
+        <div style="flex:1;min-width:0"></div>
         <div id="game-filters" style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn btn-ghost btn-xs gf active" data-f="all" onclick="filterGames('all',this)">All</button>
           <button class="btn btn-ghost btn-xs gf" data-f="live" onclick="filterGames('live',this)"><span class="live-dot" style="width:6px;height:6px;margin-right:3px"></span>Live</button>
@@ -791,7 +1141,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
           <button class="btn btn-ghost btn-xs gf" data-f="upcoming" onclick="filterGames('upcoming',this)">Upcoming</button>
         </div>
       </div>
-      <div class="card mb24" id="games-list-card"><div id="games-list"><div class="loading-state"><div class="spinner"></div> Loading games…</div></div></div>
+      <div class="card mb24"><div id="games-list"><div class="loading-state"><div class="spinner"></div> Loading games…</div></div></div>
       <div class="g2">
         <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Games by Status</div></div><div class="card-pad chart-box" style="height:200px;display:flex;align-items:center;justify-content:center"><canvas id="gamesStatusChart"></canvas></div></div>
         <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Games Overview</div></div><div class="card-pad chart-box" style="height:200px"><canvas id="gamesLineChart"></canvas></div></div>
@@ -801,25 +1151,26 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
     <!-- ══ SLIPS LIST ══ -->
     <div class="page" id="page-slips">
       <div class="page-headline">Betting Slips</div>
-      <p class="page-sub">All published prediction slips — GET /api/v1/admin/games/slips</p>
+      <p class="page-sub">All published prediction slips</p>
       <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
         <button class="btn btn-primary btn-sm" onclick="nav('create-slip',null)"><i class="fa fa-plus"></i> Create Slip</button>
       </div>
       <div class="g3 mb24" id="slips-grid"><div class="loading-state" style="grid-column:1/-1"><div class="spinner"></div> Loading slips…</div></div>
-      <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Slip Performance</div><div class="card-sub">Won / Lost / Pending — real data</div></div><div class="card-pad chart-box" style="height:220px"><canvas id="slipChart"></canvas></div></div>
+      <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Slip Performance</div><div class="card-sub">Won / Lost / Pending</div></div><div class="card-pad chart-box" style="height:220px"><canvas id="slipChart"></canvas></div></div>
     </div>
 
-    <!-- ══ CREATE SLIP PAGE ══ -->
+    <!-- ══ CREATE SLIP ══ -->
     <div class="page" id="page-create-slip">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
-        <button class="btn btn-ghost btn-sm" onclick="nav('slips',null)" style="padding:6px 10px"><i class="fa fa-arrow-left"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="nav('slips',null)" style="padding:6px 10px;flex-shrink:0"><i class="fa fa-arrow-left"></i></button>
         <div class="page-headline" style="margin-bottom:0">Create Slip</div>
       </div>
-      <p class="page-sub">POST /api/v1/admin/games/slips — build one or queue multiple</p>
+      <p class="page-sub">Build one or queue multiple slips for batch submission</p>
 
       <div class="slip-create-layout">
+        <!-- LEFT COLUMN -->
         <div>
-          <!-- STEP 1: Slip Type -->
+          <!-- Step 1: Type -->
           <div class="card mb24" style="overflow:visible">
             <div class="card-pad" style="border-bottom:1px solid var(--border)">
               <div class="card-title">Step 1 — Choose Slip Type</div>
@@ -849,7 +1200,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
-          <!-- STEP 2: Link to Game -->
+          <!-- Step 2: Link Game -->
           <div class="slip-section-card mb16">
             <div class="slip-section-card-hd">
               <div class="sec-icon ic-blue"><i class="fa fa-futbol"></i></div>
@@ -868,9 +1219,9 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setCreateSlipDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
                 <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setCreateSlipDateFilter('tomorrow',this)">Tomorrow</button>
                 <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setCreateSlipDateFilter('day-after',this)">Day After</button>
-                <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setCreateSlipDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7 Days</button>
+                <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setCreateSlipDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7</button>
                 <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
-                  <input type="date" id="cs-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setCreateSlipDateFilter('custom',null)" title="Pick a specific date"/>
+                  <input type="date" id="cs-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setCreateSlipDateFilter('custom',null)"/>
                 </div>
               </div>
               <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
@@ -884,14 +1235,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
               </div>
               <div id="cs-game-selected" style="display:none;margin-top:10px;padding:10px 14px;background:var(--accent-lt);border:1px solid #1a4d32;border-radius:8px;align-items:center;gap:10px">
-                <i class="fa fa-circle-check" style="color:var(--accent)"></i>
-                <div style="flex:1;font-size:13px;font-weight:600" id="cs-game-label">—</div>
-                <button class="btn btn-ghost btn-xs" onclick="clearCreateSlipGame()"><i class="fa fa-xmark"></i> Clear</button>
+                <i class="fa fa-circle-check" style="color:var(--accent);flex-shrink:0"></i>
+                <div style="flex:1;font-size:13px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="cs-game-label">—</div>
+                <button class="btn btn-ghost btn-xs" onclick="clearCreateSlipGame()" style="flex-shrink:0"><i class="fa fa-xmark"></i> Clear</button>
               </div>
             </div>
           </div>
 
-          <!-- STEP 3: Booking Code -->
+          <!-- Step 3: Booking Code -->
           <div class="slip-section active" id="cs-section-booking">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -912,7 +1263,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
-          <!-- STEP 3: Prediction -->
+          <!-- Step 3: Prediction -->
           <div class="slip-section" id="cs-section-prediction">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -921,8 +1272,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
               </div>
               <div class="slip-section-card-body">
                 <div id="cs-pred-no-game" style="padding:20px;background:var(--panel);border-radius:8px;text-align:center;font-size:13px;color:var(--muted);margin-bottom:14px">
-                  <i class="fa fa-arrow-up" style="display:block;margin-bottom:6px;font-size:20px;opacity:.4"></i>
-                  Link a game above to see available outcomes
+                  <i class="fa fa-arrow-up" style="display:block;margin-bottom:6px;font-size:20px;opacity:.4"></i>Link a game above to see available outcomes
                 </div>
                 <div id="cs-pred-outcomes" style="display:none;margin-bottom:14px">
                   <label class="form-label" style="margin-bottom:10px">Select Prediction(s)</label>
@@ -945,7 +1295,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
-          <!-- STEP 3: Odds -->
+          <!-- Step 3: Odds Accumulator -->
           <div class="slip-section" id="cs-section-odds">
             <div class="slip-section-card">
               <div class="slip-section-card-hd">
@@ -958,7 +1308,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                   <div id="cs-odds-game-pills" style="display:flex;gap:6px;flex-wrap:wrap"></div>
                 </div>
                 <div style="margin-bottom:12px">
-                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
                     <label class="form-label" style="margin:0">Accumulator Legs</label>
                     <button class="btn btn-ghost btn-xs" onclick="addCreateOddsLeg()"><i class="fa fa-plus"></i> Add Leg</button>
                   </div>
@@ -976,7 +1326,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
           </div>
 
-          <!-- STEP 4: Options -->
+          <!-- Step 4: Options -->
           <div class="slip-section-card">
             <div class="slip-section-card-hd">
               <div class="sec-icon ic-gray"><i class="fa fa-sliders"></i></div>
@@ -997,24 +1347,22 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                   <input class="form-input" id="cs-valid" type="datetime-local"/>
                 </div>
               </div>
-              <div class="checkbox-row" style="margin-bottom:8px"><input type="checkbox" id="cs-pub" checked><label for="cs-pub">Publish immediately</label></div>
+              <div class="checkbox-row"><input type="checkbox" id="cs-pub" checked><label for="cs-pub">Publish immediately</label></div>
             </div>
           </div>
 
-          <!-- ACTION BUTTONS -->
+          <!-- Actions -->
           <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
-            <!-- Add to Queue button -->
-            <button class="btn btn-outline" onclick="addSlipToQueue()" style="flex:0 0 auto">
+            <button class="btn btn-outline btn-sm" onclick="addSlipToQueue()" style="flex-shrink:0">
               <i class="fa fa-plus"></i> Add to Queue
             </button>
-            <!-- Submit current slip only -->
-            <button class="btn btn-primary" id="cs-submit-btn" onclick="submitCreateSlipPage()" style="flex:1;min-width:160px">
+            <button class="btn btn-primary" id="cs-submit-btn" onclick="submitCreateSlipPage()" style="flex:1;min-width:140px">
               <i class="fa fa-check"></i> Create Slip
             </button>
             <button class="btn btn-ghost btn-sm" onclick="nav('slips',null)">Cancel</button>
           </div>
 
-          <!-- ── SLIP QUEUE ── -->
+          <!-- Slip Queue -->
           <div class="slip-queue-wrap" id="cs-queue-wrap" style="display:none;margin-top:20px">
             <div class="slip-queue-hd">
               <div class="slip-queue-title">
@@ -1022,29 +1370,27 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 Slip Queue
                 <span class="slip-queue-count" id="cs-queue-count">0</span>
               </div>
-              <div style="display:flex;gap:8px;align-items:center">
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                 <span style="font-size:12px;color:var(--muted)">All queued slips will be submitted together</span>
-                <button class="btn btn-ghost btn-xs" onclick="clearSlipQueue()"><i class="fa fa-xmark"></i> Clear</button>
+                <button class="btn btn-ghost btn-xs" onclick="clearSlipQueue()"><i class="fa fa-xmark"></i> Clear all</button>
               </div>
             </div>
             <div class="slip-queue-body">
               <div id="cs-queue-list"></div>
-              <!-- Progress bar shown during submit -->
               <div id="cs-queue-progress" style="display:none;margin-top:12px">
-                <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="cs-queue-progress-label">Submitting 0 / 0…</div>
+                <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="cs-queue-progress-label">Submitting…</div>
                 <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="cs-queue-progress-fill" style="width:0%"></div></div>
               </div>
             </div>
-            <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end">
+            <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap">
               <button class="btn btn-primary btn-sm" id="cs-queue-submit-btn" onclick="submitSlipQueue()">
                 <i class="fa fa-paper-plane"></i> Submit All in Queue
               </button>
             </div>
           </div>
-
         </div>
 
-        <!-- RIGHT: LIVE PREVIEW -->
+        <!-- RIGHT COLUMN: PREVIEW -->
         <div>
           <div class="slip-preview-card">
             <div class="slip-preview-header">Live Preview</div>
@@ -1064,8 +1410,6 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             </div>
             <hr/>
             <div style="font-size:11px;color:var(--muted);text-align:center">Preview updates as you type</div>
-
-            <!-- Mini queue summary in preview panel -->
             <div id="preview-queue-summary" style="display:none;margin-top:14px;padding:10px 12px;background:var(--accent-lt);border:1px solid #1a4d32;border-radius:8px">
               <div style="font-size:11px;color:var(--accent);font-weight:600;margin-bottom:4px"><i class="fa fa-layer-group" style="margin-right:4px"></i>Queue Ready</div>
               <div style="font-size:12px;color:var(--text2)" id="preview-queue-count-text">0 slips in queue</div>
@@ -1082,10 +1426,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="g2 mb24">
         <div class="card">
           <div class="card-pad" style="border-bottom:1px solid var(--border)">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-              <div><div class="card-title">Current VIP Price</div><div class="card-sub">Admin base price · users pay in their local currency</div></div>
-              <button class="btn btn-ghost btn-xs" onclick="refreshVipRates()" title="Refresh live rates"><i class="fa fa-rotate"></i> Rates</button>
-            </div>
+            <div class="section-hd"><div><div class="card-title">Current VIP Price</div><div class="card-sub">Admin base price · users pay in their local currency</div></div><button class="btn btn-ghost btn-xs" onclick="refreshVipRates()"><i class="fa fa-rotate"></i> Rates</button></div>
           </div>
           <div class="card-pad" id="vip-price-display"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
         </div>
@@ -1095,7 +1436,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         </div>
       </div>
       <div class="g2">
-        <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">VIP Subscriber Count</div><div class="card-sub">From real stats data</div></div><div class="card-pad chart-box" style="height:220px"><canvas id="vipGrowthChart"></canvas></div></div>
+        <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">VIP Subscriber Count</div></div><div class="card-pad chart-box" style="height:220px"><canvas id="vipGrowthChart"></canvas></div></div>
         <div class="card"><div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Revenue vs Churn</div></div><div class="card-pad chart-box" style="height:220px"><canvas id="vipRevChart"></canvas></div></div>
       </div>
     </div>
@@ -1116,40 +1457,25 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="page-headline">AI Match Analytics</div>
       <p class="page-sub">GET /api/v1/analytics/match</p>
       <div class="card mb24">
-        <div class="card-pad" style="border-bottom:1px solid var(--border)">
-          <div class="card-title">Select a Fixture</div>
-          <div class="card-sub">Pick a game — date tabs let you browse upcoming fixtures</div>
-        </div>
+        <div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Select a Fixture</div><div class="card-sub">Pick a game — date tabs let you browse upcoming fixtures</div></div>
         <div class="card-pad">
-          <div class="search-group mb16" style="margin-bottom:10px">
-            <i class="fa fa-search"></i>
-            <input class="form-input" id="an-game-search" placeholder="Search by team or league…" oninput="filterAnalyticsGames()" style="padding-left:36px" autocomplete="off"/>
-          </div>
+          <div class="search-group" style="margin-bottom:10px"><i class="fa fa-search"></i><input class="form-input" id="an-game-search" placeholder="Search by team or league…" oninput="filterAnalyticsGames()" style="padding-left:36px" autocomplete="off"/></div>
           <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:8px">
             <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setAnalyticsDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
             <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setAnalyticsDateFilter('tomorrow',this)">Tomorrow</button>
             <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setAnalyticsDateFilter('day-after',this)">Day After</button>
-            <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setAnalyticsDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7 Days</button>
+            <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setAnalyticsDateFilter('next-week',this)"><i class="fa fa-calendar-week" style="font-size:10px"></i> Next 7</button>
             <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
-              <input type="date" id="an-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setAnalyticsDateFilter('custom',null)" title="Pick a specific date"/>
+              <input type="date" id="an-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setAnalyticsDateFilter('custom',null)"/>
             </div>
           </div>
-          <div id="an-game-list" style="border:1.5px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;background:var(--bg);margin-bottom:14px">
-            <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div>
-          </div>
+          <div id="an-game-list" style="border:1.5px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;background:var(--bg);margin-bottom:14px"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading fixtures…</div></div>
           <div id="an-game-selected" style="display:none;padding:12px 16px;background:var(--accent-lt);border:1px solid #1a4d32;border-radius:8px;margin-bottom:14px;align-items:center;gap:12px">
             <i class="fa fa-circle-check" style="color:var(--accent);flex-shrink:0"></i>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600" id="an-game-label">—</div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)" id="an-game-ids">—</div>
-            </div>
-            <button class="btn btn-ghost btn-xs" onclick="clearAnalyticsGame()"><i class="fa fa-xmark"></i> Clear</button>
+            <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="an-game-label">—</div><div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)" id="an-game-ids">—</div></div>
+            <button class="btn btn-ghost btn-xs" onclick="clearAnalyticsGame()" style="flex-shrink:0"><i class="fa fa-xmark"></i> Clear</button>
           </div>
-          <input type="hidden" id="an-fix"/>
-          <input type="hidden" id="an-home"/>
-          <input type="hidden" id="an-away"/>
-          <input type="hidden" id="an-lg"/>
-          <input type="hidden" id="an-season"/>
+          <input type="hidden" id="an-fix"/><input type="hidden" id="an-home"/><input type="hidden" id="an-away"/><input type="hidden" id="an-lg"/><input type="hidden" id="an-season"/>
           <button class="btn btn-primary" id="an-btn" onclick="runAnalytics()"><i class="fa fa-brain"></i> Run AI Analysis</button>
         </div>
       </div>
@@ -1167,7 +1493,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
                 <div style="font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-family:var(--font-mono)">Predicted Outcome</div>
                 <div class="verdict-outcome" id="an-outcome">—</div>
                 <div class="verdict-tip" id="an-tip"></div>
-                <div style="display:flex;gap:6px;margin-top:14px" id="an-chips"></div>
+                <div style="display:flex;gap:6px;margin-top:14px;flex-wrap:wrap" id="an-chips"></div>
               </div>
               <div>
                 <div class="metric-row"><span class="m-label">BTTS Rate</span><span class="m-val" id="an-btts" style="color:var(--blue)">—</span></div>
@@ -1191,9 +1517,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         <button class="btn btn-primary btn-sm" onclick="triggerJob('all')"><i class="fa fa-play"></i> Run All Jobs</button>
         <button class="btn btn-ghost btn-sm" onclick="loadSchedulerStatus()"><i class="fa fa-rotate"></i> Refresh</button>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px" id="scheduler-jobs">
-        <div class="loading-state"><div class="spinner"></div> Loading…</div>
-      </div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="scheduler-jobs"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
     </div>
 
     <!-- ══ SETTINGS ══ -->
@@ -1202,9 +1526,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <p class="page-sub">Manage your admin account</p>
       <div class="session-info-banner">
         <i class="fa fa-shield-halved"></i>
-        <div>
-          <strong>Secure session active.</strong> Connected to <code style="background:rgba(45,158,110,.15);padding:1px 6px;border-radius:4px;font-family:var(--font-mono);font-size:12px" id="settings-api-url">localhost:8080</code>
-        </div>
+        <div><strong>Secure session active.</strong> Connected to <code style="background:rgba(45,158,110,.15);padding:1px 6px;border-radius:4px;font-family:var(--font-mono);font-size:12px" id="settings-api-url">localhost:8080</code></div>
       </div>
       <div class="card" style="max-width:560px">
         <div class="card-pad" style="border-bottom:1px solid var(--border)"><div class="card-title">Account Details</div><div class="card-sub">PATCH /api/v1/admin/me</div></div>
@@ -1216,14 +1538,13 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
           <div class="form-group"><label class="form-label">Current Password</label><input class="form-input" id="prof-cur-pw" type="password" placeholder="••••••••"/></div>
           <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="prof-new-pw" type="password" placeholder="Min 8 characters"/></div>
           <div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input" id="prof-cnf-pw" type="password" placeholder="Repeat new password"/></div>
-          <div style="display:flex;gap:10px;margin-top:4px">
+          <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap">
             <button class="btn btn-primary btn-sm" id="prof-save-btn" onclick="submitProfile()"><i class="fa fa-check"></i> Save Changes</button>
             <button class="btn btn-danger btn-sm" onclick="logout()"><i class="fa fa-arrow-right-from-bracket"></i> Sign Out</button>
           </div>
         </div>
       </div>
     </div>
-
   </div><!-- /.main -->
 </div><!-- /#app -->
 
@@ -1231,56 +1552,34 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
      MODALS
 ════════════════════════════════ -->
 
-<!-- ══ BOOK GAME MODAL (redesigned — no manual UUID) ══ -->
+<!-- BOOK GAME -->
 <div class="overlay" id="book-modal">
   <div class="modal" style="width:600px">
     <div class="modal-hd">
-      <div>
-        <div class="modal-title">Book Game</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select a fixture, then configure odds &amp; flags</div>
-      </div>
+      <div><div class="modal-title">Book Game</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select a fixture, then configure odds &amp; flags</div></div>
       <div class="modal-close" onclick="closeModal('book-modal')"><i class="fa fa-xmark"></i></div>
     </div>
     <div class="modal-body">
-
-      <!-- Game search + picker -->
       <div class="form-group" style="margin-bottom:10px">
         <label class="form-label">Pick a Fixture <span style="color:var(--accent2)">*</span></label>
-        <div class="search-group" style="margin-bottom:8px">
-          <i class="fa fa-search"></i>
-          <input class="form-input" id="bm-search" placeholder="Search by team or league…" oninput="filterBookModalGames()" style="padding-left:36px" autocomplete="off"/>
-        </div>
-        <!-- Date filter tabs -->
+        <div class="search-group" style="margin-bottom:8px"><i class="fa fa-search"></i><input class="form-input" id="bm-search" placeholder="Search by team or league…" oninput="filterBookModalGames()" style="padding-left:36px" autocomplete="off"/></div>
         <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
           <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setBookModalDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBookModalDateFilter('tomorrow',this)">Tomorrow</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBookModalDateFilter('day-after',this)">Day After</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBookModalDateFilter('next-week',this)">Next 7 Days</button>
-          <div style="margin-left:auto">
-            <input type="date" id="bm-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setBookModalDateFilter('custom',null)"/>
-          </div>
+          <div style="margin-left:auto"><input type="date" id="bm-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:130px;min-height:unset" onchange="setBookModalDateFilter('custom',null)"/></div>
         </div>
-        <div id="bm-game-list" class="game-picker-list">
-          <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
-        </div>
+        <div id="bm-game-list" class="game-picker-list"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div></div>
       </div>
-
-      <!-- Selected game banner -->
       <div class="selected-game-banner" id="bm-selected-banner">
         <i class="fa fa-circle-check" style="color:var(--accent);flex-shrink:0"></i>
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:600" id="bm-selected-label">—</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)" id="bm-selected-meta">—</div>
-        </div>
-        <button class="btn btn-ghost btn-xs" onclick="clearBookModalGame()"><i class="fa fa-xmark"></i> Clear</button>
+        <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="bm-selected-label">—</div><div style="font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)" id="bm-selected-meta">—</div></div>
+        <button class="btn btn-ghost btn-xs" onclick="clearBookModalGame()" style="flex-shrink:0"><i class="fa fa-xmark"></i> Clear</button>
       </div>
-
-      <!-- Odds + flags — shown once a game is selected -->
       <div class="book-odds-section" id="bm-odds-section">
         <hr style="margin:14px 0"/>
-        <div style="font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px">
-          Configure Odds <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — leave blank to skip)</span>
-        </div>
+        <div style="font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:10px">Configure Odds <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
         <div class="form-row-3">
           <div class="form-group"><label class="form-label">Home Win</label><input class="form-input" id="bg-hw" placeholder="2.10" type="number" step="0.01"/></div>
           <div class="form-group"><label class="form-label">Draw</label><input class="form-input" id="bg-draw" placeholder="3.40" type="number" step="0.01"/></div>
@@ -1291,13 +1590,12 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
           <div class="form-group"><label class="form-label">Over 2.5</label><input class="form-input" id="bg-o25" placeholder="1.90" type="number" step="0.01"/></div>
           <div class="form-group"><label class="form-label">Over 3.5</label><input class="form-input" id="bg-o35" placeholder="3.50" type="number" step="0.01"/></div>
         </div>
-        <div style="display:flex;gap:20px;margin-top:4px;flex-wrap:wrap">
+        <div style="display:flex;gap:20px;flex-wrap:wrap">
           <div class="checkbox-row"><input type="checkbox" id="bg-pub" checked><label for="bg-pub">Published</label></div>
           <div class="checkbox-row"><input type="checkbox" id="bg-vip"><label for="bg-vip">VIP Only</label></div>
           <div class="checkbox-row"><input type="checkbox" id="bg-feat"><label for="bg-feat">Featured</label></div>
         </div>
       </div>
-
     </div>
     <div class="modal-ft">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('book-modal')">Cancel</button>
@@ -1306,19 +1604,14 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
-<!-- ══ BULK BOOK MODAL (redesigned — per-game odds via List<BookGameRequest>) ══ -->
+<!-- BULK BOOK -->
 <div class="overlay" id="bulk-modal">
   <div class="modal" style="width:700px">
     <div class="modal-hd">
-      <div>
-        <div class="modal-title">Bulk Book Games</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select games, configure per-game odds, then submit all at once</div>
-      </div>
+      <div><div class="modal-title">Bulk Book Games</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px">Select games, set per-game odds, then submit all at once</div></div>
       <div class="modal-close" onclick="closeModal('bulk-modal')"><i class="fa fa-xmark"></i></div>
     </div>
     <div class="modal-body" style="padding-top:18px">
-
-      <!-- Tab bar -->
       <div class="bulk-tab-bar">
         <button class="bulk-tab active" id="bulk-tab-pick" onclick="switchBulkTab('pick')">
           <i class="fa fa-futbol" style="margin-right:5px"></i>Pick Games
@@ -1330,25 +1623,17 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         </button>
       </div>
 
-      <!-- TAB 1: Pick Games -->
+      <!-- TAB 1: Pick -->
       <div class="bulk-tab-panel active" id="bulk-panel-pick">
-        <div class="search-group" style="margin-bottom:8px">
-          <i class="fa fa-search"></i>
-          <input class="form-input" id="bb-search" placeholder="Search by team or league…" oninput="filterBulkGames()" style="padding-left:36px" autocomplete="off"/>
-        </div>
-        <!-- Date filter tabs -->
+        <div class="search-group" style="margin-bottom:8px"><i class="fa fa-search"></i><input class="form-input" id="bb-search" placeholder="Search by team or league…" oninput="filterBulkGames()" style="padding-left:36px" autocomplete="off"/></div>
         <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
           <button class="btn btn-ghost btn-xs csdf active" data-d="today" onclick="setBulkDateFilter('today',this)"><i class="fa fa-calendar-day" style="font-size:10px"></i> Today</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="tomorrow" onclick="setBulkDateFilter('tomorrow',this)">Tomorrow</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="day-after" onclick="setBulkDateFilter('day-after',this)">Day After</button>
           <button class="btn btn-ghost btn-xs csdf" data-d="next-week" onclick="setBulkDateFilter('next-week',this)">Next 7 Days</button>
-          <div style="margin-left:auto">
-            <input type="date" id="bb-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:120px;min-height:unset" onchange="setBulkDateFilter('custom',null)"/>
-          </div>
+          <div style="margin-left:auto"><input type="date" id="bb-custom-date" class="form-input" style="padding:4px 8px;font-size:11.5px;height:28px;width:120px;min-height:unset" onchange="setBulkDateFilter('custom',null)"/></div>
         </div>
-        <div id="bb-game-list" class="game-picker-list" style="max-height:280px">
-          <div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div>
-        </div>
+        <div id="bb-game-list" class="game-picker-list" style="max-height:280px"><div class="loading-state" style="padding:20px"><div class="spinner"></div> Loading…</div></div>
         <div id="bb-selected-wrap" style="display:none;margin-top:12px">
           <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:7px">
             Selected <span id="bb-count" style="color:var(--accent)">0</span> game(s)
@@ -1358,19 +1643,15 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
         </div>
       </div>
 
-      <!-- TAB 2: Set Odds & Flags (per-game) -->
+      <!-- TAB 2: Odds -->
       <div class="bulk-tab-panel" id="bulk-panel-odds">
         <div id="bulk-odds-empty" style="padding:32px;text-align:center;color:var(--muted)">
           <i class="fa fa-futbol" style="font-size:28px;opacity:.2;display:block;margin-bottom:10px"></i>
           <div style="font-size:13px">No games selected yet.</div>
           <div style="font-size:12px;margin-top:4px">Go to the <strong style="color:var(--text)">Pick Games</strong> tab first.</div>
         </div>
-
-        <!-- Apply defaults to all -->
         <div id="bulk-apply-defaults" style="display:none;margin-bottom:14px;padding:14px;background:var(--panel);border:1px solid var(--border);border-radius:10px">
-          <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">
-            <i class="fa fa-wand-magic-sparkles" style="color:var(--gold);margin-right:5px"></i>Apply Same Settings to All Selected Games
-          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px"><i class="fa fa-wand-magic-sparkles" style="color:var(--gold);margin-right:5px"></i>Apply Same Settings to All</div>
           <div class="form-row-3" style="margin-bottom:8px">
             <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Home Win</label><input class="form-input" id="bbd-hw" placeholder="2.10" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
             <div class="form-group" style="margin-bottom:0"><label class="form-label" style="font-size:10px">Draw</label><input class="form-input" id="bbd-draw" placeholder="3.40" type="number" step="0.01" style="padding:7px 10px;font-size:12.5px"/></div>
@@ -1385,33 +1666,26 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
             <div class="checkbox-row"><input type="checkbox" id="bbd-pub" checked><label for="bbd-pub" style="font-size:12px">Published</label></div>
             <div class="checkbox-row"><input type="checkbox" id="bbd-vip"><label for="bbd-vip" style="font-size:12px">VIP Only</label></div>
             <div class="checkbox-row"><input type="checkbox" id="bbd-feat"><label for="bbd-feat" style="font-size:12px">Featured</label></div>
-            <button class="btn btn-gold btn-xs" style="margin-left:auto" onclick="applyDefaultsToAll()">
-              <i class="fa fa-wand-magic-sparkles"></i> Apply to All
-            </button>
+            <button class="btn btn-gold btn-xs" style="margin-left:auto" onclick="applyDefaultsToAll()"><i class="fa fa-wand-magic-sparkles"></i> Apply to All</button>
           </div>
         </div>
-
-        <!-- Per-game rows -->
         <div id="bulk-odds-list" class="bulk-game-odds-list" style="display:none"></div>
       </div>
 
-      <!-- Progress bar -->
+      <!-- Progress -->
       <div id="bulk-progress" style="display:none;margin-top:14px">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="bulk-progress-label">Submitting 0 / 0…</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px" id="bulk-progress-label">Submitting…</div>
         <div class="bulk-progress-bar"><div class="bulk-progress-fill" id="bulk-progress-fill" style="width:0%"></div></div>
       </div>
-
     </div>
     <div class="modal-ft">
       <button class="btn btn-ghost btn-sm" onclick="closeModal('bulk-modal')">Cancel</button>
-      <button class="btn btn-primary btn-sm" id="bulk-submit-btn" onclick="submitBulkBook()">
-        <i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span>
-      </button>
+      <button class="btn btn-primary btn-sm" id="bulk-submit-btn" onclick="submitBulkBook()"><i class="fa fa-layer-group"></i> Book <span id="bulk-submit-label">Selected</span></button>
     </div>
   </div>
 </div>
 
-<!-- ══ SLIP STATUS MODAL ══ -->
+<!-- SLIP STATUS / DETAIL -->
 <div class="overlay" id="slip-status-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Slip Detail</div><div class="modal-close" onclick="closeModal('slip-status-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1419,10 +1693,8 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <input type="hidden" id="slip-status-id"/>
       <div class="form-group"><label class="form-label">Status</label>
         <select class="form-input" id="slip-status-val">
-          <option value="PENDING">PENDING</option>
-          <option value="WON">WON</option>
-          <option value="LOST">LOST</option>
-          <option value="VOID">VOID</option>
+          <option value="PENDING">PENDING</option><option value="WON">WON</option>
+          <option value="LOST">LOST</option><option value="VOID">VOID</option>
         </select>
       </div>
     </div>
@@ -1433,42 +1705,27 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
-<!-- ══ VIP MODAL ══ -->
+<!-- VIP PRICING -->
 <div class="overlay" id="vip-modal">
   <div class="modal">
-    <div class="modal-hd">
-      <div class="modal-title">Update VIP Pricing</div>
-      <div class="modal-close" onclick="closeModal('vip-modal')"><i class="fa fa-xmark"></i></div>
-    </div>
+    <div class="modal-hd"><div class="modal-title">Update VIP Pricing</div><div class="modal-close" onclick="closeModal('vip-modal')"><i class="fa fa-xmark"></i></div></div>
     <div class="modal-body">
       <div style="background:var(--blue-lt);border:1px solid #0d2040;border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:12.5px;color:var(--blue);display:flex;gap:10px;align-items:flex-start">
         <i class="fa fa-circle-info" style="margin-top:1px;flex-shrink:0"></i>
-        <div>Set the price in <strong>any currency</strong>. Users will be automatically charged in their local currency (GHS / NGN / USD) at the live exchange rate when they pay.</div>
+        <div>Set the price in <strong>any currency</strong>. Users will be automatically charged in their local currency at the live exchange rate.</div>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Price <span style="color:var(--accent2)">*</span></label>
-          <input class="form-input" id="vp-price" type="number" step="0.01" min="0.01" placeholder="e.g. 10.00" oninput="updateVipModalPreview()"/>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Currency <span style="color:var(--accent2)">*</span></label>
+        <div class="form-group"><label class="form-label">Price <span style="color:var(--accent2)">*</span></label><input class="form-input" id="vp-price" type="number" step="0.01" min="0.01" placeholder="e.g. 10.00" oninput="updateVipModalPreview()"/></div>
+        <div class="form-group"><label class="form-label">Currency <span style="color:var(--accent2)">*</span></label>
           <select class="form-input" id="vp-currency" onchange="updateVipModalPreview()">
-            <option value="USD">USD — US Dollar</option>
-            <option value="GHS">GHS — Ghana Cedi</option>
-            <option value="NGN">NGN — Nigerian Naira</option>
-            <option value="EUR">EUR — Euro</option>
-            <option value="GBP">GBP — British Pound</option>
+            <option value="USD">USD — US Dollar</option><option value="GHS">GHS — Ghana Cedi</option>
+            <option value="NGN">NGN — Nigerian Naira</option><option value="EUR">EUR — Euro</option><option value="GBP">GBP — British Pound</option>
           </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Description</label>
-        <textarea class="form-input" id="vp-desc" rows="2" placeholder="e.g. Unlock premium predictions &amp; VIP slips for 24 hours"></textarea>
-      </div>
+      <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="vp-desc" rows="2" placeholder="e.g. Unlock premium predictions &amp; VIP slips for 24 hours"></textarea></div>
       <div id="vip-modal-preview" style="display:none;background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:14px 16px">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;font-family:var(--font-mono)">
-          <i class="fa fa-wand-magic-sparkles" style="margin-right:4px"></i>Estimated user charges (live rates)
-        </div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;font-family:var(--font-mono)"><i class="fa fa-wand-magic-sparkles" style="margin-right:4px"></i>Estimated user charges (live rates)</div>
         <div id="vip-modal-equiv" style="display:flex;gap:10px;flex-wrap:wrap"></div>
         <div style="font-size:11px;color:var(--muted);margin-top:8px" id="vip-modal-rate-note"></div>
       </div>
@@ -1480,7 +1737,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
-<!-- ══ PROMO MODAL ══ -->
+<!-- PROMO -->
 <div class="overlay" id="promo-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Create Promotion</div><div class="modal-close" onclick="closeModal('promo-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1488,10 +1745,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
       <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="pm-title" placeholder="e.g. Weekend Special"/></div>
       <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="pm-desc" rows="2" placeholder="Promo details…"></textarea></div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type">
-          <option value="DISCOUNT">DISCOUNT — % off VIP price</option>
-          <option value="FREE_VIP">FREE_VIP — Free VIP access</option>
-          <option value="ANNOUNCEMENT">ANNOUNCEMENT — Banner / notice</option></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="pm-type"><option value="DISCOUNT">DISCOUNT — % off VIP price</option><option value="FREE_VIP">FREE_VIP — Free VIP access</option><option value="ANNOUNCEMENT">ANNOUNCEMENT — Banner / notice</option></select></div>
         <div class="form-group"><label class="form-label">Discount %</label><input class="form-input" id="pm-disc" placeholder="25" type="number"/></div>
       </div>
       <div class="form-row">
@@ -1507,7 +1761,7 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   </div>
 </div>
 
-<!-- ══ PROFILE MODAL ══ -->
+<!-- PROFILE -->
 <div class="overlay" id="profile-modal">
   <div class="modal">
     <div class="modal-hd"><div class="modal-title">Admin Profile</div><div class="modal-close" onclick="closeModal('profile-modal')"><i class="fa fa-xmark"></i></div></div>
@@ -1528,21 +1782,11 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
 
 <!-- ══ MOBILE BOTTOM NAV ══ -->
 <nav class="mobile-nav" id="mobile-nav" style="display:none">
-  <button class="mobile-nav-item active" id="mn-dash" onclick="mobileNavTo('dashboard')">
-    <i class="fa fa-house"></i><span>Home</span>
-  </button>
-  <button class="mobile-nav-item" id="mn-games" onclick="mobileNavTo('games')">
-    <i class="fa fa-futbol"></i><span>Games</span>
-  </button>
-  <button class="mobile-nav-item" id="mn-slips" onclick="mobileNavTo('slips')">
-    <i class="fa fa-ticket"></i><span>Slips</span>
-  </button>
-  <button class="mobile-nav-item" id="mn-users" onclick="mobileNavTo('users')">
-    <i class="fa fa-users"></i><span>Users</span>
-  </button>
-  <button class="mobile-nav-item mobile-nav-more" onclick="toggleMoreMenu()">
-    <i class="fa fa-ellipsis"></i><span>More</span>
-  </button>
+  <button class="mobile-nav-item active" id="mn-dash" onclick="mobileNavTo('dashboard')"><i class="fa fa-house"></i><span>Home</span></button>
+  <button class="mobile-nav-item" id="mn-games" onclick="mobileNavTo('games')"><i class="fa fa-futbol"></i><span>Games</span></button>
+  <button class="mobile-nav-item" id="mn-slips" onclick="mobileNavTo('slips')"><i class="fa fa-ticket"></i><span>Slips</span></button>
+  <button class="mobile-nav-item" id="mn-users" onclick="mobileNavTo('users')"><i class="fa fa-users"></i><span>Users</span></button>
+  <button class="mobile-nav-item mobile-nav-more" onclick="toggleMoreMenu()"><i class="fa fa-ellipsis"></i><span>More</span></button>
 </nav>
 
 <!-- ══ MOBILE MORE MENU ══ -->
@@ -1557,6 +1801,35 @@ hr{border:none;border-top:1px solid var(--border);margin:18px 0}
   <div class="mobile-more-item" onclick="logout()"><i class="fa fa-arrow-right-from-bracket" style="color:var(--accent2)"></i> Sign Out</div>
 </div>
 
+<!-- MOBILE NAV STYLES (inline to avoid flash) -->
+<style>
+.mobile-nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:3px; cursor:pointer; color:var(--muted); font-size:10px; font-weight:600;
+  letter-spacing:.3px; text-transform:uppercase; padding:6px 2px;
+  border:none; background:none; font-family:var(--font);
+  transition:color .12s; -webkit-tap-highlight-color:transparent; position:relative;
+}
+.mobile-nav-item i { font-size:18px; transition:transform .15s; }
+.mobile-nav-item.active { color:var(--accent); }
+.mobile-nav-item.active i { transform:translateY(-2px); }
+.mobile-nav-item.active::after {
+  content:''; position:absolute; bottom:0; left:25%; right:25%;
+  height:2px; background:var(--accent); border-radius:2px 2px 0 0;
+}
+.mobile-more-item {
+  display:flex; align-items:center; gap:14px; padding:14px 20px;
+  font-size:14px; font-weight:500; color:var(--text2); cursor:pointer;
+  border-bottom:1px solid var(--border); transition:background .1s;
+  -webkit-tap-highlight-color:transparent;
+}
+.mobile-more-item:last-child { border-bottom:none; }
+.mobile-more-item:active { background:var(--panel); }
+.mobile-more-item i { width:20px; text-align:center; font-size:15px; flex-shrink:0; }
+.mobile-more-item.active { color:var(--accent); }
+</style>
+
+<!-- PASTE YOUR SCRIPT TAG HERE -->
 <script>
   // ════════════════════════════════════════════════════════════
 //  BetChale Admin — FULL MERGED SCRIPT
