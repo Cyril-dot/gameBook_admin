@@ -63,26 +63,57 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 /* FILTERS BAR */
 .filters-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
 .filter-group{display:flex;gap:4px;flex-wrap:wrap;}
-.flt-btn{padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .12s;min-height:36px;-webkit-tap-highlight-color:transparent;}
+.flt-btn{padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .12s;min-height:36px;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;gap:5px;}
 .flt-btn:hover{background:var(--panel);color:var(--text);}
 .flt-btn.active{background:var(--accent-lt);color:var(--accent);border-color:#1a4d32;}
+.flt-btn.active-won{background:var(--blue-lt)!important;color:var(--blue)!important;border-color:#1a3a6e!important;}
+.flt-btn.active-lost{background:var(--accent2-lt)!important;color:var(--accent2)!important;border-color:#5a2518!important;}
+.flt-btn .flt-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(255,255,255,.08);font-family:var(--font-mono);}
 .search-input-wrap{position:relative;flex:1;min-width:180px;}
 .search-input-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none;}
 .search-input-wrap input{width:100%;background:var(--panel);border:1.5px solid var(--border2);border-radius:8px;padding:8px 12px 8px 34px;font-family:var(--font);font-size:13px;color:var(--text);outline:none;min-height:36px;}
 .search-input-wrap input:focus{border-color:var(--accent);}
 .search-input-wrap input::placeholder{color:var(--muted);}
 
-/* ── SLIP CARDS — user-facing style ── */
+/* ── SLIP CARDS ── */
 .slips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;}
 
 .slip-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s;cursor:pointer;display:flex;flex-direction:column;}
 .slip-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border2);}
 
+/* Status-based card border tints */
+.slip-card.status-won{border-color:rgba(58,114,200,.25);}
+.slip-card.status-won:hover{border-color:rgba(58,114,200,.5);}
+.slip-card.status-lost{border-color:rgba(224,90,43,.2);}
+.slip-card.status-lost:hover{border-color:rgba(224,90,43,.4);}
+.slip-card.status-active{border-color:rgba(45,158,110,.2);}
+.slip-card.status-active:hover{border-color:rgba(45,158,110,.45);}
+
+/* ── RESULT BANNER — the big addition ── */
+.slip-result-banner{display:flex;align-items:center;gap:9px;padding:9px 14px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.slip-result-banner.banner-won{background:linear-gradient(90deg,rgba(58,114,200,.25) 0%,rgba(58,114,200,.06) 100%);border-bottom:1px solid rgba(58,114,200,.22);color:var(--blue);}
+.slip-result-banner.banner-lost{background:linear-gradient(90deg,rgba(224,90,43,.2) 0%,rgba(224,90,43,.05) 100%);border-bottom:1px solid rgba(224,90,43,.2);color:var(--accent2);}
+.slip-result-banner.banner-active{background:linear-gradient(90deg,rgba(45,158,110,.18) 0%,rgba(45,158,110,.04) 100%);border-bottom:1px solid rgba(45,158,110,.18);color:var(--accent);}
+.slip-result-banner.banner-void{background:var(--panel);border-bottom:1px solid var(--border);color:var(--muted);}
+.slip-result-banner .banner-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.banner-won .banner-icon{background:var(--blue);color:#fff;}
+.banner-lost .banner-icon{background:var(--accent2);color:#fff;}
+.banner-active .banner-icon{background:var(--accent);color:#fff;}
+.banner-void .banner-icon{background:var(--muted);color:var(--surface);}
+.banner-label{flex:1;font-size:11.5px;}
+.banner-won .banner-ml{color:rgba(58,114,200,.6);}
+.banner-lost .banner-ml{color:rgba(224,90,43,.5);}
+
 /* slip image */
-.slip-img-wrap{position:relative;overflow:hidden;height:160px;cursor:zoom-in;}
+.slip-img-wrap{position:relative;overflow:hidden;height:156px;cursor:zoom-in;}
 .slip-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
 .slip-card:hover .slip-img-wrap img{transform:scale(1.04);}
 .slip-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);}
+/* Image status pill */
+.slip-img-status-pill{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.05em;backdrop-filter:blur(6px);text-transform:uppercase;}
+.img-pill-won{background:rgba(58,114,200,.85);color:#fff;}
+.img-pill-lost{background:rgba(224,90,43,.85);color:#fff;}
+.img-pill-active{background:rgba(45,158,110,.8);color:#fff;}
 
 /* slip body */
 .slip-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:10px;}
@@ -98,7 +129,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .slip-accum-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .slip-accum-title{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;}
 .slip-accum-wins{display:flex;gap:4px;}
-.slip-accum-game{display:flex;align-items:center;gap:6px;font-size:12px;padding:3px 0;}
+.slip-accum-game{display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 0;}
 .slip-accum-game+.slip-accum-game{border-top:1px solid var(--border);}
 .slip-accum-num{width:18px;height:18px;border-radius:50%;background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);}
 .slip-accum-teams{flex:1;min-width:0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -120,7 +151,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 /* total odds */
 .slip-total-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;}
-.slip-total-odds{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--gold);line-height:1;}
+.slip-total-odds{font-family:var(--font-mono);font-size:26px;font-weight:700;line-height:1;}
+.slip-total-odds.won{color:var(--blue);}
+.slip-total-odds.lost{color:var(--accent2);}
+.slip-total-odds.active{color:var(--gold);}
 .slip-total-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
 .slip-deadline{text-align:right;}
 .slip-deadline-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px;}
@@ -149,6 +183,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .chip-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810;}
 .chip-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040;}
 .chip-gray{background:var(--panel);color:var(--text2);border:1px solid var(--border2);}
+
+/* Status chip sizes — big visible ones */
+.chip-won-lg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font-mono);background:var(--blue-lt);color:var(--blue);border:1px solid #1a3a6e;text-transform:uppercase;letter-spacing:.04em;}
+.chip-lost-lg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font-mono);background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518;text-transform:uppercase;letter-spacing:.04em;}
+.chip-active-lg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font-mono);background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;text-transform:uppercase;letter-spacing:.04em;}
+.live-pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite;flex-shrink:0;}
 
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:8px;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;text-decoration:none;min-height:42px;-webkit-tap-highlight-color:transparent;user-select:none;}
@@ -220,6 +260,9 @@ select.form-input option{background:#1a1917;}
 .pg-btn.active{background:var(--accent-lt);color:var(--accent);border-color:#1a4d32;}
 .pg-btn:disabled{opacity:.4;cursor:not-allowed;}
 
+/* hide-xs */
+@media(max-width:480px){.hide-xs{display:none!important;}}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   :root{--page-pad:14px;--topbar-h:52px;}
@@ -271,7 +314,6 @@ select.form-input option{background:#1a1917;}
   <div class="topbar-divider"></div>
   <div class="topbar-title">Betting Slips</div>
   <div class="topbar-actions">
-    <!-- FIX: back button uses history.back(), falls back to index.html -->
     <button class="btn btn-ghost btn-sm" onclick="goBack()" title="Back"><i class="fa fa-arrow-left"></i></button>
     <button class="btn btn-ghost btn-sm" onclick="loadSlips()" title="Refresh"><i class="fa fa-rotate"></i></button>
     <button class="btn btn-primary btn-sm" onclick="openCreateModal()"><i class="fa fa-plus"></i> <span class="hide-xs">Create Slip</span></button>
@@ -285,7 +327,7 @@ select.form-input option{background:#1a1917;}
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat-card"><div class="stat-icon ic-blue"><i class="fa fa-ticket"></i></div><div class="stat-label">Total Slips</div><div class="stat-val" id="st-total">—</div></div>
-    <div class="stat-card"><div class="stat-icon ic-green"><i class="fa fa-trophy"></i></div><div class="stat-label">Won</div><div class="stat-val" id="st-won" style="color:var(--accent)">—</div></div>
+    <div class="stat-card"><div class="stat-icon ic-green"><i class="fa fa-trophy"></i></div><div class="stat-label">Won</div><div class="stat-val" id="st-won" style="color:var(--blue)">—</div></div>
     <div class="stat-card"><div class="stat-icon ic-red"><i class="fa fa-xmark"></i></div><div class="stat-label">Lost</div><div class="stat-val" id="st-lost" style="color:var(--accent2)">—</div></div>
     <div class="stat-card"><div class="stat-icon ic-gold"><i class="fa fa-crown"></i></div><div class="stat-label">VIP</div><div class="stat-val" id="st-vip" style="color:var(--gold)">—</div></div>
     <div class="stat-card"><div class="stat-icon ic-gray"><i class="fa fa-clock"></i></div><div class="stat-label">Pending</div><div class="stat-val" id="st-pending">—</div></div>
@@ -297,12 +339,23 @@ select.form-input option{background:#1a1917;}
       <i class="fa fa-search"></i>
       <input id="slip-search" placeholder="Search bookmaker, code, teams…" oninput="filterAndRender()" autocomplete="off"/>
     </div>
+    <!-- Status filter with counts -->
     <div class="filter-group" id="status-filters">
-      <button class="flt-btn active" onclick="setFilter('status','all',this)">All</button>
-      <button class="flt-btn" onclick="setFilter('status','ACTIVE',this)">Active</button>
-      <button class="flt-btn" onclick="setFilter('status','WON',this)">Won</button>
-      <button class="flt-btn" onclick="setFilter('status','LOST',this)">Lost</button>
-      <button class="flt-btn" onclick="setFilter('status','VOID',this)">Void</button>
+      <button class="flt-btn active" onclick="setFilter('status','all',this)" data-status="all">
+        <i class="fa fa-sparkles" style="font-size:10px"></i> All <span class="flt-count" id="fc-all">—</span>
+      </button>
+      <button class="flt-btn" onclick="setFilter('status','ACTIVE',this)" data-status="ACTIVE">
+        <span class="live-pulse" style="width:6px;height:6px"></span> Active <span class="flt-count" id="fc-active">—</span>
+      </button>
+      <button class="flt-btn" onclick="setFilter('status','WON',this)" data-status="WON">
+        <i class="fa fa-trophy" style="font-size:10px"></i> Won <span class="flt-count" id="fc-won">—</span>
+      </button>
+      <button class="flt-btn" onclick="setFilter('status','LOST',this)" data-status="LOST">
+        <i class="fa fa-circle-xmark" style="font-size:10px"></i> Lost <span class="flt-count" id="fc-lost">—</span>
+      </button>
+      <button class="flt-btn" onclick="setFilter('status','VOID',this)" data-status="VOID">
+        <i class="fa fa-ban" style="font-size:10px"></i> Void <span class="flt-count" id="fc-void">—</span>
+      </button>
     </div>
     <div class="filter-group" id="type-filters">
       <button class="flt-btn active" onclick="setFilter('type','all',this)">All Types</button>
@@ -425,13 +478,9 @@ async function apiCall(method, path, body=null, isFormData=false) {
   return json;
 }
 
-// ── FIX: smart back navigation ────────────────────────────
 function goBack() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = 'index.html';
-  }
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = 'index.html';
 }
 
 let ALL_SLIPS = [];
@@ -461,11 +510,18 @@ function updateStats() {
   const lost    = ALL_SLIPS.filter(s=>s.status==='LOST').length;
   const vip     = ALL_SLIPS.filter(s=>s.type==='VIP').length;
   const pending = ALL_SLIPS.filter(s=>!s.status||s.status==='ACTIVE').length;
+  const voided  = ALL_SLIPS.filter(s=>s.status==='VOID').length;
   document.getElementById('st-total').textContent   = total;
   document.getElementById('st-won').textContent     = won;
   document.getElementById('st-lost').textContent    = lost;
   document.getElementById('st-vip').textContent     = vip;
   document.getElementById('st-pending').textContent = pending;
+  // Update filter count badges
+  document.getElementById('fc-all').textContent    = total;
+  document.getElementById('fc-active').textContent = pending;
+  document.getElementById('fc-won').textContent    = won;
+  document.getElementById('fc-lost').textContent   = lost;
+  document.getElementById('fc-void').textContent   = voided;
 }
 
 function buildCharts() {
@@ -478,7 +534,7 @@ function buildCharts() {
 
   const sc = document.getElementById('statusChart');
   if(sc){try{Chart.getChart(sc)?.destroy();}catch{}
-    new Chart(sc,{type:'doughnut',data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#2d9e6e','#e05a2b','#3a72c8','#2e2c29'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
+    new Chart(sc,{type:'doughnut',data:{labels:['Won','Lost','Active','Void'],datasets:[{data:[won,lost,active,voided],backgroundColor:['#3a72c8','#e05a2b','#2d9e6e','#2e2c29'],borderWidth:0,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'bottom',labels:{font:{family:"'Sora',sans-serif",size:11},color:'#a09d97',boxWidth:10}}}}});
   }
   const tc = document.getElementById('typeChart');
   if(tc){try{Chart.getChart(tc)?.destroy();}catch{}
@@ -491,8 +547,17 @@ function buildCharts() {
 function setFilter(key, val, btn) {
   FILTERS[key] = val;
   const group = btn.closest('.filter-group') || btn.parentElement;
-  group.querySelectorAll('.flt-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  group.querySelectorAll('.flt-btn').forEach(b => {
+    b.classList.remove('active','active-won','active-lost');
+  });
+  // Colour the active button by which status it represents
+  if(key === 'status') {
+    if(val === 'WON')  btn.classList.add('active-won');
+    else if(val === 'LOST') btn.classList.add('active-lost');
+    else btn.classList.add('active');
+  } else {
+    btn.classList.add('active');
+  }
   currentPage = 1;
   filterAndRender();
 }
@@ -523,7 +588,8 @@ function fmtTime(dt){try{return new Date(dt).toLocaleTimeString([],{hour:'2-digi
 function fmtDate(dt){try{return new Date(dt).toLocaleDateString('en-GB',{year:'numeric',month:'short',day:'numeric'});}catch{return dt||'—';}}
 function fmtDeadline(dt){try{return new Date(dt).toLocaleDateString('en-GB',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch{return dt||'—';}}
 
-const STATUS_CHIP = {WON:'chip-green',LOST:'chip-red',ACTIVE:'chip-blue',VOID:'chip-gray',EXPIRED:'chip-gray'};
+// Legacy status chip (small, for badges row — still used in some places)
+const STATUS_CHIP = {WON:'chip-blue',LOST:'chip-red',ACTIVE:'chip-green',VOID:'chip-gray',EXPIRED:'chip-gray'};
 
 function parseSelections(raw) {
   if(!raw) return [];
@@ -538,7 +604,55 @@ function determineResults(s) {
   return Object.keys(tests).filter(k=>raw.includes(k)).map(k=>({k,hit:tests[k]}));
 }
 
-// ── RENDER CARDS (user-facing style) ──────────────────────
+// ── BUILD RESULT BANNER ────────────────────────────────────
+
+function buildResultBanner(s) {
+  const st = s.status || 'ACTIVE';
+  if(st === 'WON') return `
+    <div class="slip-result-banner banner-won">
+      <div class="banner-icon"><i class="fa fa-check"></i></div>
+      <span class="banner-label">Slip Won!</span>
+      <i class="fa fa-trophy banner-ml"></i>
+    </div>`;
+  if(st === 'LOST') return `
+    <div class="slip-result-banner banner-lost">
+      <div class="banner-icon"><i class="fa fa-xmark"></i></div>
+      <span class="banner-label">Slip Lost</span>
+      <i class="fa fa-circle-xmark banner-ml"></i>
+    </div>`;
+  if(st === 'ACTIVE') return `
+    <div class="slip-result-banner banner-active">
+      <span class="live-pulse"></span>
+      <span class="banner-label">Active</span>
+    </div>`;
+  if(st === 'VOID' || st === 'EXPIRED') return `
+    <div class="slip-result-banner banner-void">
+      <div class="banner-icon"><i class="fa fa-ban"></i></div>
+      <span class="banner-label">${st}</span>
+    </div>`;
+  return '';
+}
+
+// ── BUILD LARGE STATUS CHIP ────────────────────────────────
+
+function buildStatusChipLg(s) {
+  const st = s.status || 'ACTIVE';
+  if(st === 'WON')  return `<span class="chip-won-lg"><i class="fa fa-trophy" style="font-size:10px"></i> WON</span>`;
+  if(st === 'LOST') return `<span class="chip-lost-lg"><i class="fa fa-circle-xmark" style="font-size:10px"></i> LOST</span>`;
+  if(st === 'ACTIVE') return `<span class="chip-active-lg"><span class="live-pulse"></span> ACTIVE</span>`;
+  return `<span class="chip chip-gray">${st}</span>`;
+}
+
+// ── ODDS COLOR ─────────────────────────────────────────────
+
+function oddsColorClass(s) {
+  const st = s.status || 'ACTIVE';
+  if(st === 'WON')  return 'won';
+  if(st === 'LOST') return 'lost';
+  return 'active';
+}
+
+// ── RENDER CARDS ──────────────────────────────────────────
 
 function renderSlips(list) {
   const start = (currentPage-1)*PAGE_SIZE;
@@ -568,20 +682,22 @@ function renderSlips(list) {
 }
 
 function buildSlipCard(s) {
-  const statusClass  = STATUS_CHIP[s.status] || 'chip-gray';
-  const statusLabel  = s.status || 'ACTIVE';
-  const typeClass    = s.type === 'VIP' ? 'chip-gold' : 'chip-blue';
-  const isActive     = !s.status || s.status === 'ACTIVE';
-  const isFinished   = s.gameStatus === 'FINISHED';
-  const isLive       = s.gameStatus === 'LIVE';
-  const hasScore     = s.homeScore != null && s.awayScore != null;
-  const selections   = parseSelections(s.selections);
-  const hasMulti     = selections.length > 0;
-  const winning      = selections.filter(x => x.isWinning === true).length;
-  const losing       = selections.filter(x => x.isWinning === false).length;
-  const results      = !hasMulti ? determineResults(s) : [];
-  const showOdds     = s.totalOdds && parseFloat(s.totalOdds) > 1;
-  const hasCode      = s.bookingCode && s.bookingCode !== 'N/A';
+  const st         = s.status || 'ACTIVE';
+  const typeClass  = s.type === 'VIP' ? 'chip-gold' : 'chip-blue';
+  const isActive   = !s.status || s.status === 'ACTIVE';
+  const isFinished = s.gameStatus === 'FINISHED';
+  const isLive     = s.gameStatus === 'LIVE';
+  const hasScore   = s.homeScore != null && s.awayScore != null;
+  const selections = parseSelections(s.selections);
+  const hasMulti   = selections.length > 0;
+  const winning    = selections.filter(x => x.isWinning === true).length;
+  const losing     = selections.filter(x => x.isWinning === false).length;
+  const results    = !hasMulti ? determineResults(s) : [];
+  const showOdds   = s.totalOdds && parseFloat(s.totalOdds) > 1;
+  const hasCode    = s.bookingCode && s.bookingCode !== 'N/A';
+
+  // Card class for status-tinted borders
+  const cardStatusClass = st === 'WON' ? 'status-won' : st === 'LOST' ? 'status-lost' : isActive ? 'status-active' : '';
 
   // Odds pills for single-game slips
   const oddPills = [
@@ -639,23 +755,36 @@ function buildSlipCard(s) {
 
   const deadline = s.deadline || s.validUntil;
 
+  // Image status pill (shown over image)
+  const imgStatusPill = s.imageUrl ? (
+    st === 'WON'  ? `<div class="slip-img-status-pill img-pill-won"><i class="fa fa-trophy" style="font-size:9px"></i> WON</div>` :
+    st === 'LOST' ? `<div class="slip-img-status-pill img-pill-lost"><i class="fa fa-xmark" style="font-size:9px"></i> LOST</div>` :
+    isActive      ? `<div class="slip-img-status-pill img-pill-active"><span style="width:6px;height:6px;border-radius:50%;background:#fff;display:inline-block"></span> ACTIVE</div>` :
+    ''
+  ) : '';
+
   return `
-    <div class="slip-card" onclick="openDetail('${s.id}')">
+    <div class="slip-card ${cardStatusClass}" onclick="openDetail('${s.id}')">
+
+      <!-- ── RESULT BANNER (always visible at top) ── -->
+      ${buildResultBanner(s)}
+
       ${s.imageUrl ? `
         <div class="slip-img-wrap" onclick="event.stopPropagation();openLightbox('${s.imageUrl}')">
           <img src="${s.imageUrl}" alt="Slip" loading="lazy"/>
           <div class="slip-img-overlay"></div>
+          ${imgStatusPill}
         </div>` : ''}
 
       <div class="slip-body">
-        <!-- Bookmaker + status -->
+        <!-- Bookmaker + large status chip -->
         <div class="slip-bm-row">
           <div>
             <div class="slip-bm-name">${s.bookmaker}${hasMulti ? `<span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;font-family:var(--font-mono)">${s.totalSelections||selections.length} games</span>` : ''}</div>
             ${hasCode ? `<div class="slip-code-tag">${s.bookingCode}</div>` : ''}
           </div>
           <div class="slip-badges">
-            <span class="chip ${statusClass}">${statusLabel}</span>
+            ${buildStatusChipLg(s)}
             <span class="chip ${typeClass}">${s.type==='VIP'?'<i class="fa fa-crown" style="font-size:8px"></i> ':''}${s.type||'FREE'}</span>
           </div>
         </div>
@@ -667,12 +796,12 @@ function buildSlipCard(s) {
         <!-- Odds pills (single game) -->
         ${!hasMulti && oddPills ? `<div class="slip-odds-pills">${oddPills}</div>` : ''}
 
-        <!-- Total odds + deadline -->
+        <!-- Total odds + deadline — odds color by status -->
         ${showOdds ? `
           <div class="slip-total-row">
             <div>
               <div class="slip-total-label">Total odds</div>
-              <div class="slip-total-odds">${parseFloat(s.totalOdds).toFixed(2)}×</div>
+              <div class="slip-total-odds ${oddsColorClass(s)}">${parseFloat(s.totalOdds).toFixed(2)}×</div>
             </div>
             ${deadline ? `
               <div class="slip-deadline">
@@ -766,9 +895,16 @@ function openDetail(id) {
       </div>`;
   }
 
+  const st = s.status || 'ACTIVE';
+  const oddsColorStyle = st==='WON' ? 'color:var(--blue)' : st==='LOST' ? 'color:var(--accent2)' : 'color:var(--gold)';
+
   document.getElementById('dm-body').innerHTML = `
+    <!-- Result banner inside modal -->
+    <div style="margin:-22px -22px 20px;border-radius:0">
+      ${buildResultBanner(s)}
+    </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
-      <span class="chip ${STATUS_CHIP[s.status]||'chip-gray'}">${s.status||'ACTIVE'}</span>
+      ${buildStatusChipLg(s)}
       <span class="chip ${s.type==='VIP'?'chip-gold':'chip-blue'}">${s.type||'FREE'}</span>
       <span class="chip ${s.published?'chip-green':'chip-gray'}">${s.published?'Published':'Draft'}</span>
     </div>
@@ -784,9 +920,9 @@ function openDetail(id) {
     </div>` : ''}
     ${selectionsHTML}
     ${s.totalOdds && parseFloat(s.totalOdds)>1 ? `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gold-lt);border:1px solid #3a2810;border-radius:8px;margin-bottom:16px">
-      <span style="font-size:13px;color:var(--gold);font-weight:600">Total Odds</span>
-      <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--gold)">${parseFloat(s.totalOdds).toFixed(2)}</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;margin-bottom:16px">
+      <span style="font-size:13px;color:var(--text2);font-weight:600">Total Odds</span>
+      <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;${oddsColorStyle}">${parseFloat(s.totalOdds).toFixed(2)}</span>
     </div>` : ''}
     ${s.description ? `<div style="font-size:13px;color:var(--text2);margin-bottom:14px;padding:10px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">${s.description}</div>` : ''}
     ${s.imageUrl ? `<img src="${s.imageUrl}" style="width:100%;border-radius:8px;margin-bottom:14px;max-height:200px;object-fit:cover;cursor:zoom-in" onclick="openLightbox('${s.imageUrl}')">` : ''}
@@ -825,7 +961,7 @@ async function saveSlipStatus() {
     ALL_SLIPS = ALL_SLIPS.map(s => s.id===detailSlipId ? {...s,status} : s);
     updateStats(); buildCharts(); filterAndRender();
     closeModal('detail-modal');
-    showToast(`Status → ${status}`, status==='WON'?'green':status==='LOST'?'red':'blue');
+    showToast(`Status → ${status}`, status==='WON'?'blue':status==='LOST'?'red':'green');
   } catch(e) { showToast(e.message,'red'); }
   finally { btn.disabled=false; btn.innerHTML='<i class="fa fa-check"></i> Save Status'; }
 }
@@ -848,7 +984,7 @@ async function autoSettle(id) {
     if(!res.success) throw new Error(res.message);
     ALL_SLIPS = ALL_SLIPS.map(s => s.id===id ? {...s,status:res.data.status} : s);
     updateStats(); buildCharts(); filterAndRender();
-    showToast(`Auto-settled → ${res.data.status}`, res.data.status==='WON'?'green':'red');
+    showToast(`Auto-settled → ${res.data.status}`, res.data.status==='WON'?'blue':'red');
   } catch(e) { showToast(e.message,'red'); }
 }
 
