@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>BetChale — Payment Tracker</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#0f0e0d; --surface:#1a1917; --panel:#212019;
+  --border:#2e2c29; --border2:#3a3834;
+  --text:#e8e6e1; --text2:#a09d97; --muted:#5c5a56;
+  --accent:#2d9e6e; --accent-lt:#0f2d1f;
+  --accent2:#e05a2b; --accent2-lt:#2d1610;
+  --gold:#c8943a; --gold-lt:#2a1f0a;
+  --blue:#3a72c8; --blue-lt:#0d1e3a;
+  --radius:10px; --radius-lg:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.5);
+  --font:'Sora',sans-serif;
+  --font-serif:'Crimson Pro',serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --page-pad:28px;
+  --topbar-h:58px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(15,14,13,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 var(--page-pad);height:var(--topbar-h);}
+.topbar-brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{width:32px;height:32px;border-radius:8px;background:var(--text);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:17px;height:17px;fill:none;stroke:#0f0e0d;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:-.3px;}
+.topbar-divider{width:1px;height:20px;background:var(--border);flex-shrink:0;}
+.topbar-title{font-size:14px;font-weight:600;color:var(--text2);flex:1;}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+
+/* LIVE DOT */
+.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.6s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.live-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;letter-spacing:.04em;}
+
+/* PAGE */
+.page-wrap{padding:var(--page-pad);max-width:1500px;margin:0 auto;}
+.page-headline{font-family:var(--font-serif);font-size:28px;font-weight:600;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:24px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 18px 14px;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.stat-card.card-green::after{background:linear-gradient(90deg,var(--accent),transparent);}
+.stat-card.card-blue::after{background:linear-gradient(90deg,var(--blue),transparent);}
+.stat-card.card-gold::after{background:linear-gradient(90deg,var(--gold),transparent);}
+.stat-card.card-red::after{background:linear-gradient(90deg,var(--accent2),transparent);}
+.stat-card.card-gray::after{background:linear-gradient(90deg,var(--muted),transparent);}
+.stat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:12px;}
+.ic-green{background:var(--accent-lt);color:var(--accent);}
+.ic-red{background:var(--accent2-lt);color:var(--accent2);}
+.ic-gold{background:var(--gold-lt);color:var(--gold);}
+.ic-blue{background:var(--blue-lt);color:var(--blue);}
+.ic-gray{background:var(--panel);color:var(--text2);}
+.stat-label{font-size:11px;color:var(--text2);font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;}
+.stat-val{font-size:30px;font-weight:700;font-family:var(--font-mono);line-height:1;letter-spacing:-.5px;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;}
+.stat-delta{display:inline-flex;align-items:center;gap:3px;margin-top:8px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;}
+.delta-up{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;}
+.delta-neutral{background:var(--panel);color:var(--muted);border:1px solid var(--border2);}
+
+/* CHARTS GRID */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+.charts-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.card-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.card-title{font-size:14px;font-weight:700;}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.card-pad{padding:20px;}
+.chart-wrap{position:relative;padding:20px;}
+.chart-wrap-sm{position:relative;padding:16px;}
+
+/* FILTERS BAR */
+.filters-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+.filter-group{display:flex;gap:4px;flex-wrap:wrap;}
+.flt-btn{padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font);transition:all .12s;min-height:36px;display:inline-flex;align-items:center;gap:5px;}
+.flt-btn:hover{background:var(--panel);color:var(--text);}
+.flt-btn.active{background:var(--accent-lt);color:var(--accent);border-color:#1a4d32;}
+.flt-btn.active-blue{background:var(--blue-lt)!important;color:var(--blue)!important;border-color:#1a3a6e!important;}
+.flt-btn.active-gold{background:var(--gold-lt)!important;color:var(--gold)!important;border-color:#3a2810!important;}
+.flt-btn.active-red{background:var(--accent2-lt)!important;color:var(--accent2)!important;border-color:#5a2518!important;}
+.flt-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(255,255,255,.08);font-family:var(--font-mono);}
+.search-input-wrap{position:relative;flex:1;min-width:200px;}
+.search-input-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;pointer-events:none;}
+.search-input-wrap input{width:100%;background:var(--panel);border:1.5px solid var(--border2);border-radius:8px;padding:8px 12px 8px 34px;font-family:var(--font);font-size:13px;color:var(--text);outline:none;min-height:36px;}
+.search-input-wrap input:focus{border-color:var(--accent);}
+.search-input-wrap input::placeholder{color:var(--muted);}
+
+/* TABLE */
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:24px;}
+.table-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--panel);white-space:nowrap;}
+td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.02);}
+td.mono{font-family:var(--font-mono);font-size:12px;}
+th:last-child,td:last-child{text-align:right;}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono);white-space:nowrap;}
+.chip-green{background:var(--accent-lt);color:var(--accent);border:1px solid #1a4d32;}
+.chip-red{background:var(--accent2-lt);color:var(--accent2);border:1px solid #5a2518;}
+.chip-gold{background:var(--gold-lt);color:var(--gold);border:1px solid #3a2810;}
+.chip-blue{background:var(--blue-lt);color:var(--blue);border:1px solid #0d2040;}
+.chip-gray{background:var(--panel);color:var(--text2);border:1px solid var(--border2);}
+
+/* CURRENCY BADGES */
+.cur-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:5px;font-family:var(--font-mono);font-size:11px;font-weight:700;}
+.cur-GHS{background:#0f2d1f;color:#2d9e6e;border:1px solid #1a4d32;}
+.cur-NGN{background:#1e0d38;color:#a855f7;border:1px solid #3d1a72;}
+.cur-USD{background:var(--blue-lt);color:var(--blue);border:1px solid #1a3a6e;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:8px;font-family:var(--font);font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;min-height:42px;user-select:none;}
+.btn-primary{background:var(--text);color:#0f0e0d;}
+.btn-primary:hover{background:#f0ede8;transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border);}
+.btn-ghost:hover{background:var(--panel);color:var(--text);}
+.btn-sm{padding:8px 14px;font-size:12.5px;min-height:36px;}
+.btn:active:not(:disabled){transform:scale(.97)!important;}
+
+/* SPARKLINE */
+.sparkline-wrap{display:flex;align-items:center;justify-content:center;}
+
+/* PROGRESS BARS */
+.progress-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.progress-label{font-size:12px;font-weight:600;width:36px;flex-shrink:0;}
+.progress-bar-bg{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.progress-val{font-family:var(--font-mono);font-size:11px;color:var(--text2);min-width:70px;text-align:right;flex-shrink:0;}
+
+/* LAST UPDATED */
+.last-updated{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+
+/* PAGINATION */
+.pagination{display:flex;gap:6px;align-items:center;justify-content:center;padding:14px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.pg-btn{padding:7px 13px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-family:var(--font-mono);min-height:36px;transition:all .12s;}
+.pg-btn:hover{background:var(--panel);}
+.pg-btn.active{background:var(--accent-lt);color:var(--accent);border-color:#1a4d32;}
+.pg-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* SPINNER / LOADING */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state{display:flex;align-items:center;justify-content:center;padding:48px;gap:12px;color:var(--muted);font-size:13px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);font-size:13px;animation:toastIn .25s ease;min-width:240px;max-width:calc(100vw - 40px);}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--panel);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* SUMMARY HIGHLIGHT ROW */
+.summary-highlight{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;}
+.sh-cell{background:var(--surface);padding:20px 22px;text-align:center;}
+.sh-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.sh-val{font-family:var(--font-mono);font-size:26px;font-weight:700;line-height:1;}
+.sh-sub{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* REFRESH SPIN ANIMATION */
+@keyframes rotateSpin{to{transform:rotate(360deg)}}
+.spinning i{animation:rotateSpin .5s linear infinite;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.charts-row{grid-template-columns:1fr;}.charts-row-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){
+  :root{--page-pad:14px;--topbar-h:52px;}
+  html{font-size:13.5px;}
+  .stats-row{grid-template-columns:1fr 1fr;gap:10px;}
+  .stat-val{font-size:22px;}
+  .charts-row,.charts-row-3{grid-template-columns:1fr;}
+  .topbar{padding:0 14px;gap:8px;}
+  .topbar-divider{display:none;}
+  .summary-highlight{grid-template-columns:1fr;}
+  .table-responsive{overflow-x:auto;}
+  table{min-width:640px;}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .stat-val{font-size:20px;}
+  .flt-btn{padding:6px 10px;font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+    <div class="brand-name">BetChale</div>
+  </div>
+  <div class="topbar-divider"></div>
+  <div class="topbar-title">VIP Payment Tracker</div>
+  <div class="topbar-actions">
+    <div class="live-badge"><span class="live-dot"></span> Live</div>
+    <span class="last-updated" id="lastUpdatedText"><i class="fa fa-clock"></i> —</span>
+    <button class="btn btn-ghost btn-sm" id="refreshBtn" onclick="doRefresh()" title="Refresh"><i class="fa fa-rotate"></i></button>
+    <button class="btn btn-ghost btn-sm" onclick="goBack()"><i class="fa fa-arrow-left"></i></button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="page-headline">VIP Payment Tracker</div>
+  <div class="page-sub">
+    <span>All amounts in USD equivalent · Auto-refreshes every 30s</span>
+    <span style="margin-left:auto;font-size:12px;color:var(--muted)" id="genAt">—</span>
+  </div>
+
+  <!-- SUMMARY HIGHLIGHT -->
+  <div class="summary-highlight">
+    <div class="sh-cell">
+      <div class="sh-label">Today's Revenue</div>
+      <div class="sh-val" id="sh-daily" style="color:var(--accent)">—</div>
+      <div class="sh-sub" id="sh-daily-sub">— transactions</div>
+    </div>
+    <div class="sh-cell">
+      <div class="sh-label">This Week (7 days)</div>
+      <div class="sh-val" id="sh-week" style="color:var(--gold)">—</div>
+      <div class="sh-sub" id="sh-week-sub">— transactions</div>
+    </div>
+    <div class="sh-cell">
+      <div class="sh-label">All-Time Revenue</div>
+      <div class="sh-val" id="sh-total" style="color:var(--blue)">—</div>
+      <div class="sh-sub" id="sh-total-sub">— total transactions</div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-row">
+    <div class="stat-card card-green">
+      <div class="stat-icon ic-green"><i class="fa fa-arrow-trend-up"></i></div>
+      <div class="stat-label">Today's Revenue</div>
+      <div class="stat-val" id="st-daily-usd">—</div>
+      <div class="stat-sub" id="st-daily-txns">— transactions today</div>
+      <div class="stat-delta delta-up" id="st-daily-delta" style="display:none"><i class="fa fa-arrow-up" style="font-size:9px"></i> <span></span></div>
+    </div>
+    <div class="stat-card card-gold">
+      <div class="stat-icon ic-gold"><i class="fa fa-calendar-week"></i></div>
+      <div class="stat-label">Weekly Revenue</div>
+      <div class="stat-val" id="st-week-usd">—</div>
+      <div class="stat-sub" id="st-week-txns">— transactions this week</div>
+      <div class="stat-delta delta-neutral"><i class="fa fa-clock" style="font-size:9px"></i> Last 7 days</div>
+    </div>
+    <div class="stat-card card-blue">
+      <div class="stat-icon ic-blue"><i class="fa fa-chart-line"></i></div>
+      <div class="stat-label">All-Time Revenue</div>
+      <div class="stat-val" id="st-total-usd">—</div>
+      <div class="stat-sub" id="st-total-txns">— total transactions</div>
+    </div>
+    <div class="stat-card card-green">
+      <div class="stat-icon ic-green"><i class="fa fa-crown"></i></div>
+      <div class="stat-label">Active VIPs Now</div>
+      <div class="stat-val" id="st-active-vips" style="color:var(--accent)">—</div>
+      <div class="stat-sub">current subscribers</div>
+    </div>
+    <div class="stat-card card-gray">
+      <div class="stat-icon ic-gray"><i class="fa fa-percent"></i></div>
+      <div class="stat-label">Success Rate</div>
+      <div class="stat-val" id="st-conv-rate">—</div>
+      <div class="stat-sub">successful payments</div>
+    </div>
+    <div class="stat-card card-gold">
+      <div class="stat-icon ic-gold"><i class="fa fa-coins"></i></div>
+      <div class="stat-label">Avg. Transaction</div>
+      <div class="stat-val" id="st-avg-txn">—</div>
+      <div class="stat-sub">per successful payment</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 1 — Revenue bar + Currency breakdown -->
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Revenue — Last 7 Days</div>
+          <div class="card-sub">Daily USD equivalent · auto-updating</div>
+        </div>
+        <div class="filter-group" id="chart-range-btns">
+          <button class="flt-btn active" onclick="setChartRange(7,this)">7D</button>
+          <button class="flt-btn" onclick="setChartRange(14,this)">14D</button>
+          <button class="flt-btn" onclick="setChartRange(30,this)">30D</button>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:260px;">
+        <canvas id="revenueBarChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Currency Breakdown</div>
+          <div class="card-sub">All-time by currency</div>
+        </div>
+      </div>
+      <div class="chart-wrap-sm" style="height:180px;display:flex;align-items:center;justify-content:center;">
+        <canvas id="currencyDoughnut"></canvas>
+      </div>
+      <div style="padding:0 16px 16px;" id="cur-breakdown-bars"></div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW 2 — Status donut + Hourly txns + Channel split -->
+  <div class="charts-row-3">
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Payment Status</div>
+          <div class="card-sub">Success / Pending / Failed</div>
+        </div>
+      </div>
+      <div style="height:200px;display:flex;align-items:center;justify-content:center;padding:16px;">
+        <canvas id="statusDoughnut"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Txns by Hour (today)</div>
+          <div class="card-sub">Transaction volume per hour</div>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:200px;">
+        <canvas id="hourlyLineChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div>
+          <div class="card-title">Payment Channel</div>
+          <div class="card-sub">card / bank / mobile / ussd</div>
+        </div>
+      </div>
+      <div style="height:200px;display:flex;align-items:center;justify-content:center;padding:16px;">
+        <canvas id="channelDoughnut"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT PAYMENTS TABLE -->
+  <div class="filters-bar">
+    <div class="search-input-wrap">
+      <i class="fa fa-search"></i>
+      <input id="pay-search" placeholder="Search reference, email, channel…" oninput="filterTable()" autocomplete="off"/>
+    </div>
+    <div class="filter-group">
+      <button class="flt-btn active" onclick="setStatusFilter('ALL',this)">All <span class="flt-count" id="fc-all">—</span></button>
+      <button class="flt-btn" onclick="setStatusFilter('SUCCESS',this)">
+        <i class="fa fa-check-circle" style="font-size:10px"></i> Success <span class="flt-count" id="fc-success">—</span>
+      </button>
+      <button class="flt-btn" onclick="setStatusFilter('PENDING',this)">
+        <i class="fa fa-clock" style="font-size:10px"></i> Pending <span class="flt-count" id="fc-pending">—</span>
+      </button>
+      <button class="flt-btn" onclick="setStatusFilter('FAILED',this)">
+        <i class="fa fa-times-circle" style="font-size:10px"></i> Failed <span class="flt-count" id="fc-failed">—</span>
+      </button>
+    </div>
+    <div class="filter-group">
+      <button class="flt-btn active" onclick="setCurFilter('ALL',this)">All Currencies</button>
+      <button class="flt-btn" onclick="setCurFilter('GHS',this)">GHS</button>
+      <button class="flt-btn" onclick="setCurFilter('NGN',this)">NGN</button>
+      <button class="flt-btn" onclick="setCurFilter('USD',this)">USD</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-hd">
+      <div>
+        <div class="card-title">All Payments</div>
+        <div class="card-sub" id="table-showing">Loading…</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="exportCSV()"><i class="fa fa-download"></i> Export CSV</button>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>USD Equiv.</th>
+            <th>Status</th>
+            <th>Channel</th>
+            <th>Paid At</th>
+          </tr>
+        </thead>
+        <tbody id="payments-tbody">
+          <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)"><div class="spinner" style="margin:0 auto"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const API_BASE = 'https://bettingbackend-y3ck.onrender.com';
+const token = () => localStorage.getItem('bc_jwt') || '';
+
+async function apiCall(method, path) {
+  const headers = { 'ngrok-skip-browser-warning': 'true' };
+  if (token()) headers['Authorization'] = `Bearer ${token()}`;
+  const res = await fetch(API_BASE + path, { method, headers });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.message || `HTTP ${res.status}`);
+  return json;
+}
+
+function goBack() {
+  if (window.history.length > 1) window.history.back();
+  else window.location.href = 'slips.html';
+}
+
+// ── EXCHANGE RATES (fallback if no live conversion) ─────────────────────────
+const RATES = { GHS: 0.069, NGN: 0.00061, USD: 1 };
+const SYMBOLS = { GHS: '₵', NGN: '₦', USD: '$' };
+const CUR_COLORS = { GHS: '#2d9e6e', NGN: '#a855f7', USD: '#3a72c8' };
+
+function toUSD(amount, currency) {
+  return amount * (RATES[currency] || 1);
+}
+function fmtUSD(v) {
+  return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtAmt(amount, currency) {
+  const sym = SYMBOLS[currency] || '';
+  return sym + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function fmtDateShort(dt) {
+  if (!dt) return '—';
+  try { return new Date(dt).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch { return dt; }
+}
+function fmtFull(dt) {
+  if (!dt) return '—';
+  try { return new Date(dt).toLocaleString('en-GB', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+  catch { return dt; }
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let ALL_PAYMENTS = [];
+let FILTERS = { status: 'ALL', currency: 'ALL', search: '' };
+let chartRange = 7;
+const PAGE_SIZE = 20;
+let currentPage = 1;
+
+// Chart instances (so we can destroy & rebuild)
+let revenueChart, currencyChart, statusChart, hourlyChart, channelChart;
+
+// ── LOAD ───────────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res = await apiCall('GET', '/api/admin/payments/stats');
+    const d = res; // AdminPaymentStatsResponse directly
+
+    // Summary highlight
+    document.getElementById('sh-daily').textContent = fmtUSD(d.dailyTotalUsd || 0);
+    document.getElementById('sh-daily-sub').textContent = (d.dailyCount || 0) + ' transactions';
+    document.getElementById('sh-week').textContent = fmtUSD(d.weeklyTotalUsd || 0);
+    document.getElementById('sh-week-sub').textContent = (d.weeklyCount || 0) + ' transactions';
+    document.getElementById('sh-total').textContent = fmtUSD(d.totalUsd || 0);
+    document.getElementById('sh-total-sub').textContent = (d.totalCount || 0) + ' total';
+
+    // Stat cards
+    document.getElementById('st-daily-usd').textContent = fmtUSD(d.dailyTotalUsd || 0);
+    document.getElementById('st-daily-txns').textContent = (d.dailyCount || 0) + ' transactions today';
+    document.getElementById('st-week-usd').textContent = fmtUSD(d.weeklyTotalUsd || 0);
+    document.getElementById('st-week-txns').textContent = (d.weeklyCount || 0) + ' transactions this week';
+    document.getElementById('st-total-usd').textContent = fmtUSD(d.totalUsd || 0);
+    document.getElementById('st-total-txns').textContent = (d.totalCount || 0) + ' total transactions';
+    document.getElementById('st-active-vips').textContent = d.activeVips || 0;
+
+    // Conv rate & avg txn from payments
+    const successPmts = ALL_PAYMENTS.filter(p => p.status === 'SUCCESS');
+    const allPmts = ALL_PAYMENTS.length;
+    const rate = allPmts ? Math.round((successPmts.length / allPmts) * 100) : 0;
+    document.getElementById('st-conv-rate').textContent = rate + '%';
+    const avgUsd = successPmts.length ? (successPmts.reduce((s, p) => s + toUSD(p.amount, p.currency), 0) / successPmts.length) : 0;
+    document.getElementById('st-avg-txn').textContent = fmtUSD(avgUsd);
+
+    // Last7Days → revenue bar chart data
+    if (d.last7Days) buildRevenueChart(d.last7Days);
+    // Currency breakdown
+    if (d.currencyBreakdown) buildCurrencyChart(d.currencyBreakdown);
+
+    document.getElementById('genAt').textContent = 'Generated: ' + new Date().toLocaleTimeString();
+  } catch (e) {
+    // Fall back to building from ALL_PAYMENTS
+    buildChartsFromPayments();
+  }
+}
+
+async function loadPayments() {
+  try {
+    const res = await apiCall('GET', '/api/admin/payments/all');
+    ALL_PAYMENTS = res.data || res || [];
+  } catch (e) {
+    // If endpoint not ready yet, still render with empty
+    ALL_PAYMENTS = [];
+  }
+  updateFilterCounts();
+  filterTable();
+  buildChartsFromPayments();
+  buildStatusChart();
+  buildHourlyChart();
+  buildChannelChart();
+  document.getElementById('lastUpdatedText').innerHTML = '<i class="fa fa-clock"></i> ' + new Date().toLocaleTimeString();
+}
+
+// ── CHARTS ─────────────────────────────────────────────────────────────────
+function buildRevenueChart(last7Days) {
+  const labels = last7Days.map(d => {
+    const dt = new Date(d.date);
+    return dt.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' });
+  });
+  const data = last7Days.map(d => parseFloat((d.totalUsd || 0).toFixed(2)));
+  const ctx = document.getElementById('revenueBarChart');
+  if (revenueChart) revenueChart.destroy();
+  revenueChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Revenue (USD)',
+        data,
+        backgroundColor: data.map((v, i) => i === data.length - 1 ? '#2d9e6e' : 'rgba(45,158,110,0.35)'),
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ' ' + fmtUSD(c.parsed.y) } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#5c5a56', font: { family: "'JetBrains Mono',monospace", size: 11 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5c5a56', font: { family: "'JetBrains Mono',monospace", size: 11 }, callback: v => '$' + v } }
+      }
+    }
+  });
+}
+
+function buildCurrencyChart(breakdown) {
+  const labels = Object.keys(breakdown);
+  const data = labels.map(k => parseFloat(breakdown[k].toFixed(2)));
+  const colors = labels.map(k => CUR_COLORS[k] || '#5c5a56');
+
+  const ctx = document.getElementById('currencyDoughnut');
+  if (currencyChart) currencyChart.destroy();
+  currencyChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Progress bars
+  const max = Math.max(...data, 1);
+  const barsHTML = labels.map((cur, i) => `
+    <div class="progress-item">
+      <span class="progress-label" style="color:${colors[i]}">${cur}</span>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${Math.round((data[i]/max)*100)}%;background:${colors[i]}"></div></div>
+      <span class="progress-val">${fmtAmt(data[i], cur)}</span>
+    </div>`).join('');
+  document.getElementById('cur-breakdown-bars').innerHTML = barsHTML;
+}
+
+function buildStatusChart() {
+  const success = ALL_PAYMENTS.filter(p => p.status === 'SUCCESS').length;
+  const pending = ALL_PAYMENTS.filter(p => p.status === 'PENDING').length;
+  const failed  = ALL_PAYMENTS.filter(p => p.status === 'FAILED').length;
+  const ctx = document.getElementById('statusDoughnut');
+  if (statusChart) statusChart.destroy();
+  statusChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [`Success (${success})`, `Pending (${pending})`, `Failed (${failed})`],
+      datasets: [{ data: [success, pending, failed], backgroundColor: ['#2d9e6e', '#c8943a', '#e05a2b'], borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Sora',sans-serif", size: 11 }, color: '#a09d97', boxWidth: 10, padding: 14 } } }
+    }
+  });
+}
+
+function buildHourlyChart() {
+  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const counts = Array(24).fill(0);
+  ALL_PAYMENTS.filter(p => p.status === 'SUCCESS' && p.paidAt).forEach(p => {
+    const d = new Date(p.paidAt);
+    if (d >= today) counts[d.getHours()]++;
+  });
+  const ctx = document.getElementById('hourlyLineChart');
+  if (hourlyChart) hourlyChart.destroy();
+  hourlyChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: hours.map(h => h + ':00'),
+      datasets: [{
+        data: counts,
+        borderColor: '#c8943a',
+        backgroundColor: 'rgba(200,148,58,0.1)',
+        borderWidth: 2,
+        pointRadius: 2,
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: '#5c5a56', font: { size: 10 }, maxTicksLimit: 8 }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#5c5a56', font: { size: 10 }, stepSize: 1 },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+}
+
+function buildChannelChart() {
+  const channelCounts = {};
+  ALL_PAYMENTS.filter(p => p.status === 'SUCCESS' && p.channel).forEach(p => {
+    channelCounts[p.channel] = (channelCounts[p.channel] || 0) + 1;
+  });
+  const labels = Object.keys(channelCounts);
+  const data   = labels.map(k => channelCounts[k]);
+  const colors = ['#3a72c8', '#2d9e6e', '#c8943a', '#e05a2b', '#a855f7'];
+  const ctx = document.getElementById('channelDoughnut');
+  if (channelChart) channelChart.destroy();
+  channelChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderWidth: 0, hoverOffset: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: { legend: { position: 'bottom', labels: { font: { family: "'Sora',sans-serif", size: 11 }, color: '#a09d97', boxWidth: 10, padding: 12 } } }
+    }
+  });
+}
+
+function buildChartsFromPayments() {
+  // Build 7-day revenue from payments directly (fallback)
+  const days = [];
+  for (let i = chartRange - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const start = new Date(d); start.setHours(0, 0, 0, 0);
+    const end   = new Date(d); end.setHours(23, 59, 59, 999);
+    const dayTotal = ALL_PAYMENTS.filter(p => p.status === 'SUCCESS' && p.paidAt).reduce((s, p) => {
+      const pd = new Date(p.paidAt);
+      return pd >= start && pd <= end ? s + toUSD(p.amount, p.currency) : s;
+    }, 0);
+    days.push({ date: d.toISOString().split('T')[0], totalUsd: dayTotal, count: 0 });
+  }
+  buildRevenueChart(days);
+
+  // Currency breakdown
+  const curBreak = {};
+  ALL_PAYMENTS.filter(p => p.status === 'SUCCESS').forEach(p => {
+    curBreak[p.currency] = (curBreak[p.currency] || 0) + p.amount;
+  });
+  if (Object.keys(curBreak).length) buildCurrencyChart(curBreak);
+
+  // Stats from payments
+  const success = ALL_PAYMENTS.filter(p => p.status === 'SUCCESS');
+  const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
+  const weekStart  = new Date(); weekStart.setDate(weekStart.getDate() - 6); weekStart.setHours(0, 0, 0, 0);
+
+  const todayP = success.filter(p => p.paidAt && new Date(p.paidAt) >= todayStart);
+  const weekP  = success.filter(p => p.paidAt && new Date(p.paidAt) >= weekStart);
+
+  const dailyUSD = todayP.reduce((s, p) => s + toUSD(p.amount, p.currency), 0);
+  const weekUSD  = weekP.reduce((s, p) => s + toUSD(p.amount, p.currency), 0);
+  const totalUSD = success.reduce((s, p) => s + toUSD(p.amount, p.currency), 0);
+
+  document.getElementById('sh-daily').textContent = fmtUSD(dailyUSD);
+  document.getElementById('sh-daily-sub').textContent = todayP.length + ' transactions';
+  document.getElementById('sh-week').textContent = fmtUSD(weekUSD);
+  document.getElementById('sh-week-sub').textContent = weekP.length + ' transactions';
+  document.getElementById('sh-total').textContent = fmtUSD(totalUSD);
+  document.getElementById('sh-total-sub').textContent = success.length + ' total';
+
+  document.getElementById('st-daily-usd').textContent = fmtUSD(dailyUSD);
+  document.getElementById('st-daily-txns').textContent = todayP.length + ' transactions today';
+  document.getElementById('st-week-usd').textContent = fmtUSD(weekUSD);
+  document.getElementById('st-week-txns').textContent = weekP.length + ' transactions this week';
+  document.getElementById('st-total-usd').textContent = fmtUSD(totalUSD);
+  document.getElementById('st-total-txns').textContent = success.length + ' total transactions';
+
+  const rate = ALL_PAYMENTS.length ? Math.round((success.length / ALL_PAYMENTS.length) * 100) : 0;
+  document.getElementById('st-conv-rate').textContent = rate + '%';
+
+  const avgUsd = success.length ? (totalUSD / success.length) : 0;
+  document.getElementById('st-avg-txn').textContent = fmtUSD(avgUsd);
+}
+
+function setChartRange(days, btn) {
+  chartRange = days;
+  document.querySelectorAll('#chart-range-btns .flt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildChartsFromPayments();
+}
+
+// ── FILTER & TABLE ─────────────────────────────────────────────────────────
+function updateFilterCounts() {
+  document.getElementById('fc-all').textContent     = ALL_PAYMENTS.length;
+  document.getElementById('fc-success').textContent = ALL_PAYMENTS.filter(p => p.status === 'SUCCESS').length;
+  document.getElementById('fc-pending').textContent = ALL_PAYMENTS.filter(p => p.status === 'PENDING').length;
+  document.getElementById('fc-failed').textContent  = ALL_PAYMENTS.filter(p => p.status === 'FAILED').length;
+}
+
+function setStatusFilter(val, btn) {
+  FILTERS.status = val;
+  document.querySelectorAll('.filters-bar .filter-group:nth-child(2) .flt-btn').forEach(b => {
+    b.classList.remove('active', 'active-blue', 'active-red');
+  });
+  if (val === 'SUCCESS') btn.classList.add('active-blue');
+  else if (val === 'FAILED') btn.classList.add('active-red');
+  else btn.classList.add('active');
+  currentPage = 1;
+  filterTable();
+}
+
+function setCurFilter(val, btn) {
+  FILTERS.currency = val;
+  document.querySelectorAll('.filters-bar .filter-group:nth-child(3) .flt-btn').forEach(b => {
+    b.classList.remove('active', 'active-gold');
+  });
+  if (val !== 'ALL') btn.classList.add('active-gold');
+  else btn.classList.add('active');
+  currentPage = 1;
+  filterTable();
+}
+
+function filterTable() {
+  const q = (document.getElementById('pay-search')?.value || '').toLowerCase();
+  let list = [...ALL_PAYMENTS];
+  if (FILTERS.status !== 'ALL') list = list.filter(p => p.status === FILTERS.status);
+  if (FILTERS.currency !== 'ALL') list = list.filter(p => p.currency === FILTERS.currency);
+  if (q) list = list.filter(p =>
+    (p.reference || '').toLowerCase().includes(q) ||
+    (p.userEmail || '').toLowerCase().includes(q) ||
+    (p.channel || '').toLowerCase().includes(q)
+  );
+  renderTable(list);
+}
+
+function renderTable(list) {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = list.slice(start, start + PAGE_SIZE);
+  const tbody = document.getElementById('payments-tbody');
+  document.getElementById('table-showing').textContent = `Showing ${Math.min(list.length, start + PAGE_SIZE)} of ${list.length} payments`;
+
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)">No payments match your filters</td></tr>`;
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = page.map(p => {
+    const statusChip = {
+      SUCCESS: `<span class="chip chip-green"><i class="fa fa-check" style="font-size:8px"></i> Success</span>`,
+      PENDING: `<span class="chip chip-gold"><i class="fa fa-clock" style="font-size:8px"></i> Pending</span>`,
+      FAILED:  `<span class="chip chip-red"><i class="fa fa-times" style="font-size:8px"></i> Failed</span>`,
+    }[p.status] || `<span class="chip chip-gray">${p.status || '—'}</span>`;
+
+    const curBadge = `<span class="cur-badge cur-${p.currency || 'USD'}">${p.currency || '—'}</span>`;
+    const usdEq = toUSD(p.amount || 0, p.currency || 'USD');
+
+    return `<tr>
+      <td class="mono" style="color:var(--accent);font-size:11px">${(p.reference || '—').substring(0, 20)}</td>
+      <td style="font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.userEmail || '—'}</td>
+      <td class="mono">${fmtAmt(p.amount || 0, p.currency || 'USD')}</td>
+      <td>${curBadge}</td>
+      <td class="mono" style="color:var(--blue)">${fmtUSD(usdEq)}</td>
+      <td>${statusChip}</td>
+      <td style="color:var(--text2);font-size:12px">${p.channel || '—'}</td>
+      <td style="color:var(--muted);font-size:11px">${fmtDateShort(p.paidAt || p.createdAt)}</td>
+    </tr>`;
+  }).join('');
+
+  // Pagination
+  const totalPages = Math.ceil(list.length / PAGE_SIZE);
+  const pgEl = document.getElementById('pagination');
+  if (totalPages <= 1) { pgEl.innerHTML = ''; return; }
+  let pgHTML = `<button class="pg-btn" onclick="goPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹ Prev</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1)
+      pgHTML += `<button class="pg-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    else if (Math.abs(i - currentPage) === 2)
+      pgHTML += `<span style="color:var(--muted);padding:0 4px">…</span>`;
+  }
+  pgHTML += `<button class="pg-btn" onclick="goPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next ›</button>`;
+  pgEl.innerHTML = pgHTML;
+}
+
+function goPage(p) { currentPage = p; filterTable(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+// ── EXPORT CSV ─────────────────────────────────────────────────────────────
+function exportCSV() {
+  const headers = ['Reference', 'Email', 'Amount', 'Currency', 'USD_Equivalent', 'Status', 'Channel', 'Paid_At'];
+  const rows = ALL_PAYMENTS.map(p => [
+    p.reference || '',
+    p.userEmail || '',
+    p.amount || 0,
+    p.currency || '',
+    toUSD(p.amount || 0, p.currency || 'USD').toFixed(2),
+    p.status || '',
+    p.channel || '',
+    fmtFull(p.paidAt || p.createdAt)
+  ]);
+  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'vip-payments-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  showToast('CSV exported!', 'green');
+}
+
+// ── REFRESH ────────────────────────────────────────────────────────────────
+async function doRefresh() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  btn.disabled = true;
+  await loadPayments();
+  await loadStats();
+  btn.classList.remove('spinning');
+  btn.disabled = false;
+  showToast('Dashboard refreshed', 'green');
+}
+
+// ── TOAST ──────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = 'green') {
+  document.querySelector('.toast')?.remove();
+  clearTimeout(toastTimer);
+  const icons = { green: 'fa-circle-check', red: 'fa-circle-xmark', blue: 'fa-circle-info', gold: 'fa-crown' };
+  const colors = { green: 'var(--accent)', red: 'var(--accent2)', blue: 'var(--blue)', gold: 'var(--gold)' };
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="fa ${icons[type] || icons.green}" style="color:${colors[type] || colors.green};font-size:15px"></i> ${msg}`;
+  document.body.appendChild(t);
+  toastTimer = setTimeout(() => t.remove(), 3500);
+}
+
+// ── AUTO-REFRESH every 30s ─────────────────────────────────────────────────
+setInterval(async () => {
+  await loadPayments();
+  await loadStats();
+}, 30000);
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadPayments();
+  await loadStats();
+});
+</script>
+</body>
+</html>
